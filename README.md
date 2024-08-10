@@ -1,16 +1,52 @@
-# movie_app
+# Avaliação Técnica - Projeto Android
 
-A new Flutter project.
+## Descrição do Projeto
 
-## Getting Started
+Este projeto tem como objetivo avaliar suas habilidades em desenvolvimento Android. Você deverá criar um aplicativo simples que consuma uma API pública e exiba os dados em uma lista. O aplicativo deve permitir ao usuário visualizar detalhes de cada item da lista em uma nova tela.
 
-This project is a starting point for a Flutter application.
+## Funcionalidades Requeridas
 
-A few resources to get you started if this is your first Flutter project:
+[x] 1. **Tela de Lista de Itens**
+   - Exibir uma lista de itens recuperados de uma API pública.
+   - Cada item deve mostrar pelo menos um título e uma breve descrição.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+[x] 2. **Tela de Detalhes do Item** 
+   - Exibir detalhes adicionais do item selecionado na lista.
+   - Incluir informações como título, descrição completa e qualquer outra informação relevante fornecida pela API.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[x] 3. **Pesquisa**
+   - Incluir uma funcionalidade de pesquisa que permita ao usuário filtrar a lista de itens pelo título.
+
+[x] 4. **Tratamento de Erros**
+   - Exibir mensagens de erro adequadas em caso de falha na requisição da API ou problemas de conectividade.
+
+## Requisitos Técnicos
+
+[x] 1. **Consumo de API** - Api escolhida foi The Movie Database
+   - Utilize uma API pública de sua escolha (ex.: JSONPlaceholder, The Movie Database, etc.).
+
+[x] 2. **Boas Práticas**
+   - Código limpo e bem documentado.
+   - Tratamento adequado de erros e exceções.
+
+## Instruções de Instalação
+
+1. **Clone o repositório**
+   ```bash
+   git clone https://github.com/seu-usuario/seu-repositorio.git
+   ```
+
+2. **Crie seu emulador Android**
+   ````
+   flutter emulators --create [name yxz]
+   ````
+
+3. **Instale as dependências**
+   ```
+   flutter pub get
+   ```
+
+4. **Rode a aplicação usando o emulador criado**
+   ```
+   flutter emulators --launch EmulatorName
+   ```
