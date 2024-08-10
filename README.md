@@ -36,20 +36,20 @@ Este projeto tem como objetivo avaliar suas habilidades em desenvolvimento Andro
    git clone https://github.com/lzerodev/movie_app.git
    ```
 
-2. **Crie seu emulador Android**
-   ````
-   flutter emulators --create [name yxz]
-   ````
+2. **Abra o diretório no Android Studio e crie seu emulador**
 
-3. **Instale as dependências**
+3. **Instale as dependências do projeto**
    ```
    flutter pub get
    ```
 
 4. **Rode a aplicação usando o emulador criado**
    ```
-   flutter emulators --launch EmulatorName
-   ```
-   ```
    flutter run
    ```
+   
+## Dependencias adicionadas:
+
+Dio
+flutter_svg
+
