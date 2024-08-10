@@ -33,7 +33,7 @@ Este projeto tem como objetivo avaliar suas habilidades em desenvolvimento Andro
 
 1. **Clone o repositório**
    ```bash
-   git clone https://github.com/seu-usuario/seu-repositorio.git
+   git clone https://github.com/lzerodev/movie_app.git
    ```
 
 2. **Crie seu emulador Android**
@@ -49,4 +49,7 @@ Este projeto tem como objetivo avaliar suas habilidades em desenvolvimento Andro
 4. **Rode a aplicação usando o emulador criado**
    ```
    flutter emulators --launch EmulatorName
+   ```
+   ```
+   flutter run
    ```
