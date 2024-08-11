@@ -117,8 +117,10 @@ class _MovieListViewState extends State<MovieListView> {
                         fontWeight: FontWeight.normal,
                       ),
                     ),
+                    const SizedBox(width: 80),
+                    const Icon(Icons.star, color: Colors.amber, size: 24.0),
                     Text(
-                      'Rating: $voteAverage',
+                      '$voteAverage',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12.0,
