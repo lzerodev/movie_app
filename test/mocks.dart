@@ -3,7 +3,7 @@ import 'package:movie_app/data/repositories/movie_repository.dart';
 import 'package:dio/dio.dart';
 
 // O pacote mockito é usado para criar objetos simulados (mocks) para testes.
-// O annotation @GenerateMocks é usada para gerar automaticamente os mocks
+// O annotation @GenerateMocks é usado para gerar automaticamente os mocks
 // para as classes listadas dentro dos colchetes.
 
 @GenerateMocks([Dio, MovieRepository])

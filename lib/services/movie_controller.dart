@@ -28,7 +28,7 @@ class MovieController {
       _hasMore = movies.isNotEmpty; // Verifica se há mais filmes
     } catch (e) {
       // Tratamento de erro, imprime a exceção e ajusta o estado
-      print('Erro ao buscar filmes: $e');
+      debugPrint('Erro ao buscar filmes: $e');
       _movies = []; // Limpa a lista em caso de erro
       _hasMore = false; // Define hasMore como false se ocorrer erro
     } finally {

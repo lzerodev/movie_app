@@ -24,7 +24,7 @@ class MySearchBar extends StatelessWidget {
           ),
           prefixIcon: const Icon(Icons.search, color: Color.fromARGB(255, 142, 139, 139)),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.0), // Borda arredondada
+            borderRadius: BorderRadius.circular(30.0),
             borderSide: BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(

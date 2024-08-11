@@ -52,4 +52,11 @@ Este projeto tem como objetivo avaliar suas habilidades em desenvolvimento Andro
 
 Dio
 flutter_svg
+mockito
+tests
+build_runner
 
+## Melhorias mapeadas
+
+   Parte do código precisa ser refatorado após a implementação dos testes e extração dos controllers. 
+   O princípio SOLID foi aplicado ao longo da evolução da aplicação.
