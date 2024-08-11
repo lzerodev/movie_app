@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../data/models/movie_model.dart';
-import '../data/repositories/movie_repository.dart';
+import 'package:flutter/material.dart';
+import '../services/movie_controller.dart';
+import '../services/scroll_controller.dart';
 import '../widgets/movie_list_view.dart';
-import 'search_movies.dart';
+import '../screens/search_movies.dart';
 
 class NowPlayingMoviesPage extends StatefulWidget {
   const NowPlayingMoviesPage({super.key});
@@ -13,71 +13,34 @@ class NowPlayingMoviesPage extends StatefulWidget {
 }
 
 class _NowPlayingMoviesPageState extends State<NowPlayingMoviesPage> {
-  late MovieRepository _movieRepository;
-  List<Movie> _movies = [];
-  bool _isLoading = false;
-  bool _hasMore = true;
-  int _currentPage = 1;
-  final ScrollController _scrollController = ScrollController();
+  late MovieController _movieController;
+  late ScrollService _scrollService;
 
   @override
   void initState() {
     super.initState();
     final Dio dio = Dio();
-    _movieRepository = MovieRepository(dio);
-    _fetchMovies();
+    _movieController = MovieController(dio);
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && !_isLoading) {
-        _fetchMoreMovies();
+    // Inicializa o ScrollService e passa o callback de carregamento
+    _scrollService = ScrollService(() {
+      if (!_movieController.isLoading) {
+        _movieController.fetchMoreMovies();
       }
     });
+
+    _fetchMovies();
   }
 
   Future<void> _fetchMovies() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final movies = await _movieRepository.getNowPlayingMovies(page: _currentPage);
-      setState(() {
-        _movies = movies;
-        _hasMore = movies.isNotEmpty;
-      });
-    } catch (e) {
-      // Handle error
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    await _movieController.fetchMovies();
+    setState(() {}); // Atualiza o estado para refletir as mudanças na UI
   }
 
-  Future<void> _fetchMoreMovies() async {
-    if (!_hasMore) return;
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final moreMovies = await _movieRepository.getNowPlayingMovies(page: _currentPage + 1);
-      setState(() {
-        if (moreMovies.isEmpty) {
-          _hasMore = false;
-        } else {
-          _currentPage++;
-          _movies.addAll(moreMovies);
-        }
-      });
-    } catch (e) {
-      debugPrint("Error fetching more movies");
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+  @override
+  void dispose() {
+    _scrollService.dispose(); // Libera os recursos do ScrollService
+    super.dispose();
   }
 
   @override
@@ -91,7 +54,7 @@ class _NowPlayingMoviesPageState extends State<NowPlayingMoviesPage> {
           color: Colors.white,
           fontFamily: 'Poppins',
           fontSize: 18.0,
-          fontWeight: FontWeight.bold
+          fontWeight: FontWeight.bold,
         ),
         actions: [
           IconButton(
@@ -99,17 +62,18 @@ class _NowPlayingMoviesPageState extends State<NowPlayingMoviesPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SearchMoviesPage()),
+                MaterialPageRoute(
+                    builder: (context) => const SearchMoviesPage()),
               );
             },
           ),
         ],
       ),
       body: MovieListView(
-        scrollController: _scrollController,
-        movies: _movies,
-        isLoading: _isLoading,
-        fetchMoreMovies: _fetchMoreMovies,
+        scrollController: _scrollService.scrollController,
+        movies: _movieController.movies,
+        isLoading: _movieController.isLoading,
+        fetchMoreMovies: _movieController.fetchMoreMovies,
       ),
     );
   }

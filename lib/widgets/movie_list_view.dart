@@ -6,7 +6,7 @@ class MovieListView extends StatelessWidget {
   final ScrollController? scrollController;
   final List<Movie> movies;
   final bool isLoading;
-  final Function? fetchMoreMovies;
+  final Future<void> Function()? fetchMoreMovies;
 
   const MovieListView({
     super.key,
@@ -18,14 +18,25 @@ class MovieListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Verifica se a função de carregar mais filmes está disponível e, se necessário, a chama quando o scroll atinge o final
+    scrollController?.addListener(() {
+      if (scrollController!.position.pixels >= scrollController!.position.maxScrollExtent - 50) {
+        if (fetchMoreMovies != null && !isLoading) {
+          fetchMoreMovies!(); // Chama o callback para carregar mais filmes
+        }
+      }
+    });
+
     return ListView.builder(
       controller: scrollController,
       itemCount: movies.length + (isLoading ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == movies.length) {
-          return isLoading ? const 
-          Center(
-            child: CircularProgressIndicator(color: Colors.black)) : Container();
+          return isLoading
+              ? const Center(
+            child: CircularProgressIndicator(color: Colors.black),
+          )
+              : Container();
         }
 
         final movie = movies[index];
@@ -52,7 +63,7 @@ class MovieListView extends StatelessWidget {
                     color: Colors.white,
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(9.0), 
+                    borderRadius: BorderRadius.circular(9.0),
                     child: Image.network(
                       'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                       fit: BoxFit.cover,

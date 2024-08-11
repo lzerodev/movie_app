@@ -7,15 +7,14 @@ class Movie {
   final String overview;
   final double voteAverage;
 
-  Movie({
-    required this.title,
-    required this.posterPath,
-    required this.backdropPath,
-    required this.releaseDate,
-    required this.id,
-    required this.overview,
-    required this.voteAverage
-  });
+  Movie(
+      {required this.title,
+      required this.posterPath,
+      required this.backdropPath,
+      required this.releaseDate,
+      required this.id,
+      required this.overview,
+      required this.voteAverage});
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(

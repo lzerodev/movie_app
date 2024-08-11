@@ -48,7 +48,7 @@ Este projeto tem como objetivo avaliar suas habilidades em desenvolvimento Andro
    flutter run
    ```
    
-## Dependencias adicionadas:
+## Dependências adicionadas:
 
 Dio
 flutter_svg

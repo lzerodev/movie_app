@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import '../data/models/movie_model.dart';
-import '../data/repositories/movie_repository.dart';
+import '../services/search_services.dart';
 import '../widgets/back_button.dart';
 import '../widgets/movie_list_view.dart';
 import '../widgets/search_bar.dart';
@@ -15,7 +15,7 @@ class SearchMoviesPage extends StatefulWidget {
 }
 
 class _SearchMoviesPageState extends State<SearchMoviesPage> {
-  late MovieRepository _movieRepository;
+  late SearchService _searchService;
   Future<List<Movie>>? _searchResultsFuture;
   final TextEditingController _searchController = TextEditingController();
 
@@ -23,12 +23,12 @@ class _SearchMoviesPageState extends State<SearchMoviesPage> {
   void initState() {
     super.initState();
     final Dio dio = Dio();
-    _movieRepository = MovieRepository(dio);
+    _searchService = SearchService(dio); // Inicializa o serviço de pesquisa
   }
 
   void _searchMovies() {
     setState(() {
-      _searchResultsFuture = _movieRepository.searchMovies(_searchController.text);
+      _searchResultsFuture = _searchService.searchMovies(_searchController.text);
     });
   }
 

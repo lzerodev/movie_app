@@ -7,46 +7,68 @@ class MovieRepository {
 
   MovieRepository(this._dio);
 
+  /// Obtém uma lista de filmes em exibição nos cinemas a partir da API.
+  ///
+  /// [page] é o número da página a ser buscada.
+  /// Retorna uma [List<Movie>] de filmes.
+  /// Lança uma [Exception] se a requisição falhar.
   Future<List<Movie>> getNowPlayingMovies({int page = 1}) async {
-    final response = await _dio.get(
-      '$host/movie/now_playing',
-      queryParameters: {
-        'api_key': apiKey,
-        'page': page,
-      },
-    );
-    if (response.statusCode == 200) {
-      List<dynamic> results = response.data['results'];
+    try {
+      final data = await _getRequest(
+        '/movie/now_playing',
+        queryParameters: {'api_key': apiKey, 'page': page},
+      );
+      List<dynamic> results = data['results'];
       return results.map((movie) => Movie.fromJson(movie)).toList();
-    } else {
-      throw Exception('Failed to load movies');
+    } catch (e) {
+      print('Erro ao buscar filmes em exibição: $e');
+      rethrow; // Relança a exceção para ser tratada pelo chamador
     }
   }
 
-    Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
+  /// Pesquisa filmes na API com base na consulta fornecida.
+  ///
+  /// [query] é o termo de pesquisa.
+  /// [page] é o número da página a ser buscada.
+  /// Retorna uma [List<Movie>] de filmes.
+  /// Retorna uma lista vazia em caso de erro ou se nenhum resultado for encontrado.
+  Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
+    try {
+      final data = await _getRequest(
+        '/search/movie',
+        queryParameters: {'api_key': apiKey, 'query': query, 'page': page},
+      );
+      List<dynamic> results = data['results'] ?? [];
+      return results.map((json) => Movie.fromJson(json)).toList();
+    } catch (e) {
+      print('Erro ao pesquisar filmes: $e');
+      return []; // Retorna uma lista vazia em caso de erro
+    }
+  }
+
+  /// Faz uma requisição GET para o endpoint especificado.
+  ///
+  /// [endpoint] é o caminho da URL da API.
+  /// [queryParameters] são os parâmetros da consulta.
+  /// Retorna um [Map<String, dynamic>] com os dados da resposta.
+  /// Lança uma [Exception] se a requisição falhar.
+  Future<Map<String, dynamic>> _getRequest(String endpoint,
+      {Map<String, dynamic>? queryParameters}) async {
     try {
       final response = await _dio.get(
-        '$host/search/movie',
-        queryParameters: {
-          'api_key': apiKey,
-          'query': query,
-          'page': page,
-        },
+        '$host$endpoint',
+        queryParameters: queryParameters,
       );
 
       if (response.statusCode == 200) {
-        final data = response.data;
-        if (data != null && data['results'] != null) {
-          final List results = data['results'];
-          return results.map((json) => Movie.fromJson(json)).toList();
-        } else {
-          return []; // Return an empty list if no results are found
-        }
+        return response.data;
       } else {
-        throw Exception('Failed to search movies');
+        throw Exception(
+            'Falha ao buscar dados com código de status ${response.statusCode}');
       }
     } catch (e) {
-      return []; // Return an empty list on error
+      print('Erro ao fazer requisição: $e');
+      rethrow; // Relança a exceção para ser tratada pelo chamador
     }
   }
 }
