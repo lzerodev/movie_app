@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import '../data/models/movie_model.dart';
-import '../services/search_services.dart';
+import '../services/search_controller.dart';
 import '../widgets/back_button.dart';
 import '../widgets/movie_list_view.dart';
 import '../widgets/search_bar.dart';
