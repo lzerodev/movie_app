@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/models/movie_model.dart';
 import '../screens/movie_detail.dart';
 
-class MovieListView extends StatelessWidget {
+class MovieListView extends StatefulWidget {
   final ScrollController? scrollController;
   final List<Movie> movies;
   final bool isLoading;
@@ -17,29 +17,49 @@ class MovieListView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    // Verifica se a função de carregar mais filmes está disponível e, se necessário, a chama quando o scroll atinge o final
-    scrollController?.addListener(() {
-      if (scrollController!.position.pixels >= scrollController!.position.maxScrollExtent - 50) {
-        if (fetchMoreMovies != null && !isLoading) {
-          fetchMoreMovies!(); // Chama o callback para carregar mais filmes
-        }
-      }
-    });
+  _MovieListViewState createState() => _MovieListViewState();
+}
 
+class _MovieListViewState extends State<MovieListView> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Verifica se a função de carregar mais filmes está disponível e, se necessário, a chama quando o scroll atinge o final
+    widget.scrollController?.addListener(_scrollListener);
+  }
+
+  // Remove o listener ao descartar o widget para evitar vazamento de memória
+  @override
+  void dispose() {
+    widget.scrollController?.removeListener(_scrollListener);
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (widget.scrollController!.position.pixels >=
+        widget.scrollController!.position.maxScrollExtent - 50 &&
+        widget.fetchMoreMovies != null &&
+        !widget.isLoading) {
+      widget.fetchMoreMovies!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.builder(
-      controller: scrollController,
-      itemCount: movies.length + (isLoading ? 1 : 0),
+      controller: widget.scrollController,
+      itemCount: widget.movies.length + (widget.isLoading ? 1 : 0),
       itemBuilder: (context, index) {
-        if (index == movies.length) {
-          return isLoading
+        if (index == widget.movies.length) {
+          return widget.isLoading
               ? const Center(
             child: CircularProgressIndicator(color: Colors.black),
           )
               : Container();
         }
 
-        final movie = movies[index];
+        final movie = widget.movies[index];
         final voteAverage = movie.voteAverage;
         final releaseDate = movie.releaseDate;
 
@@ -62,13 +82,19 @@ class MovieListView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15.0),
                     color: Colors.white,
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(9.0),
-                    child: Image.network(
-                      'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                      fit: BoxFit.cover,
-                      width: 50.0,
-                      height: 60.0,
+                  child: Hero(
+                    tag: 'movie_${movie.id}',
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(9.0),
+                      child: Image.network(
+                        'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                        fit: BoxFit.cover,
+                        width: 50.0,
+                        height: 60.0,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.error, color: Colors.red);
+                        },
+                      ),
                     ),
                   ),
                 ),

@@ -33,12 +33,12 @@ void main() {
     final List<Movie> mockMovies = [
       Movie(
         id: 1,
-        title: 'Test Movie',
-        posterPath: '',
-        backdropPath: '',
-        releaseDate: '',
-        overview: '',
-        voteAverage: 1.0,
+        title: 'Inception',
+        posterPath: '/path/to/poster',
+        releaseDate: '2010-07-16',
+        overview: 'A thief who steals corporate secrets through the use of dream-sharing technology.',
+        voteAverage: 8.8,
+        backdropPath: '/path/to/backdrop',
       )
     ];
     when(mockMovieRepository.getNowPlayingMovies(page: 1))
@@ -59,12 +59,12 @@ void main() {
     final List<Movie> mockMovies = [
       Movie(
         id: 1,
-        title: 'Test Movie',
-        posterPath: '',
-        backdropPath: '',
-        releaseDate: '',
-        overview: '',
-        voteAverage: 1.0,
+        title: 'Inception',
+        posterPath: '/path/to/poster',
+        releaseDate: '2010-07-16',
+        overview: 'A thief who steals corporate secrets through the use of dream-sharing technology.',
+        voteAverage: 8.8,
+        backdropPath: '/path/to/backdrop',
       )
     ];
     when(mockMovieRepository.getNowPlayingMovies(page: 1))
@@ -88,12 +88,12 @@ void main() {
     final List<Movie> mockMovies = [
       Movie(
         id: 1,
-        title: 'Test Movie',
-        posterPath: 'a',
-        backdropPath: '',
-        releaseDate: '',
-        overview: '',
-        voteAverage: 2.0,
+        title: 'Inception',
+        posterPath: '/path/to/poster',
+        releaseDate: '2010-07-16',
+        overview: 'A thief who steals corporate secrets through the use of dream-sharing technology.',
+        voteAverage: 8.8,
+        backdropPath: '/path/to/backdrop',
       )
     ];
     when(mockMovieRepository.getNowPlayingMovies(page: 1))

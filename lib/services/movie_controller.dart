@@ -20,19 +20,22 @@ class MovieController {
 
   // Função para buscar filmes
   Future<void> fetchMovies() async {
-    _setLoading(true);
+    _setLoading(true); // Define o estado de carregamento como verdadeiro
     try {
       // Busca filmes da página atual
       final movies = await _movieRepository.getNowPlayingMovies(page: _currentPage);
-      _movies = movies;
-      _hasMore = movies.isNotEmpty; // Verifica se há mais filmes
+      if (_currentPage == 1) {
+        _movies = movies; // Substitui a lista de filmes se for a primeira página
+      } else {
+        _movies.addAll(movies); // Adiciona os filmes à lista existente
+      }
+      _hasMore = movies.isNotEmpty; // Verifica se há mais filmes para carregar
     } catch (e) {
-      // Tratamento de erro, imprime a exceção e ajusta o estado
+      // Tratamento de erro: imprime a exceção e ajusta o estado
       debugPrint('Erro ao buscar filmes: $e');
-      _movies = []; // Limpa a lista em caso de erro
-      _hasMore = false; // Define hasMore como false se ocorrer erro
+      _hasMore = false; // Define hasMore como false se ocorrer um erro
     } finally {
-      _setLoading(false); // Ajusta o estado de carregamento
+      _setLoading(false); // Define o estado de carregamento como falso
     }
   }
 
@@ -41,22 +44,22 @@ class MovieController {
     // Retorna se não houver mais filmes ou se já estiver carregando
     if (!_hasMore || _isLoading) return;
 
-    _setLoading(true);
+    _setLoading(true); // Define o estado de carregamento como verdadeiro
     try {
       // Busca mais filmes da próxima página
-      final moreMovies = await _movieRepository.getNowPlayingMovies(page: _currentPage + 1);
+      _currentPage++;
+      final moreMovies = await _movieRepository.getNowPlayingMovies(page: _currentPage);
       if (moreMovies.isEmpty) {
-        _hasMore = false; // Se não houver mais filmes, define hasMore como false
+        _hasMore = false; // Define hasMore como false se não houver mais filmes
       } else {
-        _currentPage++; // Atualiza a página atual
         _movies.addAll(moreMovies); // Adiciona os filmes à lista existente
       }
     } catch (e) {
-      // Tratamento de erro, imprime a exceção
+      // Tratamento de erro: imprime a exceção
       debugPrint('Erro ao buscar mais filmes: $e');
       // Não altera _currentPage nem _hasMore para manter o estado consistente
     } finally {
-      _setLoading(false); // Ajusta o estado de carregamento
+      _setLoading(false); // Define o estado de carregamento como falso
     }
   }
 

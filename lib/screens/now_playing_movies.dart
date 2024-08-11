@@ -23,11 +23,13 @@ class _NowPlayingMoviesPageState extends State<NowPlayingMoviesPage> {
     _movieController = MovieController(dio);
 
     // Inicializa o ScrollService e passa o callback de carregamento
-    _scrollService = ScrollService(() {
-      if (!_movieController.isLoading) {
-        _movieController.fetchMoreMovies();
-      }
-    });
+    _scrollService = ScrollService(
+      onEndOfScroll: () {
+        if (!_movieController.isLoading) {
+          _movieController.fetchMoreMovies();
+        }
+      },
+    );
 
     _fetchMovies();
   }
@@ -45,35 +47,38 @@ class _NowPlayingMoviesPageState extends State<NowPlayingMoviesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Now Playing Movies'),
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
-          fontFamily: 'Poppins',
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const SearchMoviesPage()),
-              );
-            },
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Now Playing Movies'),
+          backgroundColor: Colors.black,
+          centerTitle: true,
+          titleTextStyle: const TextStyle(
+            color: Colors.white,
+            fontFamily: 'Poppins',
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
           ),
-        ],
-      ),
-      body: MovieListView(
-        scrollController: _scrollService.scrollController,
-        movies: _movieController.movies,
-        isLoading: _movieController.isLoading,
-        fetchMoreMovies: _movieController.fetchMoreMovies,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SearchMoviesPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        body: MovieListView(
+          scrollController: _scrollService.scrollController,
+          movies: _movieController.movies,
+          isLoading: _movieController.isLoading,
+          fetchMoreMovies: _movieController.fetchMoreMovies,
+        ),
       ),
     );
   }

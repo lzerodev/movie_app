@@ -1,7 +1,7 @@
 class Movie {
   final int? id;
   final String title;
-  final String posterPath;
+  final String? posterPath;
   final String? backdropPath;
   final String releaseDate;
   final String overview;

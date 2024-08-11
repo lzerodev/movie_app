@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import '../models/movie_model.dart';
 import 'const.dart';
 
@@ -12,16 +13,17 @@ class MovieRepository {
   /// [page] é o número da página a ser buscada.
   /// Retorna uma [List<Movie>] de filmes.
   /// Lança uma [Exception] se a requisição falhar.
+  ///
   Future<List<Movie>> getNowPlayingMovies({int page = 1}) async {
     try {
       final data = await _getRequest(
         '/movie/now_playing',
         queryParameters: {'api_key': apiKey, 'page': page},
       );
-      List<dynamic> results = data['results'];
+      List<dynamic> results = data['results'] ?? [];
       return results.map((movie) => Movie.fromJson(movie)).toList();
     } catch (e) {
-      print('Erro ao buscar filmes em exibição: $e');
+      debugPrint('Erro ao buscar filmes em exibição: $e');
       rethrow; // Relança a exceção para ser tratada pelo chamador
     }
   }
@@ -32,6 +34,7 @@ class MovieRepository {
   /// [page] é o número da página a ser buscada.
   /// Retorna uma [List<Movie>] de filmes.
   /// Retorna uma lista vazia em caso de erro ou se nenhum resultado for encontrado.
+  ///
   Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
     try {
       final data = await _getRequest(
@@ -41,7 +44,7 @@ class MovieRepository {
       List<dynamic> results = data['results'] ?? [];
       return results.map((json) => Movie.fromJson(json)).toList();
     } catch (e) {
-      print('Erro ao pesquisar filmes: $e');
+      debugPrint('Erro ao pesquisar filmes: $e');
       return []; // Retorna uma lista vazia em caso de erro
     }
   }
@@ -52,6 +55,7 @@ class MovieRepository {
   /// [queryParameters] são os parâmetros da consulta.
   /// Retorna um [Map<String, dynamic>] com os dados da resposta.
   /// Lança uma [Exception] se a requisição falhar.
+  ///
   Future<Map<String, dynamic>> _getRequest(String endpoint,
       {Map<String, dynamic>? queryParameters}) async {
     try {
@@ -64,10 +68,10 @@ class MovieRepository {
         return response.data;
       } else {
         throw Exception(
-            'Falha ao buscar dados com código de status ${response.statusCode}');
+            'Falha ao buscar dados: código de status ${response.statusCode} para o endpoint $endpoint');
       }
     } catch (e) {
-      print('Erro ao fazer requisição: $e');
+      debugPrint('Erro ao fazer requisição: $e');
       rethrow; // Relança a exceção para ser tratada pelo chamador
     }
   }
