@@ -17,6 +17,7 @@ class MovieListView extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _MovieListViewState createState() => _MovieListViewState();
 }
 
@@ -25,20 +26,25 @@ class _MovieListViewState extends State<MovieListView> {
   void initState() {
     super.initState();
 
-    // Verifica se a função de carregar mais filmes está disponível e, se necessário, a chama quando o scroll atinge o final
-    widget.scrollController?.addListener(_scrollListener);
+    // Adiciona o listener de scroll caso o scrollController não seja nulo
+    if (widget.scrollController != null) {
+      widget.scrollController!.addListener(_scrollListener);
+    }
   }
 
-  // Remove o listener ao descartar o widget para evitar vazamento de memória
   @override
   void dispose() {
-    widget.scrollController?.removeListener(_scrollListener);
+    // Remove o listener de scroll ao descartar o widget para evitar vazamentos de memória
+    if (widget.scrollController != null) {
+      widget.scrollController!.removeListener(_scrollListener);
+    }
     super.dispose();
   }
 
   void _scrollListener() {
-    if (widget.scrollController!.position.pixels >=
-        widget.scrollController!.position.maxScrollExtent - 50 &&
+    if (widget.scrollController != null &&
+        widget.scrollController!.position.pixels >=
+            widget.scrollController!.position.maxScrollExtent - 50 &&
         widget.fetchMoreMovies != null &&
         !widget.isLoading) {
       widget.fetchMoreMovies!();
@@ -54,8 +60,8 @@ class _MovieListViewState extends State<MovieListView> {
         if (index == widget.movies.length) {
           return widget.isLoading
               ? const Center(
-            child: CircularProgressIndicator(color: Colors.black),
-          )
+                  child: CircularProgressIndicator(color: Colors.black),
+                )
               : Container();
         }
 
@@ -117,7 +123,7 @@ class _MovieListViewState extends State<MovieListView> {
                         fontWeight: FontWeight.normal,
                       ),
                     ),
-                    const SizedBox(width: 80),
+                    const SizedBox(width: 50),
                     const Icon(Icons.star, color: Colors.amber, size: 24.0),
                     Text(
                       '$voteAverage',

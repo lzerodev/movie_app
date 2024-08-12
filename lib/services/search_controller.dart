@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import '../data/models/movie_model.dart';
 import '../data/repositories/movie_repository.dart';
 
@@ -11,7 +12,7 @@ class SearchService {
     try {
       return await _movieRepository.searchMovies(query);
     } catch (e) {
-      print('Erro ao buscar filmes: $e');
+      debugPrint('Erro ao buscar filmes: $e');
       return []; // Retorna uma lista vazia em caso de erro
     }
   }
