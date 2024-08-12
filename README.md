@@ -60,6 +60,4 @@ build_runner
 
    O princípio SOLID foi aplicado ao longo da evolução da aplicação.
    Parte do código precisa ser refatorado após a implementação dos testes e extração dos controllers.
-   Os testes estão parcialmente elaborados, com outros ainda a serem criados, e o princípio TDD não foi aplicado.
-
-   TODO - FIX  
+   Funcionalidade de carregar mais filmes com scroll precisa ser ajustada.
