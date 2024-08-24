@@ -59,9 +59,12 @@ class _MovieListViewState extends State<MovieListView> {
       itemBuilder: (context, index) {
         if (index == widget.movies.length) {
           return widget.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(color: Colors.black),
-                )
+              ? const Padding(
+                padding: EdgeInsets.symmetric(vertical: 250),
+                child: Center(
+                    child: CircularProgressIndicator(color: Colors.black),
+                  ),
+              )
               : Container();
         }
 
@@ -85,7 +88,6 @@ class _MovieListViewState extends State<MovieListView> {
                 minLeadingWidth: 90,
                 leading: Container(
                   width: 90.0,
-
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     color: Colors.white,
