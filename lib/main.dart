@@ -1,23 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/now_playing_movies.dart';
+import 'package:movie_app/movieapp.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MovieApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Movies App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.grey[300],
-      ),
-      home: const NowPlayingMoviesPage(),
-    );
-  }
-}

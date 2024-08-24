@@ -18,18 +18,28 @@ class MovieController {
   bool get isLoading => _isLoading;
   bool get hasMore => _hasMore;
 
+  // Função privada para ajustar o estado de carregamento
+  void _setLoading(bool loading) {
+    _isLoading = loading;
+  }
+
   // Função para buscar filmes
   Future<void> fetchMovies() async {
+    if (_isLoading) return; // Verifica se já está carregando para evitar chamadas duplicadas
     _setLoading(true); // Define o estado de carregamento como verdadeiro
     try {
       // Busca filmes da página atual
       final movies = await _movieRepository.getNowPlayingMovies(page: _currentPage);
-      if (_currentPage == 1) {
-        _movies = movies; // Substitui a lista de filmes se for a primeira página
+      if (movies.isNotEmpty) {
+        if (_currentPage == 1) {
+          _movies = movies; // Substitui a lista de filmes se for a primeira página
+        } else {
+          _movies.addAll(movies); // Adiciona os filmes à lista existente
+        }
+        _hasMore = true; // Há mais filmes para carregar
       } else {
-        _movies.addAll(movies); // Adiciona os filmes à lista existente
+        _hasMore = false; // Não há mais filmes para carregar
       }
-      _hasMore = movies.isNotEmpty; // Verifica se há mais filmes para carregar
     } catch (e) {
       // Tratamento de erro: imprime a exceção e ajusta o estado
       debugPrint('Erro ao buscar filmes: $e');
@@ -47,12 +57,12 @@ class MovieController {
     _setLoading(true); // Define o estado de carregamento como verdadeiro
     try {
       // Busca mais filmes da próxima página
-      _currentPage++;
-      final moreMovies = await _movieRepository.getNowPlayingMovies(page: _currentPage);
-      if (moreMovies.isEmpty) {
-        _hasMore = false; // Define hasMore como false se não houver mais filmes
-      } else {
+      final moreMovies = await _movieRepository.getNowPlayingMovies(page: _currentPage + 1);
+      if (moreMovies.isNotEmpty) {
+        _currentPage++; // Incrementa _currentPage após sucesso na requisição
         _movies.addAll(moreMovies); // Adiciona os filmes à lista existente
+      } else {
+        _hasMore = false; // Define hasMore como false se não houver mais filmes
       }
     } catch (e) {
       // Tratamento de erro: imprime a exceção
@@ -61,10 +71,5 @@ class MovieController {
     } finally {
       _setLoading(false); // Define o estado de carregamento como falso
     }
-  }
-
-  // Função privada para ajustar o estado de carregamento
-  void _setLoading(bool loading) {
-    _isLoading = loading;
   }
 }

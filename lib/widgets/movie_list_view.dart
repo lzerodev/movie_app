@@ -81,9 +81,11 @@ class _MovieListViewState extends State<MovieListView> {
                 color: Colors.white,
               ),
               child: ListTile(
+                hoverColor: Colors.black,
+                minLeadingWidth: 90,
                 leading: Container(
-                  width: 70.0,
-                  height: 90.0,
+                  width: 90.0,
+
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     color: Colors.white,
@@ -124,15 +126,19 @@ class _MovieListViewState extends State<MovieListView> {
                       ),
                     ),
                     const SizedBox(width: 50),
-                    const Icon(Icons.star, color: Colors.amber, size: 24.0),
-                    Text(
-                      '$voteAverage',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
+                    Row(                      children: [
+                        const Icon(Icons.star, color: Colors.amber, size: 24.0),
+                        const SizedBox(width: 5),
+                        Text(
+                          '$voteAverage',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
