@@ -116,33 +116,35 @@ class _MovieListViewState extends State<MovieListView> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Release: $releaseDate',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    const SizedBox(width: 50),
-                    Row(                      children: [
-                        const Icon(Icons.star, color: Colors.amber, size: 24.0),
-                        const SizedBox(width: 5),
-                        Text(
-                          '$voteAverage',
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                          ),
+                subtitle: FittedBox(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Release: $releaseDate',
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.normal,
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      const SizedBox(width: 50),
+                      Row(                      children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 24.0),
+                          const SizedBox(width: 5),
+                          Text(
+                            '$voteAverage',
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(
