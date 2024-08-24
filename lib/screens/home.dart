@@ -49,20 +49,24 @@ class HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        body: const NowPlayingMoviesPage(),
+        body: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: NowPlayingMoviesPage(),
+        ),
         floatingActionButton: FloatingActionButton.extended(
           label: const Icon(Icons.search, color: Colors.white),
-          foregroundColor: Colors.black , 
+          foregroundColor: Colors.black,
           hoverColor: Colors.red,
           backgroundColor: const Color.fromARGB(255, 83, 83, 83),
           onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SearchMoviesPage(),
-                  ),
-                );
-              },),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SearchMoviesPage(),
+              ),
+            );
+          },
+        ),
         bottomNavigationBar: NavigationBar(
           indicatorColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 168, 168, 168),
