@@ -13,9 +13,6 @@ class HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {
-    const String firstName = 'Leandro';
-    const String lastName = 'Morais Neves';
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -84,35 +81,64 @@ class HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          const Card(
-            shadowColor: Colors.transparent,
-            margin: EdgeInsets.all(8.0),
-            child: SizedBox.expand(
-              child: Column(
-                children: [
-                  Flex(
-                    direction: Axis.vertical,
-                    children: <Widget>[
-                      FittedBox(
-                         fit: BoxFit.contain,
-                        alignment: Alignment.topLeft,
-                        child: 
-                          Text('Profile',
-                              style:
-                                  TextStyle(fontFamily: 'Poppins', fontSize: 20, fontWeight: FontWeight.w500)),
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            'Nome: $firstName $lastName',
-                          ),
-                        ],
-                      ),
-                      Text('Endereço'),
-                      Text('Telefone')
-                    ],
-                  ),
-                ],
+          Card(
+            clipBehavior: null,
+            margin: const EdgeInsets.all(10),
+            elevation: 5,
+            semanticContainer: true,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                        maxHeight: 600,
+                        maxWidth: MediaQuery.sizeOf(context).width - 20),
+                    child: Column(
+                      children: <Widget>[
+                        const SizedBox(height: 15,),
+                        const SizedBox(child: Text('Teste'),),
+                        SizedBox(
+                          height: 200,
+                          child: CarouselView(
+                              elevation: 5,
+                              itemExtent: 350,
+                              itemSnapping: true,
+                              children: <Widget>[
+                                Container(color: Colors.amber),
+                                Container(color: Colors.blueAccent),
+                                Container(
+                                    color: const Color.fromARGB(255, 71, 67, 11)),
+                                Container(
+                                    color: const Color.fromARGB(255, 35, 50, 75)),
+                                Container(
+                                    color: const Color.fromARGB(255, 39, 85, 46)),
+                                Container(color: Colors.redAccent),
+                                Container(color: Colors.lightGreenAccent)
+                              ]),
+                        ),
+                        const SizedBox(height: 50,),
+                        const SizedBox(child: Text('Teste'),),
+                        SizedBox(
+                          height: 200,
+                          child: CarouselView(
+                              elevation: 5,
+                              itemExtent: 300,
+                              itemSnapping: true,
+                              children: <Widget>[
+                                Container(color: Colors.amber),
+                                Container(color: Colors.blueAccent),
+                                Container(
+                                    color: const Color.fromARGB(255, 71, 67, 11)),
+                                Container(
+                                    color: const Color.fromARGB(255, 35, 50, 75)),
+                                Container(
+                                    color: const Color.fromARGB(255, 39, 85, 46)),
+                                Container(color: Colors.redAccent),
+                                Container(color: Colors.lightGreenAccent)
+                              ]),
+                        )
+                      ],
+                    )),
               ),
             ),
           ),
