@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import '../data/models/movie_model.dart';
 import '../services/search_controller.dart';
 import '../widgets/back_button.dart';
-import '../widgets/movie_list_view.dart';
+import '../widgets/movie_list.dart';
 import '../widgets/search_bar.dart';
 
 class SearchMoviesPage extends StatefulWidget {
@@ -68,7 +68,7 @@ class _SearchMoviesPageState extends State<SearchMoviesPage> {
               future: _searchResultsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(color: Colors.black,));
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -76,7 +76,7 @@ class _SearchMoviesPageState extends State<SearchMoviesPage> {
                 } else {
                   final movies = snapshot.data!;
                   return MovieListView(
-                    movies: movies,
+                    movies: movies, isLoading: false,
                   );
                 }
               },
