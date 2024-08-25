@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../services/movie_controller.dart';
 import '../services/scroll_controller.dart';
-import '../widgets/movie_list_view.dart';
+import '../widgets/movie_list.dart';
 
 class NowPlayingMoviesPage extends StatefulWidget {
   const NowPlayingMoviesPage({super.key});
@@ -46,10 +46,8 @@ class _NowPlayingMoviesPageState extends State<NowPlayingMoviesPage> {
   @override
   Widget build(BuildContext context) {
     return MovieListView(
-          scrollController: _scrollService.scrollController,
           movies: _movieController.movies,
           isLoading: _movieController.isLoading,
-          fetchMoreMovies: _movieController.fetchMoreMovies,
         );
   }
 }
