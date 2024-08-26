@@ -167,12 +167,13 @@ class HomePageState extends State<HomePage> {
               label: 'Home',
             ),
             NavigationDestination(
-              icon: Badge(child: Icon(Icons.notifications_sharp)),
+              icon: Badge(
+                label: Text('2'),
+                child: Icon(Icons.notifications_sharp)),
               label: 'Notifications',
             ),
             NavigationDestination(
               icon: Badge(
-                label: Text('2'),
                 child: Icon(Icons.person),
               ),
               label: 'Profile',
