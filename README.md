@@ -55,9 +55,3 @@ flutter_svg
 mockito
 tests
 build_runner
-
-## Melhorias mapeadas
-
-   O princípio SOLID foi aplicado ao longo da evolução da aplicação.
-   Parte do código precisa ser refatorado após a implementação dos testes e extração dos controllers.
-   Funcionalidade de carregar mais filmes com scroll precisa ser ajustada.
