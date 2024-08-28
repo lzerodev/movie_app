@@ -32,11 +32,14 @@ class MovieController {
       final movies = await _movieRepository.getNowPlayingMovies(page: _currentPage);
       if (movies.isNotEmpty) {
         if (_currentPage == 1) {
-          _movies = movies; // Substitui a lista de filmes se for a primeira página
+          _movies = movies;
+          debugPrint('Substitui a lista de filmes'); // Substitui a lista de filmes se for a primeira página
         } else {
-          _movies.addAll(movies); // Adiciona os filmes à lista existente
+          _movies.addAll(movies);
+          debugPrint('Adicionando mais filmes a lista'); // Adiciona os filmes à lista existente
         }
-        _hasMore = true; // Há mais filmes para carregar
+        _hasMore = true; 
+        debugPrint('_hasMore é verdadeiro');// Há mais filmes para carregar
       } else {
         _hasMore = false; // Não há mais filmes para carregar
       }
@@ -60,7 +63,8 @@ class MovieController {
       final moreMovies = await _movieRepository.getNowPlayingMovies(page: _currentPage + 1);
       if (moreMovies.isNotEmpty) {
         _currentPage++; // Incrementa _currentPage após sucesso na requisição
-        _movies.addAll(moreMovies); // Adiciona os filmes à lista existente
+        _movies.addAll(moreMovies);
+        debugPrint('Adiciona filmes a lista existente'); // Adiciona os filmes à lista existente
       } else {
         _hasMore = false; // Define hasMore como false se não houver mais filmes
       }
