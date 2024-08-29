@@ -22,7 +22,7 @@ class Movie {
       title: json['title'],
       posterPath: json['poster_path'],
       backdropPath: json['backdrop_path'],
-      releaseDate: json['release_date'],
+      releaseDate: DateTime.parse(json['release_date']),
       overview: json['overview'],
       voteAverage: double.parse((json['vote_average']).toStringAsFixed(1)),
     );

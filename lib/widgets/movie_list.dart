@@ -42,7 +42,7 @@ class _MovieListViewState extends State<MovieListView> {
 
         final movie = widget.movies[index];
         final voteAverage = movie.voteAverage;
-        final releaseDate = DateFormat.yMd('dd/MM/yyyy').format(movie.releaseDate);
+        final releaseDate = DateFormat.yMMMd('pt_BR').format(movie.releaseDate);
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 3.0),
