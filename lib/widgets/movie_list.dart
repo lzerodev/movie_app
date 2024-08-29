@@ -98,7 +98,7 @@ class _MovieListViewState extends State<MovieListView> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Release: $releaseDate',
+                        'Lançamento: $releaseDate',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 10.0,
