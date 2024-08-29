@@ -1,4 +1,6 @@
-# Personal Project - Android - Movie APP
+# Project - Android - Movie APP
+
+
 
 # TO - DO
 
@@ -24,11 +26,7 @@
     - [ ] Emit `MovieSuccess` state with the updated list of movies and current page.
     - [ ] Handle and emit `MovieFailure` state in case of errors.
 
-### 4. Create the Repository
-- [ ] Create `MovieRepository` class.
-  - [ ] Implement `fetchMovies` method to interact with the API and return a list of movies.
-
-### 5. Connect BLoC to the UI
+### 4. Connect BLoC to the UI
 - [ ] Create `MovieListView` widget to display the list of movies.
   - [ ] Use `BlocBuilder<MovieBloc, MovieState>` to build the UI based on the current state.
   - [ ] Add a `ScrollController` to detect when the user has scrolled near the end of the list.
@@ -36,7 +34,7 @@
   - [ ] Display a loading indicator while fetching more movies.
   - [ ] Display an error message if `MovieFailure` state is emitted.
 
-### 6. Setup the Main Application
+### 5. Setup the Main Application
 - [ ] Update `main.dart` to initialize the `MovieRepository` and provide the `MovieBloc` to the `MovieListView`.
   - [ ] Use `BlocProvider` to inject `MovieBloc` into the widget tree.
 

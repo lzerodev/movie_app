@@ -4,6 +4,7 @@ import '../services/movie_controller.dart';
 import '../services/scroll_controller.dart';
 import '../widgets/movie_list.dart';
 
+// TODO #1 : Lazy loading not working
 class NowPlayingMoviesPage extends StatefulWidget {
   const NowPlayingMoviesPage({super.key});
 
