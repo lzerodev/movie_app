@@ -1,57 +1,43 @@
-# Avaliação Técnica - Projeto Android
+# Personal Project - Android - Movie APP
 
-## Descrição do Projeto
+# TO - DO
 
-Este projeto tem como objetivo avaliar suas habilidades em desenvolvimento Android. Você deverá criar um aplicativo simples que consuma uma API pública e exiba os dados em uma lista. O aplicativo deve permitir ao usuário visualizar detalhes de cada item da lista em uma nova tela.
+## BLoC Architecture Implementation for Infinite Scroll Movie List
 
-## Funcionalidades Requeridas
+### 1. Define Events
+- [ ] Create `MovieEvent` as the base abstract class for all movie-related events.
+  - [ ] Add `MovieFetched` event to trigger the fetching of movies from the API.
 
-[x] 1. **Tela de Lista de Itens**
-   - Exibir uma lista de itens recuperados de uma API pública.
-   - Cada item deve mostrar pelo menos um título e uma breve descrição.
+### 2. Define States
+- [ ] Create `MovieState` as the base abstract class for all movie-related states.
+  - [ ] Add `MovieInitial` state for the initial state of the BLoC.
+  - [ ] Add `MovieLoading` state to indicate that movies are being loaded.
+  - [ ] Add `MovieSuccess` state to store the list of movies and the current page.
+  - [ ] Add `MovieFailure` state to handle errors during movie fetching.
 
-[x] 2. **Tela de Detalhes do Item** 
-   - Exibir detalhes adicionais do item selecionado na lista.
-   - Incluir informações como título, descrição completa e qualquer outra informação relevante fornecida pela API.
+### 3. Implement the BLoC
+- [ ] Create `MovieBloc` class extending `Bloc<MovieEvent, MovieState>`.
+  - [ ] Implement the `MovieBloc` constructor to initialize with a `MovieRepository`.
+  - [ ] Implement the `_onMovieFetched` method to handle `MovieFetched` event.
+    - [ ] Check if the current state is `MovieLoading` to prevent duplicate API calls.
+    - [ ] Fetch movies using the `MovieRepository`.
+    - [ ] Emit `MovieSuccess` state with the updated list of movies and current page.
+    - [ ] Handle and emit `MovieFailure` state in case of errors.
 
-[x] 3. **Pesquisa**
-   - Incluir uma funcionalidade de pesquisa que permita ao usuário filtrar a lista de itens pelo título.
+### 4. Create the Repository
+- [ ] Create `MovieRepository` class.
+  - [ ] Implement `fetchMovies` method to interact with the API and return a list of movies.
 
-[x] 4. **Tratamento de Erros**
-   - Exibir mensagens de erro adequadas em caso de falha na requisição da API ou problemas de conectividade.
+### 5. Connect BLoC to the UI
+- [ ] Create `MovieListView` widget to display the list of movies.
+  - [ ] Use `BlocBuilder<MovieBloc, MovieState>` to build the UI based on the current state.
+  - [ ] Add a `ScrollController` to detect when the user has scrolled near the end of the list.
+  - [ ] Trigger the `MovieFetched` event when the scroll threshold is reached.
+  - [ ] Display a loading indicator while fetching more movies.
+  - [ ] Display an error message if `MovieFailure` state is emitted.
 
-## Requisitos Técnicos
+### 6. Setup the Main Application
+- [ ] Update `main.dart` to initialize the `MovieRepository` and provide the `MovieBloc` to the `MovieListView`.
+  - [ ] Use `BlocProvider` to inject `MovieBloc` into the widget tree.
 
-[x] 1. **Consumo de API** - Api escolhida foi The Movie Database
-   - Utilize uma API pública de sua escolha (ex.: JSONPlaceholder, The Movie Database, etc.).
 
-[x] 2. **Boas Práticas**
-   - Código limpo e bem documentado.
-   - Tratamento adequado de erros e exceções.
-
-## Instruções de Instalação
-
-1. **Clone o repositório**
-   ```bash
-   git clone https://github.com/lzerodev/movie_app.git
-   ```
-
-2. **Abra o diretório no Android Studio e crie seu emulador**
-
-3. **Instale as dependências do projeto**
-   ```
-   flutter pub get
-   ```
-
-4. **Rode a aplicação usando o emulador criado**
-   ```
-   flutter run
-   ```
-   
-## Dependências adicionadas:
-
-dio
-flutter_svg
-mockito
-tests
-build_runner
