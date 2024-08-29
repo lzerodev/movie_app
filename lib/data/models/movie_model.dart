@@ -3,7 +3,7 @@ class Movie {
   final String title;
   final String? posterPath;
   final String? backdropPath;
-  final String releaseDate;
+  final DateTime releaseDate;
   final String overview;
   final double voteAverage;
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:movie_app/services/movie_controller.dart';
 import '../data/models/movie_model.dart';
 import '../screens/movie_detail.dart';
@@ -22,35 +23,6 @@ class MovieListView extends StatefulWidget {
 
 class _MovieListViewState extends State<MovieListView> {
 
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   // Adiciona o listener de scroll caso o scrollController não seja nulo
-  //   if (widget.scrollController != null) {
-  //     widget.scrollController!.addListener(_scrollListener);
-  //   }
-  // }
-
-  // @override
-  // void dispose() {
-  //   // Remove o listener de scroll ao descartar o widget para evitar vazamentos de memória
-  //   if (widget.scrollController != null) {
-  //     widget.scrollController!.removeListener(_scrollListener);
-  //   }
-  //   super.dispose();
-  // }
-
-  // void _scrollListener() {
-  //   if (widget.scrollController != null &&
-  //       widget.scrollController!.position.pixels >=
-  //           widget.scrollController!.position.maxScrollExtent - 10 &&
-  //       widget.fetchMoreMovies != null &&
-  //       !widget.isLoading) {
-  //     widget.fetchMoreMovies!();
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -70,7 +42,7 @@ class _MovieListViewState extends State<MovieListView> {
 
         final movie = widget.movies[index];
         final voteAverage = movie.voteAverage;
-        final releaseDate = movie.releaseDate;
+        final releaseDate = DateFormat.yMd('dd/MM/yyyy').format(movie.releaseDate);
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 3.0),
