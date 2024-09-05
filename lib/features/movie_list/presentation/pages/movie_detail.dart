@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../data/models/movie_model.dart';
+import '../../data/models/movie_model.dart';
 import '../widgets/back_button.dart';
 
 class MovieDetailPage extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:movie_app/services/scroll_controller.dart';
+import 'package:movie_app/features/movie_list/domain/usecases/scroll_controller.dart';
 
 void main() {
   testWidgets('ScrollService triggers onEndOfScroll when scrolled near the end', (WidgetTester tester) async {

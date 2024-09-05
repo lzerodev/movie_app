@@ -13,8 +13,8 @@ import 'package:dio/src/options.dart' as _i2;
 import 'package:dio/src/response.dart' as _i6;
 import 'package:dio/src/transformer.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:movie_app/data/models/movie_model.dart' as _i11;
-import 'package:movie_app/data/repositories/movie_repository.dart' as _i10;
+import 'package:movie_app/features/movie_list/data/models/movie_model.dart' as _i11;
+import 'package:movie_app/features/movie_list/data/repositories/movie_repository.dart' as _i10;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

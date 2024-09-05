@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../models/movie_model.dart';
-import 'const.dart';
+import '../../../../core/utils/const.dart';
 
 class MovieRepository {
   final Dio _dio;
@@ -18,7 +18,7 @@ class MovieRepository {
     try {
       final data = await _getRequest(
         '/movie/now_playing',
-        queryParameters: {'api_key': apiKey, 'page': page},
+        queryParameters: {'api_key': apiKey, 'page': page, 'language': 'pt-BR'},
       );
       List<dynamic> results = data['results'] ?? [];
       return results.map((movie) => Movie.fromJson(movie)).toList();

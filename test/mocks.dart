@@ -1,5 +1,5 @@
 import 'package:mockito/annotations.dart';
-import 'package:movie_app/data/repositories/movie_repository.dart';
+import 'package:movie_app/features/movie_list/data/repositories/movie_repository.dart';
 import 'package:dio/dio.dart';
 
 // O pacote mockito é usado para criar objetos simulados (mocks) para testes.

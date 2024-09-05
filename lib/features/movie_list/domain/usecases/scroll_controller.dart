@@ -9,7 +9,7 @@ class ScrollService {
   // Construtor recebe uma função a ser chamada quando o fim da rolagem é alcançado.
   ScrollService({
     required this.onEndOfScroll,
-    ScrollController? controller,
+    ScrollController? controller, 
     this.threshold = 50.0, // Valor padrão de 50 pixels
   }) : scrollController = controller ?? ScrollController() {
     scrollController.addListener(_scrollListener);
@@ -18,7 +18,8 @@ class ScrollService {
   // Verifica se a rolagem está próxima do final.
   void _scrollListener() {
     if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - threshold) {
-      onEndOfScroll(); // Chama a função passada como parâmetro.
+      onEndOfScroll();
+      debugPrint('End of Scroll'); // Chama a função passada como parâmetro.
     }
   }
 

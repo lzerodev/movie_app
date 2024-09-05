@@ -3,16 +3,17 @@ class Movie {
   final String title;
   final String? posterPath;
   final String? backdropPath;
-  final String releaseDate;
+  final DateTime releaseDate;
   final String overview;
   final double voteAverage;
 
   Movie(
-      {required this.title,
+      {
+      required this.id,
+      required this.title,
       required this.posterPath,
       required this.backdropPath,
       required this.releaseDate,
-      required this.id,
       required this.overview,
       required this.voteAverage});
 
@@ -22,7 +23,7 @@ class Movie {
       title: json['title'],
       posterPath: json['poster_path'],
       backdropPath: json['backdrop_path'],
-      releaseDate: json['release_date'],
+      releaseDate: DateTime.parse(json['release_date']),
       overview: json['overview'],
       voteAverage: double.parse((json['vote_average']).toStringAsFixed(1)),
     );

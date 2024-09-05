@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../data/models/movie_model.dart';
-import '../data/repositories/movie_repository.dart';
+import '../../data/models/movie_model.dart';
+import '../../data/repositories/movie_repository.dart';
 
 class SearchService {
   final MovieRepository _movieRepository;

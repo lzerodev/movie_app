@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:movie_app/data/models/movie_model.dart';
-import 'package:movie_app/services/movie_controller.dart';
+import 'package:movie_app/features/movie_list/data/models/movie_model.dart';
+import 'package:movie_app/features/movie_list/domain/usecases/movie_controller.dart';
 import 'package:dio/dio.dart';
 import 'mocks.mocks.dart';
 
@@ -35,7 +35,7 @@ void main() {
         id: 1,
         title: 'Inception',
         posterPath: '/path/to/poster',
-        releaseDate: '2010-07-16',
+        releaseDate: DateTime.now(),
         overview: 'A thief who steals corporate secrets through the use of dream-sharing technology.',
         voteAverage: 8.8,
         backdropPath: '/path/to/backdrop',
@@ -61,7 +61,7 @@ void main() {
         id: 1,
         title: 'Inception',
         posterPath: '/path/to/poster',
-        releaseDate: '2010-07-16',
+        releaseDate: DateTime.now(),
         overview: 'A thief who steals corporate secrets through the use of dream-sharing technology.',
         voteAverage: 8.8,
         backdropPath: '/path/to/backdrop',
@@ -90,7 +90,7 @@ void main() {
         id: 1,
         title: 'Inception',
         posterPath: '/path/to/poster',
-        releaseDate: '2010-07-16',
+        releaseDate: DateTime.now(),
         overview: 'A thief who steals corporate secrets through the use of dream-sharing technology.',
         voteAverage: 8.8,
         backdropPath: '/path/to/backdrop',
