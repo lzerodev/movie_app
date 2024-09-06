@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/features/movie_list/presentation/pages/now_playing_movies.dart';
-import 'package:movie_app/features/movie_list/presentation/pages/search_movies.dart';
+import 'package:movie_app/features/movie/presentation/pages/now_playing_movies.dart';
+import 'package:movie_app/features/movie/presentation/pages/search_movies.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
