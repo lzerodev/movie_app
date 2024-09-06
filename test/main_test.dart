@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:movie_app/features/home/presentation/movieapp.dart';
 import 'package:movie_app/features/home/widgets/home.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/features/movie_list/presentation/widgets/movie_list.dart';
+import 'package:movie_app/features/movie/presentation/widgets/movie_list.dart';
 
 void main() {
   testWidgets('MovieApp renderiza a HomePage e seus componentes', (WidgetTester tester) async {

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:movie_app/features/movie_list/data/models/movie_model.dart';
-import 'package:movie_app/features/movie_list/data/repositories/movie_repository.dart';
-import 'package:movie_app/features/movie_list/domain/usecases/search_controller.dart';
+import 'package:movie_app/features/movie/data/models/movie.dart';
+import 'package:movie_app/features/movie/data/repositories/movie_repository.dart';
+import 'package:movie_app/features/movie/domain/usecases/search_controller.dart';
 
 // Cria uma classe mock para o MovieRepository
 class MockMovieRepository extends Mock implements MovieRepository {}
