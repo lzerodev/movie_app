@@ -37,17 +37,15 @@ class MovieListItem extends StatelessWidget {
             ),
           ),
         ),
-        title: ConstrainedBox(
-          constraints: const BoxConstraints(
-              maxWidth: double.infinity, maxHeight: double.infinity),
-          child: Text(
-            movie.title,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14.0,
-              fontWeight: FontWeight.bold,
-            ),
+        title: Text(
+          movie.title,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 14.0,
+            fontWeight: FontWeight.bold,
           ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         subtitle: ConstrainedBox(
           constraints:
@@ -67,18 +65,22 @@ class MovieListItem extends StatelessWidget {
           ),
         ),
         trailing: ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 50, maxWidth: 50),
+          constraints: const BoxConstraints(maxHeight: 50, maxWidth: 70),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.star, color: Colors.amber, size: 24.0),
-              const SizedBox(width: 5),
-              Text(
-                '$voteAverage',
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey,
+              const Icon(Icons.star, color: Colors.amber, size: 20.0),
+              const SizedBox(width: 2),
+              Flexible(
+                child: Text(
+                  '$voteAverage',
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 11.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
