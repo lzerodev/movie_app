@@ -14,6 +14,57 @@ Um aplicativo de filmes desenvolvido em Flutter seguindo **Clean Architecture** 
 - ✅ **Testes abrangentes** - Cobertura completa com testes unitários
 - ✨ **Interface moderna** - Design System consistente com animações
 
+## 📱 Screenshots
+
+### **🏠 Tela Principal**
+<div align="center">
+  <img src="screenshots/home_screen.png" alt="Tela Principal" width="300"/>
+  <p><em>Navegação principal com abas e lista de filmes em cartaz</em></p>
+</div>
+
+### **🎬 Lista de Filmes**
+<div align="center">
+  <img src="screenshots/movie_list.png" alt="Lista de Filmes" width="300"/>
+  <p><em>Interface moderna com gradientes e animações fluidas</em></p>
+</div>
+
+### **🔍 Pesquisa de Filmes**
+<div align="center">
+  <img src="screenshots/search_screen.png" alt="Pesquisa de Filmes" width="300"/>
+  <p><em>Busca em tempo real com throttling e resultados instantâneos</em></p>
+</div>
+
+### **📄 Detalhes do Filme**
+<div align="center">
+  <img src="screenshots/movie_detail.png" alt="Detalhes do Filme" width="300"/>
+  <p><em>SliverAppBar expansível com informações completas e animações</em></p>
+</div>
+
+### **👤 Perfil do Usuário**
+<div align="center">
+  <img src="screenshots/profile_screen.png" alt="Perfil do Usuário" width="300"/>
+  <p><em>Seção de perfil com opções personalizadas e cards estilizados</em></p>
+</div>
+
+### **🔔 Notificações**
+<div align="center">
+  <img src="screenshots/notifications_screen.png" alt="Notificações" width="300"/>
+  <p><em>Centro de notificações com cards informativos e badges coloridos</em></p>
+</div>
+
+### **🎭 Animações e Transições**
+<div align="center">
+  <img src="screenshots/animations_demo.gif" alt="Demonstração de Animações" width="300"/>
+  <p><em>Hero animations, hover effects e transições suaves entre telas</em></p>
+</div>
+
+> **📷 Como adicionar screenshots:**
+> 1. Crie uma pasta `screenshots/` na raiz do projeto
+> 2. Capture as telas do app em diferentes dispositivos
+> 3. Salve as imagens com nomes descritivos
+> 4. Para GIFs de animação, use ferramentas como LICEcap ou ScreenToGif
+> 5. Mantenha as imagens otimizadas (máximo 1MB cada)
+
 ## 🎨 Design System & Interface
 
 ### **Redesign da Lista de Filmes**
@@ -758,6 +809,20 @@ open coverage/html/index.html
 
 ## 📋 Changelog
 
+### v2.1.0 - Documentação Visual (2025-01-19)
+#### 📷 Screenshots e Documentação
+- **📱 Seção de Screenshots** adicionada ao README
+  - Layout organizado para todas as telas principais
+  - Orientações detalhadas para captura de imagens
+  - Estrutura de pastas preparada para screenshots
+  - Guias de dimensões e qualidade de imagem
+
+- **📋 Documentação Expandida**
+  - README detalhado para pasta screenshots/
+  - Especificações técnicas para capturas
+  - Ferramentas recomendadas para criação de GIFs
+  - Scripts de automação para screenshots
+
 ### v2.0.0 - Design System & Interface Moderna (2025-01-19)
 #### ✨ Novas Features
 - **🎨 Redesign completo da lista de filmes**
@@ -838,10 +903,6 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 - **Flutter Team** pelo framework excepcional
 - **BLoC Library** pelos padrões de estado reativo
 - **Comunidade Flutter** pelas melhores práticas
-
-- **The Movie Database (TMDB)** - API de dados de filmes
-- **Flutter Team** - Framework incrível
-- **BLoC Library** - Gerenciamento de estado reativo
 
 ---
 
