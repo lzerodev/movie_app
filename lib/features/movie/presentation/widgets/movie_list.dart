@@ -36,23 +36,25 @@ class _MovieListViewState extends State<MovieListView> {
           children: [
             // Lista principal
             switch (state.status) {
-              MovieModernStatus.initial =>
-                const Center(child: CircularProgressIndicator(color: Colors.black)),
+              MovieModernStatus.initial => const Center(
+                  child: CircularProgressIndicator(color: Colors.black)),
               MovieModernStatus.loading when state.movies.isEmpty =>
-                const Center(child: CircularProgressIndicator(color: Colors.black)),
+                const Center(
+                    child: CircularProgressIndicator(color: Colors.black)),
               MovieModernStatus.failure => Center(
-                  child:
-                      Text('Erro: ${state.errorMessage ?? "Erro desconhecido"}')),
+                  child: Text(
+                      'Erro: ${state.errorMessage ?? "Erro desconhecido"}')),
               MovieModernStatus.success =>
                 _buildMovieList(state.movies, state.hasReachedMax),
               MovieModernStatus.loading => _buildMovieList(
                   state.movies, false), // Mostra loading no fim da lista
             },
-            
+
             // Botão de voltar ao topo
             if (_showScrollToTop)
               Positioned(
-                bottom: AppDesignSystem.spaceXl + 80, // Acima do FAB + navigation bar
+                bottom: AppDesignSystem.spaceXl +
+                    80, // Acima do FAB + navigation bar
                 left: AppDesignSystem.spaceLg, // Mudança para o lado esquerdo
                 child: AnimatedScale(
                   scale: _showScrollToTop ? 1.0 : 0.0,
@@ -107,7 +109,7 @@ class _MovieListViewState extends State<MovieListView> {
               width: 48,
               height: 48,
               padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
-              child: Icon(
+              child: const Icon(
                 Icons.keyboard_arrow_up_rounded,
                 color: AppDesignSystem.accentColor,
                 size: 24,
@@ -162,7 +164,7 @@ class _MovieListViewState extends State<MovieListView> {
         displacement: 50.0,
         child: ListView.separated(
           controller: _scrollController,
-          
+
           // === CONFIGURAÇÕES DE PADDING E ESPAÇAMENTO ===
           padding: const EdgeInsets.only(
             top: AppDesignSystem.spaceMd,
@@ -170,22 +172,22 @@ class _MovieListViewState extends State<MovieListView> {
             left: AppDesignSystem.spaceSm,
             right: AppDesignSystem.spaceSm,
           ),
-          
+
           // === CONFIGURAÇÕES DE FÍSICA DE SCROLL ===
           physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics(),
           ),
-          
+
           // === CONFIGURAÇÕES DE PERFORMANCE ===
           clipBehavior: Clip.antiAlias,
           shrinkWrap: false, // Para performance otimizada
           addAutomaticKeepAlives: true, // Mantém widgets na memória
           addRepaintBoundaries: true, // Otimiza repaint
           addSemanticIndexes: true, // Para acessibilidade
-          
+
           // === CONFIGURAÇÕES DE CACHE ===
           cacheExtent: 500.0, // Cache extra para scroll suave
-          
+
           // === CONFIGURAÇÕES EXISTENTES ===
           itemCount: hasReachedMax ? movies.length : movies.length + 1,
           separatorBuilder: (context, index) => const SizedBox(
@@ -194,7 +196,8 @@ class _MovieListViewState extends State<MovieListView> {
           itemBuilder: (BuildContext context, int index) {
             if (index >= movies.length) {
               return Container(
-                padding: const EdgeInsets.symmetric(vertical: AppDesignSystem.spaceXl),
+                padding: const EdgeInsets.symmetric(
+                    vertical: AppDesignSystem.spaceXl),
                 child: Center(
                   child: Container(
                     padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
@@ -266,9 +269,9 @@ class _MovieListViewState extends State<MovieListView> {
   Future<void> _handleRefresh() async {
     // Reset da paginação e recarregamento
     context.read<MovieModernBloc>().add(
-      const MovieModernNowPlayingFetched(),
-    );
-    
+          const MovieModernNowPlayingFetched(),
+        );
+
     // Simula um delay mínimo para UX
     await Future.delayed(const Duration(milliseconds: 500));
   }
