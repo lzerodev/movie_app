@@ -164,14 +164,23 @@ class AppPageLayout extends StatelessWidget {
 
   Widget _buildAppBarTitle() {
     return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 600),
       tween: Tween<double>(begin: 0.0, end: 1.0),
-      curve: Curves.easeOutBack,
+      curve: Curves.easeOutQuart, // Curva mais suave que não extrapola
       builder: (context, value, child) {
+        // Múltiplas camadas de proteção para garantir valores válidos
+        final safeValue = value.isNaN ? 0.0 : value.clamp(0.0, 1.0);
+        final safeOpacity = safeValue.clamp(0.0, 1.0);
+        final safeScale = (0.85 + (0.15 * safeValue)).clamp(0.7, 1.0);
+        
+        // Proteção adicional para opacidade das sombras
+        final shadowOpacity1 = (0.3 * safeOpacity).clamp(0.0, 1.0);
+        final shadowOpacity2 = (0.15 * safeOpacity).clamp(0.0, 1.0);
+        
         return Transform.scale(
-          scale: 0.8 + (0.2 * value),
+          scale: safeScale,
           child: Opacity(
-            opacity: value,
+            opacity: safeOpacity,
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppDesignSystem.spaceMd,
@@ -180,18 +189,18 @@ class AppPageLayout extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: AppDesignSystem.accentGradient,
                 borderRadius: AppDesignSystem.borderRadiusMd,
-                boxShadow: [
+                boxShadow: safeOpacity > 0 ? [
                   BoxShadow(
-                    color: AppDesignSystem.accentColor.withOpacity(0.4),
-                    blurRadius: 12,
-                    offset: const Offset(0, 3),
+                    color: AppDesignSystem.accentColor.withOpacity(shadowOpacity1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
                   BoxShadow(
-                    color: AppDesignSystem.accentColor.withOpacity(0.2),
-                    blurRadius: 24,
-                    offset: const Offset(0, 6),
+                    color: AppDesignSystem.accentColor.withOpacity(shadowOpacity2),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
                   ),
-                ],
+                ] : [],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
