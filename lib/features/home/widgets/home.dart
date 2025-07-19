@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/features/movie/presentation/pages/now_playing_movies.dart';
-import 'package:movie_app/features/movie/presentation/pages/search_movies.dart';
+import '../../../core/widgets/widgets.dart';
+import '../../../core/theme/app_design_system.dart';
+import '../../movie/presentation/pages/now_playing_movies.dart';
+import '../../movie/presentation/pages/search_movies.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,181 +13,310 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
+  
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
-          elevation: 5,
-          iconTheme: const IconThemeData(size: 25),
-          leading: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            child: Icon(
-              Icons.movie_rounded,
-              color: Colors.white,
+    return AppPageLayout(
+      title: 'Testflix',
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: _navigateToSearch,
+        ),
+      ],
+      bottomNavigationBar: _buildBottomNavigationBar(),
+      floatingActionButton: _buildFloatingActionButton(),
+      body: _buildBody(),
+    );
+  }
+  
+  Widget _buildBody() {
+    return IndexedStack(
+      index: currentPageIndex,
+      children: [
+        _buildHomePage(),
+        _buildNotificationsPage(),
+        _buildProfilePage(),
+      ],
+    );
+  }
+  
+  Widget _buildHomePage() {
+    return const Padding(
+      padding: EdgeInsets.all(AppDesignSystem.spaceMd),
+      child: NowPlayingMoviesPage(),
+    );
+  }
+  
+  Widget _buildNotificationsPage() {
+    return Padding(
+      padding: const EdgeInsets.all(AppDesignSystem.spaceMd),
+      child: Column(
+        children: [
+          _buildNotificationCard(
+            icon: Icons.new_releases,
+            title: 'Novos filmes hoje!',
+            subtitle: 'Descubra onde assistir seus filmes favoritos',
+            color: AppDesignSystem.accentColor,
+          ),
+          const SizedBox(height: AppDesignSystem.spaceMd),
+          _buildNotificationCard(
+            icon: Icons.local_fire_department,
+            title: 'Em alta agora',
+            subtitle: 'Veja os filmes mais populares da semana',
+            color: AppDesignSystem.warningColor,
+          ),
+          const SizedBox(height: AppDesignSystem.spaceMd),
+          _buildNotificationCard(
+            icon: Icons.star,
+            title: 'Recomendado para você',
+            subtitle: 'Baseado nos seus filmes favoritos',
+            color: AppDesignSystem.successColor,
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildNotificationCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color color,
+  }) {
+    return AppCard(
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(AppDesignSystem.spaceSm),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: AppDesignSystem.borderRadiusSm,
+          ),
+          child: Icon(
+            icon,
+            color: color,
+            size: 24,
+          ),
+        ),
+        title: Text(
+          title,
+          style: AppDesignSystem.titleMedium.copyWith(
+            color: AppDesignSystem.textPrimaryColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: AppDesignSystem.bodyMedium.copyWith(
+            color: AppDesignSystem.textSecondaryColor,
+          ),
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          color: AppDesignSystem.iconSecondaryColor,
+          size: 16,
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildProfilePage() {
+    return Padding(
+      padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
+      child: Column(
+        children: [
+          _buildProfileHeader(),
+          const SizedBox(height: AppDesignSystem.spaceXl),
+          _buildProfileOptions(),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildProfileHeader() {
+    return AppCard(
+      child: Column(
+        children: [
+          Container(
+            width: 80,
+            height: 80,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: AppDesignSystem.accentGradient,
+            ),
+            child: const Icon(
+              Icons.person,
+              size: 40,
+              color: AppDesignSystem.textPrimaryColor,
             ),
           ),
-          centerTitle: true,
-          title: const Text(
-            'Testflix',
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Poppins',
+          const SizedBox(height: AppDesignSystem.spaceMd),
+          Text(
+            'Usuário',
+            style: AppDesignSystem.headlineSmall.copyWith(
+              color: AppDesignSystem.textPrimaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: AppDesignSystem.spaceSm),
+          Text(
+            'Cinéfilo apaixonado por aventuras',
+            style: AppDesignSystem.bodyMedium.copyWith(
+              color: AppDesignSystem.textSecondaryColor,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildProfileOptions() {
+    return Column(
+      children: [
+        _buildProfileOption(
+          icon: Icons.favorite_outline,
+          title: 'Meus Favoritos',
+          subtitle: 'Filmes salvos para assistir depois',
+        ),
+        _buildProfileOption(
+          icon: Icons.history,
+          title: 'Histórico',
+          subtitle: 'Filmes que você já assistiu',
+        ),
+        _buildProfileOption(
+          icon: Icons.settings_outlined,
+          title: 'Configurações',
+          subtitle: 'Personalize sua experiência',
+        ),
+        _buildProfileOption(
+          icon: Icons.help_outline,
+          title: 'Ajuda',
+          subtitle: 'Central de suporte e FAQ',
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildProfileOption({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppDesignSystem.spaceMd),
+      child: AppCard(
+        onTap: () {
+          // TODO: Implementar navegação
+        },
+        child: ListTile(
+          leading: Icon(
+            icon,
+            color: AppDesignSystem.accentColor,
+            size: 24,
+          ),
+          title: Text(
+            title,
+            style: AppDesignSystem.titleMedium.copyWith(
+              color: AppDesignSystem.textPrimaryColor,
               fontWeight: FontWeight.w600,
             ),
           ),
-          backgroundColor: Colors.black,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SearchMoviesPage(),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-        body: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.grey,
-                  backgroundBlendMode: BlendMode.overlay,
-                ),
-                child: const NowPlayingMoviesPage()),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                Card(
-                  child: ListTile(
-                    leading: Icon(Icons.notifications_sharp),
-                    title: Text('New movie out today!'),
-                    subtitle: Text('Find out where to whatch your movies'),
-                  ),
-                ),
-                Card(
-                  child: ListTile(
-                    leading: Icon(Icons.notifications_sharp),
-                    title: Text('Alert!'),
-                    subtitle: Text('This is a notification'),
-                  ),
-                ),
-              ],
+          subtitle: Text(
+            subtitle,
+            style: AppDesignSystem.bodyMedium.copyWith(
+              color: AppDesignSystem.textSecondaryColor,
             ),
           ),
-          Card(
-            clipBehavior: null,
-            margin: const EdgeInsets.all(10),
-            elevation: 5,
-            semanticContainer: true,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        maxHeight: 600,
-                        maxWidth: MediaQuery.sizeOf(context).width - 20),
-                    child: Column(
-                      children: <Widget>[
-                        const SizedBox(height: 15,),
-                        const SizedBox(child: Text('Teste'),),
-                        SizedBox(
-                          height: 200,
-                          child: CarouselView(
-                              elevation: 5,
-                              itemExtent: 350,
-                              itemSnapping: true,
-                              children: <Widget>[
-                                Container(color: Colors.amber),
-                                Container(color: Colors.blueAccent),
-                                Container(
-                                    color: const Color.fromARGB(255, 71, 67, 11)),
-                                Container(
-                                    color: const Color.fromARGB(255, 35, 50, 75)),
-                                Container(
-                                    color: const Color.fromARGB(255, 39, 85, 46)),
-                                Container(color: Colors.redAccent),
-                                Container(color: Colors.lightGreenAccent)
-                              ]),
-                        ),
-                        const SizedBox(height: 50,),
-                        const SizedBox(child: Text('Teste'),),
-                        SizedBox(
-                          height: 200,
-                          child: CarouselView(
-                              elevation: 5,
-                              itemExtent: 300,
-                              itemSnapping: true,
-                              children: <Widget>[
-                                Container(color: Colors.amber),
-                                Container(color: Colors.blueAccent),
-                                Container(
-                                    color: const Color.fromARGB(255, 71, 67, 11)),
-                                Container(
-                                    color: const Color.fromARGB(255, 35, 50, 75)),
-                                Container(
-                                    color: const Color.fromARGB(255, 39, 85, 46)),
-                                Container(color: Colors.redAccent),
-                                Container(color: Colors.lightGreenAccent)
-                              ]),
-                        )
-                      ],
-                    )),
-              ),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            color: AppDesignSystem.iconSecondaryColor,
+            size: 16,
+          ),
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildBottomNavigationBar() {
+    return NavigationBar(
+      selectedIndex: currentPageIndex,
+      onDestinationSelected: (index) {
+        setState(() {
+          currentPageIndex = index;
+        });
+      },
+      backgroundColor: AppDesignSystem.surfaceColor,
+      indicatorColor: AppDesignSystem.accentColor.withOpacity(0.2),
+      destinations: [
+        NavigationDestination(
+          icon: Icon(
+            Icons.home_outlined,
+            color: currentPageIndex == 0 
+                ? AppDesignSystem.accentColor 
+                : AppDesignSystem.iconSecondaryColor,
+          ),
+          selectedIcon: const Icon(
+            Icons.home,
+            color: AppDesignSystem.accentColor,
+          ),
+          label: 'Home',
+        ),
+        NavigationDestination(
+          icon: Badge(
+            label: const Text('2'),
+            backgroundColor: AppDesignSystem.accentColor,
+            textColor: AppDesignSystem.textPrimaryColor,
+            child: Icon(
+              Icons.notifications_outlined,
+              color: currentPageIndex == 1 
+                  ? AppDesignSystem.accentColor 
+                  : AppDesignSystem.iconSecondaryColor,
             ),
           ),
-        ][currentPageIndex],
-        floatingActionButton: FloatingActionButton.extended(
-          label: const Icon(Icons.search, color: Colors.white),
-          foregroundColor: Colors.black,
-          hoverColor: Colors.red,
-          backgroundColor: const Color.fromARGB(255, 83, 83, 83),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SearchMoviesPage(),
-              ),
-            );
-          },
+          selectedIcon: const Badge(
+            label: Text('2'),
+            backgroundColor: AppDesignSystem.accentColor,
+            textColor: AppDesignSystem.textPrimaryColor,
+            child: Icon(
+              Icons.notifications,
+              color: AppDesignSystem.accentColor,
+            ),
+          ),
+          label: 'Notificações',
         ),
-        bottomNavigationBar: NavigationBar(
-          indicatorColor: Colors.white,
-          backgroundColor: const Color.fromARGB(255, 168, 168, 168),
-          destinations: const <Widget>[
-            NavigationDestination(
-              selectedIcon: Icon(Icons.home),
-              icon: Icon(Icons.home_outlined),
-              label: 'Home',
-            ),
-            NavigationDestination(
-              icon: Badge(
-                label: Text('2'),
-                child: Icon(Icons.notifications_sharp)),
-              label: 'Notifications',
-            ),
-            NavigationDestination(
-              icon: Badge(
-                child: Icon(Icons.person),
-              ),
-              label: 'Profile',
-            ),
-          ],
-          onDestinationSelected: (int index) {
-            setState(() {
-              currentPageIndex = index;
-            });
-          },
-          selectedIndex: currentPageIndex,
+        NavigationDestination(
+          icon: Icon(
+            Icons.person_outline,
+            color: currentPageIndex == 2 
+                ? AppDesignSystem.accentColor 
+                : AppDesignSystem.iconSecondaryColor,
+          ),
+          selectedIcon: const Icon(
+            Icons.person,
+            color: AppDesignSystem.accentColor,
+          ),
+          label: 'Perfil',
         ),
+      ],
+    );
+  }
+  
+  Widget _buildFloatingActionButton() {
+    return FloatingActionButton.extended(
+      onPressed: _navigateToSearch,
+      backgroundColor: AppDesignSystem.accentColor,
+      foregroundColor: AppDesignSystem.textPrimaryColor,
+      icon: const Icon(Icons.search),
+      label: const Text('Buscar'),
+    );
+  }
+  
+  void _navigateToSearch() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SearchMoviesPage(),
       ),
     );
   }

@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/di_extensions.dart';
+import '../../../../core/widgets/widgets.dart';
 import '../bloc/movie_modern_bloc.dart';
-import '../widgets/back_button.dart';
-import '../widgets/search_bar.dart';
 import '../widgets/search_results_list.dart';
 
 class SearchMoviesPage extends StatelessWidget {
@@ -25,8 +24,7 @@ class _SearchMoviesView extends StatefulWidget {
   const _SearchMoviesView();
 
   @override
-  // ignore: library_private_types_in_public_api
-  _SearchMoviesViewState createState() => _SearchMoviesViewState();
+  State<_SearchMoviesView> createState() => _SearchMoviesViewState();
 }
 
 class _SearchMoviesViewState extends State<_SearchMoviesView> {
@@ -36,7 +34,6 @@ class _SearchMoviesViewState extends State<_SearchMoviesView> {
   @override
   void initState() {
     super.initState();
-    // Adiciona listener para busca automática com debounce
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -68,35 +65,18 @@ class _SearchMoviesViewState extends State<_SearchMoviesView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: CustomBackButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Text('Search Movies'),
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
-          fontFamily: 'Poppins',
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: _searchMovies,
-          ),
-        ],
-      ),
+    return AppPageLayout(
+      title: 'Buscar Filmes',
+      padding: const EdgeInsets.all(16),
       body: Column(
         children: [
-          MySearchBar(
+          AppSearchField(
             controller: _searchController,
-            onSubmitted: _searchMovies,
+            hintText: 'Digite o nome do filme...',
+            onSubmitted: (_) => _searchMovies(),
+            autofocus: true,
           ),
+          const SizedBox(height: 16),
           Expanded(
             child: BlocBuilder<MovieModernBloc, MovieModernState>(
               builder: (context, state) {
@@ -106,8 +86,8 @@ class _SearchMoviesViewState extends State<_SearchMoviesView> {
 
                 return switch (state.status) {
                   MovieModernStatus.loading when state.movies.isEmpty => 
-                    const Center(
-                      child: CircularProgressIndicator(color: Colors.black),
+                    const AppLoading.large(
+                      message: 'Buscando filmes...',
                     ),
                   
                   MovieModernStatus.failure => 
@@ -136,47 +116,11 @@ class _EmptySearchState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.movie_filter,
-            size: 80,
-            color: Colors.grey,
-          ),
-          SizedBox(height: 24),
-          Text(
-            'Pesquisar Filmes',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
-          ),
-          SizedBox(height: 12),
-          Text(
-            'Digite o nome de um filme na barra de pesquisa acima',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 16,
-              color: Colors.grey,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 8),
-          Text(
-            'A pesquisa é feita automaticamente enquanto você digita',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              color: Colors.grey,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+    return const AppEmptyPageLayout(
+      showAppBar: false,
+      emptyTitle: 'Encontre seus filmes favoritos',
+      emptyMessage: 'Digite o nome de um filme na barra de busca acima para começar a pesquisar.',
+      emptyIcon: Icons.movie_filter_outlined,
     );
   }
 }
@@ -193,41 +137,13 @@ class _SearchErrorState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.error_outline,
-            size: 64,
-            color: Colors.red,
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Erro ao buscar filmes',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            errorMessage,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              color: Colors.grey,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onRetry,
-            child: const Text('Tentar novamente'),
-          ),
-        ],
-      ),
+    return AppErrorPageLayout(
+      showAppBar: false,
+      errorTitle: 'Erro ao buscar filmes',
+      errorMessage: errorMessage,
+      errorIcon: Icons.search_off,
+      retryButtonText: 'Tentar novamente',
+      onRetry: onRetry,
     );
   }
 }
@@ -238,35 +154,11 @@ class _NoResultsState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.search_off,
-            size: 64,
-            color: Colors.grey,
-          ),
-          SizedBox(height: 16),
-          Text(
-            'Nenhum filme encontrado',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Tente pesquisar com outras palavras-chave',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              color: Colors.grey,
-            ),
-          ),
-        ],
-      ),
+    return const AppEmptyPageLayout(
+      showAppBar: false,
+      emptyTitle: 'Nenhum filme encontrado',
+      emptyMessage: 'Tente pesquisar com outras palavras-chave ou verifique a ortografia.',
+      emptyIcon: Icons.search_off,
     );
   }
 }

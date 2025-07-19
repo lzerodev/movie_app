@@ -30,15 +30,15 @@ class SearchMoviesUseCase implements UseCase<List<Movie>, SearchMoviesParams> {
     final trimmedQuery = params.query.trim();
     
     if (trimmedQuery.isEmpty) {
-      return Error(ValidationFailure(message: 'Query de pesquisa não pode estar vazia'));
+      return const Error(ValidationFailure(message: 'Query de pesquisa não pode estar vazia'));
     }
 
     if (trimmedQuery.length < 2) {
-      return Error(ValidationFailure(message: 'Query deve ter pelo menos 2 caracteres'));
+      return const Error(ValidationFailure(message: 'Query deve ter pelo menos 2 caracteres'));
     }
 
     if (params.page < 1) {
-      return Error(ValidationFailure(message: 'Página deve ser maior que 0'));
+      return const Error(ValidationFailure(message: 'Página deve ser maior que 0'));
     }
 
     // Executa a busca

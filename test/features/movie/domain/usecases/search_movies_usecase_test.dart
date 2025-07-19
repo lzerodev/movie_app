@@ -21,7 +21,7 @@ void main() {
   group('SearchMoviesUseCase', () {
     const query = 'Inception';
     const page = 1;
-    final params = SearchMoviesParams(query: query, page: page);
+    const params = SearchMoviesParams(query: query, page: page);
 
     final movieList = [
       Movie(
@@ -64,7 +64,7 @@ void main() {
 
     test('deve retornar ValidationFailure quando query estiver vazia', () async {
       // Arrange
-      final emptyParams = SearchMoviesParams(query: '', page: page);
+      const emptyParams = SearchMoviesParams(query: '', page: page);
 
       // Act
       final result = await useCase(emptyParams);
@@ -80,7 +80,7 @@ void main() {
 
     test('deve retornar ValidationFailure quando query tiver menos de 2 caracteres', () async {
       // Arrange
-      final shortParams = SearchMoviesParams(query: 'a', page: page);
+      const shortParams = SearchMoviesParams(query: 'a', page: page);
 
       // Act
       final result = await useCase(shortParams);
@@ -96,7 +96,7 @@ void main() {
 
     test('deve retornar ValidationFailure quando page for menor que 1', () async {
       // Arrange
-      final invalidPageParams = SearchMoviesParams(query: query, page: 0);
+      const invalidPageParams = SearchMoviesParams(query: query, page: 0);
 
       // Act
       final result = await useCase(invalidPageParams);
@@ -114,7 +114,7 @@ void main() {
       // Arrange
       const networkFailure = NetworkFailure(message: 'Erro de conexão');
       when(() => mockRepository.searchMovies(query: query, page: page))
-          .thenAnswer((_) async => Error(networkFailure));
+          .thenAnswer((_) async => const Error(networkFailure));
 
       // Act
       final result = await useCase(params);
@@ -132,7 +132,7 @@ void main() {
       // Arrange
       const serverFailure = ServerFailure(message: 'Erro interno do servidor');
       when(() => mockRepository.searchMovies(query: query, page: page))
-          .thenAnswer((_) async => Error(serverFailure));
+          .thenAnswer((_) async => const Error(serverFailure));
 
       // Act
       final result = await useCase(params);

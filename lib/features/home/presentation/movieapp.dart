@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:movie_app/core/theme/app_theme.dart';
 import 'package:movie_app/features/home/widgets/home.dart';
 
 class MovieApp extends StatelessWidget {
@@ -17,10 +18,7 @@ class MovieApp extends StatelessWidget {
         Locale('pt', 'BR')],
       title: 'Movies App',
       debugShowCheckedModeBanner: false, 
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.grey[300],
-      ),
+      theme: AppTheme.theme,
       home: const HomePage(),      
     );
   }

@@ -75,7 +75,7 @@ class MovieRepositoryAdapter implements IMovieRepository {
   @override
   Future<Result<Movie>> getMovieDetails(int movieId) async {
     // TODO: Implementar quando o método existir no repositório legado
-    return Error(ServerFailure(message: 'Método getMovieDetails não implementado ainda'));
+    return const Error(ServerFailure(message: 'Método getMovieDetails não implementado ainda'));
   }
 
   /// Mapeia DioException para Failure apropriado.
@@ -84,23 +84,23 @@ class MovieRepositoryAdapter implements IMovieRepository {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return NetworkFailure(message: 'Timeout na conexão');
+        return const NetworkFailure(message: 'Timeout na conexão');
       case DioExceptionType.badResponse:
         final statusCode = dioError.response?.statusCode;
         switch (statusCode) {
           case 401:
-            return ServerFailure(message: 'Erro de autenticação - verifique a API key');
+            return const ServerFailure(message: 'Erro de autenticação - verifique a API key');
           case 404:
-            return ServerFailure(message: 'Endpoint não encontrado');
+            return const ServerFailure(message: 'Endpoint não encontrado');
           case 429:
-            return ServerFailure(message: 'Muitas requisições - rate limit atingido');
+            return const ServerFailure(message: 'Muitas requisições - rate limit atingido');
           default:
             return ServerFailure(message: 'Erro do servidor: $statusCode');
         }
       case DioExceptionType.cancel:
-        return NetworkFailure(message: 'Requisição cancelada');
+        return const NetworkFailure(message: 'Requisição cancelada');
       case DioExceptionType.connectionError:
-        return NetworkFailure(message: 'Erro de conexão com a internet');
+        return const NetworkFailure(message: 'Erro de conexão com a internet');
       default:
         return ServerFailure(message: 'Erro de rede desconhecido: ${dioError.message}');
     }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../network/api_client.dart';
 import '../utils/secure_config.dart';
@@ -42,13 +43,13 @@ class DependencyInjection {
   /// Resolve uma dependência.
   static T get<T extends Object>() {
     if (!_isInitialized) {
-      print('❌ DependencyInjection não foi inicializado. Dependências registradas: ${_instances.keys}');
+      debugPrint('❌ DependencyInjection não foi inicializado. Dependências registradas: ${_instances.keys}');
       throw StateError('DependencyInjection não foi inicializado. Chame setup() primeiro.');
     }
 
     final instance = _instances[T];
     if (instance == null) {
-      print('❌ Dependência de tipo $T não foi registrada. Dependências disponíveis: ${_instances.keys}');
+      debugPrint('❌ Dependência de tipo $T não foi registrada. Dependências disponíveis: ${_instances.keys}');
       throw StateError('Dependência de tipo $T não foi registrada.');
     }
 
@@ -80,8 +81,8 @@ class DependencyInjection {
         getNowPlayingMoviesUseCase: nowPlayingUseCase,
       );
     } catch (e, stackTrace) {
-      print('❌ Erro ao criar MovieModernBloc: $e');
-      print('Stack trace: $stackTrace');
+      debugPrint('❌ Erro ao criar MovieModernBloc: $e');
+      debugPrint('Stack trace: $stackTrace');
       rethrow;
     }
   }

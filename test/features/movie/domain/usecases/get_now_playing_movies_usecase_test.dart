@@ -81,7 +81,7 @@ void main() {
       // Arrange
       const networkFailure = NetworkFailure(message: 'Falha de conectividade');
       when(() => mockRepository.getNowPlayingMovies(page: page))
-          .thenAnswer((_) async => Error(networkFailure));
+          .thenAnswer((_) async => const Error(networkFailure));
 
       // Act
       final result = await useCase(params);
@@ -99,7 +99,7 @@ void main() {
       // Arrange
       const serverFailure = ServerFailure(message: 'Erro 500 - Servidor indisponível');
       when(() => mockRepository.getNowPlayingMovies(page: page))
-          .thenAnswer((_) async => Error(serverFailure));
+          .thenAnswer((_) async => const Error(serverFailure));
 
       // Act
       final result = await useCase(params);

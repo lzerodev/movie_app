@@ -56,13 +56,13 @@ class AppEmptyWidget extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: onAction,
-                child: Text(actionText!),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
                   ),
                 ),
+                child: Text(actionText!),
               ),
             ],
           ],

@@ -2,6 +2,7 @@
 /// 
 /// Define todas as exceções personalizadas que podem ocorrer
 /// durante a execução da aplicação.
+library exceptions;
 
 /// Exceção lançada quando há problemas de comunicação com o servidor.
 class ServerException implements Exception {

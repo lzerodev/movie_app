@@ -24,7 +24,7 @@ class GetNowPlayingMoviesUseCase implements UseCase<List<Movie>, GetNowPlayingMo
   @override
   Future<Result<List<Movie>>> call(GetNowPlayingMoviesParams params) async {
     if (params.page < 1) {
-      return Error(ValidationFailure(message: 'Página deve ser maior que 0'));
+      return const Error(ValidationFailure(message: 'Página deve ser maior que 0'));
     }
 
     return await repository.getNowPlayingMovies(page: params.page);
