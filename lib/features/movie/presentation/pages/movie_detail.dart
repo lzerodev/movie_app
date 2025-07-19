@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../../core/widgets/app_button.dart' show AppCardLegacy;
 import '../../data/models/movie.dart';
 
 class MovieDetailPage extends StatefulWidget {
@@ -274,7 +275,7 @@ class _MovieDetailPageState extends State<MovieDetailPage>
   Widget _buildMovieStats() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDesignSystem.spaceLg),
-      child: AppCard(
+      child: AppCardLegacy(
         child: Padding(
           padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
           child: Row(
@@ -358,7 +359,7 @@ class _MovieDetailPageState extends State<MovieDetailPage>
     
     return Padding(
       padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
-      child: AppCard(
+      child: AppCardLegacy(
         child: Padding(
           padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
           child: Column(

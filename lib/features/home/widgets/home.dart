@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../core/widgets/app_button.dart' show AppCardLegacy;
 import '../../../core/theme/app_design_system.dart';
 import '../../movie/presentation/pages/now_playing_movies.dart';
 import '../../movie/presentation/pages/search_movies.dart';
@@ -79,7 +80,7 @@ class HomePageState extends State<HomePage> {
     required String subtitle,
     required Color color,
   }) {
-    return AppCard(
+    return AppCardLegacy(
       child: ListTile(
         leading: Container(
           padding: const EdgeInsets.all(AppDesignSystem.spaceSm),
@@ -129,7 +130,7 @@ class HomePageState extends State<HomePage> {
   }
   
   Widget _buildProfileHeader() {
-    return AppCard(
+    return AppCardLegacy(
       child: Column(
         children: [
           Container(
@@ -200,7 +201,7 @@ class HomePageState extends State<HomePage> {
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppDesignSystem.spaceMd),
-      child: AppCard(
+      child: AppCardLegacy(
         onTap: () {
           // TODO: Implementar navegação
         },
