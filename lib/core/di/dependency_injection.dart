@@ -29,11 +29,12 @@ class DependencyInjection {
     _instances[ApiClient] = ApiClient(dio);
 
     // Movie - Data Layer
-    _instances[IMovieRepository] = MovieRepositoryAdapter(dio);
+    final movieRepository = MovieRepositoryAdapter(dio);
+    _instances[IMovieRepository] = movieRepository;
 
     // Movie - Domain Layer (UseCases)
-    _instances[SearchMoviesUseCase] = SearchMoviesUseCase(get<IMovieRepository>());
-    _instances[GetNowPlayingMoviesUseCase] = GetNowPlayingMoviesUseCase(get<IMovieRepository>());
+    _instances[SearchMoviesUseCase] = SearchMoviesUseCase(movieRepository);
+    _instances[GetNowPlayingMoviesUseCase] = GetNowPlayingMoviesUseCase(movieRepository);
 
     _isInitialized = true;
   }
@@ -41,11 +42,13 @@ class DependencyInjection {
   /// Resolve uma dependência.
   static T get<T extends Object>() {
     if (!_isInitialized) {
+      print('❌ DependencyInjection não foi inicializado. Dependências registradas: ${_instances.keys}');
       throw StateError('DependencyInjection não foi inicializado. Chame setup() primeiro.');
     }
 
     final instance = _instances[T];
     if (instance == null) {
+      print('❌ Dependência de tipo $T não foi registrada. Dependências disponíveis: ${_instances.keys}');
       throw StateError('Dependência de tipo $T não foi registrada.');
     }
 
@@ -68,10 +71,19 @@ class DependencyInjection {
 
   /// Factory method para o BLoC moderno com UseCases
   static MovieModernBloc createMovieModernBloc() {
-    return MovieModernBloc(
-      searchMoviesUseCase: get<SearchMoviesUseCase>(),
-      getNowPlayingMoviesUseCase: get<GetNowPlayingMoviesUseCase>(),
-    );
+    try {
+      final searchUseCase = get<SearchMoviesUseCase>();
+      final nowPlayingUseCase = get<GetNowPlayingMoviesUseCase>();
+      
+      return MovieModernBloc(
+        searchMoviesUseCase: searchUseCase,
+        getNowPlayingMoviesUseCase: nowPlayingUseCase,
+      );
+    } catch (e, stackTrace) {
+      print('❌ Erro ao criar MovieModernBloc: $e');
+      print('Stack trace: $stackTrace');
+      rethrow;
+    }
   }
 }
 

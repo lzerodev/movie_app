@@ -10,25 +10,28 @@ import 'core/utils/simple_bloc_observer.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Inicializa as configurações seguras (API keys, etc.)
   try {
+    // Inicializa as configurações seguras (API keys, etc.)
     await SecureConfig.initialize();
     debugPrint('✅ Configurações seguras inicializadas com sucesso');
-  } catch (e) {
-    debugPrint('❌ Erro ao inicializar configurações seguras: $e');
-    // Em produção, você pode querer mostrar uma tela de erro
-    // ou usar uma API key padrão (não recomendado)
-  }
-  
-  // Inicializa o sistema de Dependency Injection
-  try {
+    
+    // Inicializa o sistema de Dependency Injection
     await DependencyInjection.setup();
     debugPrint('✅ Dependency Injection inicializado com sucesso');
-  } catch (e) {
-    debugPrint('❌ Erro ao inicializar Dependency Injection: $e');
+    
+    // Configura o observer do BLoC
+    Bloc.observer = const SimpleBlocObserver();
+    
+    // Inicializa formatação de data em português
+    await initializeDateFormatting('pt_BR', null);
+    
+    runApp(const MovieApp());
+  } catch (e, stackTrace) {
+    debugPrint('❌ Erro crítico na inicialização: $e');
+    debugPrint('Stack trace: $stackTrace');
+    
+    // Em caso de erro, ainda executa o app mas com configuração mínima
+    Bloc.observer = const SimpleBlocObserver();
+    runApp(const MovieApp());
   }
-  
-  Bloc.observer = const SimpleBlocObserver();
-  await initializeDateFormatting('pt_BR', null); 
-  runApp(const MovieApp());
 }
