@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../../../core/widgets/app_button.dart' show AppCardLegacy;
 import '../../data/models/movie.dart';
 
 class MovieDetailPage extends StatefulWidget {
