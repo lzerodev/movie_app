@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../models/movie.dart';
+
 import '../../../../core/utils/const.dart';
+import '../models/movie.dart';
 
 class MovieRepository {
   final Dio _dio;
@@ -10,7 +11,7 @@ class MovieRepository {
 
   /// Obtém uma lista de filmes em exibição nos cinemas a partir da API.
   ///
-  /// [page] é o número da página a ser buscada.
+  /// [startIndex] é o número da página a ser buscada.
   /// Retorna uma [List<Movie>] de filmes.
   /// Lança uma [Exception] se a requisição falhar.
   ///
@@ -18,13 +19,17 @@ class MovieRepository {
     try {
       final data = await _getRequest(
         '/movie/now_playing',
-        queryParameters: {'api_key': apiKey, 'page': startIndex, 'language': 'pt-BR'},
+        queryParameters: {
+          'api_key': apiKey,
+          'page': startIndex,
+          'language': defaultLanguage
+        },
       );
       List<dynamic> results = data['results'] ?? [];
       return results.map((movie) => Movie.fromJson(movie)).toList();
     } catch (e) {
       debugPrint('Erro ao buscar filmes em exibição: $e');
-      rethrow; 
+      rethrow;
     }
   }
 
@@ -39,7 +44,12 @@ class MovieRepository {
     try {
       final data = await _getRequest(
         '/search/movie',
-        queryParameters: {'api_key': apiKey, 'query': query, 'page': page},
+        queryParameters: {
+          'api_key': apiKey,
+          'query': query,
+          'page': page,
+          'language': defaultLanguage,
+        },
       );
       List<dynamic> results = data['results'] ?? [];
       return results.map((json) => Movie.fromJson(json)).toList();
