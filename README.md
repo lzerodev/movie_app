@@ -1,6 +1,6 @@
 # 🎬 Movie App - Flutter
 
-Um aplicativo de filmes desenvolvido em Flutter seguindo Clean Architecture e padrão BLoC para gerenciamento de estado.
+Um aplicativo de filmes desenvolvido em Flutter seguindo **Clean Architecture** com padrão **BLoC** para gerenciamento de estado e **Result Pattern** para tratamento de erros.
 
 ## 📱 Funcionalidades
 
@@ -10,32 +10,86 @@ Um aplicativo de filmes desenvolvido em Flutter seguindo Clean Architecture e pa
 - ✅ **Detalhes do filme** - Informações completas de cada filme
 - ✅ **Interface responsiva** - Otimizada para diferentes tamanhos de tela
 - ✅ **Configuração segura** - API keys protegidas
+- ✅ **Arquitetura escalável** - Preparada para novas features
 
 ## 🏗️ Arquitetura
 
-### Clean Architecture + BLoC Pattern
+### Clean Architecture + BLoC Pattern + Result Pattern
 
 ```
 lib/
-├── core/
-│   ├── error/           # Tratamento de erros
-│   ├── usecases/        # Casos de uso abstratos
-│   └── utils/           # Utilitários e configurações
+├── core/                    # 🧱 Fundação da aplicação
+│   ├── exceptions/          # ⚠️ Exceções customizadas
+│   ├── failures/           # 💥 Padrão Failure
+│   ├── usecases/           # 🎯 Abstrações de casos de uso
+│   ├── utils/              # 🛠️ Utilitários e configurações
+│   │   ├── secure_config.dart    # 🔐 Configuração segura
+│   │   ├── app_constants.dart    # 📋 Constantes da app
+│   │   └── theme.dart           # 🎨 Sistema de temas
+│   ├── network/            # 🌐 Cliente HTTP centralizado
+│   ├── widgets/            # 🧩 Widgets reutilizáveis
+│   ├── extensions/         # 🔧 Extensões utilitárias
+│   ├── routing/            # 🗺️ Sistema de navegação
+│   └── di/                 # 💉 Injeção de dependências
 ├── features/
-│   ├── home/            # Tela principal
-│   ├── movie/           # Feature de filmes
-│   │   ├── data/        # Fontes de dados e repositórios
-│   │   ├── domain/      # Entidades e casos de uso
-│   │   └── presentation/ # UI e gerenciamento de estado
-│   └── profile/         # Perfil do usuário
+│   ├── home/               # 🏠 Tela principal
+│   ├── movie/              # 🎬 Feature de filmes
+│   │   ├── data/           # 📊 Fontes de dados e repositórios
+│   │   ├── domain/         # 🧠 Entidades e casos de uso
+│   │   └── presentation/   # 🖼️ UI e gerenciamento de estado
+│   └── profile/            # 👤 Perfil do usuário
 ```
 
-### Camadas Implementadas
+### 🎯 Padrões Arquiteturais Implementados
+
+#### **Result Pattern**
+```dart
+sealed class Result<T> {
+  const Result();
+}
+
+class Success<T> extends Result<T> {
+  const Success(this.data);
+  final T data;
+}
+
+class Error<T> extends Result<T> {
+  const Error(this.failure);
+  final Failure failure;
+}
+```
+
+#### **UseCase Pattern**
+```dart
+abstract class UseCase<Type, Params> {
+  Future<Result<Type>> call(Params params);
+}
+
+abstract class NoParamsUseCase<Type> {
+  Future<Result<Type>> call();
+}
+```
+
+#### **Dependency Injection**
+```dart
+class DependencyInjection {
+  static Future<void> setup() async { /* ... */ }
+  static T get<T extends Object>() { /* ... */ }
+}
+```
+
+### 🧱 Camadas Implementadas
 
 #### Core ✅
-- **Error**: Exceptions e Failures customizados
-- **Utils**: Constantes, configuração segura de API
-- **Security**: Sistema de proteção de API keys
+- **Exceptions**: `ServerException`, `NetworkException`, `ValidationException`
+- **Failures**: `ServerFailure`, `NetworkFailure`, `ValidationFailure`
+- **UseCases**: Abstrações para casos de uso com Result Pattern
+- **Utils**: Configuração segura, constantes, temas
+- **Network**: Cliente HTTP com interceptadores
+- **Widgets**: Componentes reutilizáveis (`AppLoadingWidget`, `AppErrorWidget`)
+- **Extensions**: Extensões para String, double, BuildContext
+- **Routing**: Sistema de navegação centralizado
+- **DI**: Injeção de dependências simplificada
 
 #### Features
 
@@ -169,10 +223,27 @@ api_keys.dart
 - **Transições suaves** entre estados
 
 ### 🎨 Interface
-- **Material Design 3**
-- **Fonte Poppins** customizada
-- **Cores consistentes** em todo o app
-- **Animações fluidas**
+- **Material Design 3** com tema customizado
+- **Fonte Poppins** em todas as variações
+- **Cores consistentes** seguindo design system
+- **Animações fluidas** com duração personalizada
+- **Widgets reutilizáveis** (`AppLoadingWidget`, `AppErrorWidget`, `AppEmptyWidget`)
+
+### 🛠️ Arquitetura Avançada
+- **Result Pattern** para tratamento de erros type-safe
+- **UseCase Pattern** para isolamento de regras de negócio
+- **Dependency Injection** para inversão de controle
+- **Clean Architecture** com separação clara de responsabilidades
+- **SOLID Principles** aplicados em toda a base de código
+- **Extension Methods** para código mais limpo e reutilizável
+
+### 🔧 Sistema Core
+- **ApiClient** centralizado com interceptadores Dio
+- **SecureConfig** para proteção de API keys
+- **AppConstants** para constantes organizadas
+- **Custom Exceptions** tipadas por domínio
+- **Failure Pattern** para tratamento consistente de erros
+- **Roteamento** centralizado com animações customizadas
 
 ## 🧪 Testes
 
@@ -242,7 +313,26 @@ O Flutter DevTools está disponível em: `http://localhost:9101`
 
 ## 📈 Roadmap
 
-### Próximas Funcionalidades
+### ✅ Arquitetura Implementada (v1.0)
+- [x] **Clean Architecture** com separation of concerns
+- [x] **Result Pattern** para tratamento de erros
+- [x] **UseCase Pattern** para casos de uso
+- [x] **Dependency Injection** centralizada
+- [x] **Custom Exceptions** e Failures
+- [x] **Core Widgets** reutilizáveis
+- [x] **Sistema de Temas** completo
+- [x] **Roteamento** centralizado
+- [x] **API Client** com interceptadores
+- [x] **Extensões** utilitárias
+
+### 🔄 Próximas Iterações
+- [ ] **Refatoração das Features** para usar nova arquitetura
+- [ ] **Implementação de UseCase** para busca e listagem
+- [ ] **Repository Pattern** com Result Pattern
+- [ ] **Testes Unitários** para toda arquitetura core
+- [ ] **Documentação** dos padrões implementados
+
+### 🚀 Próximas Funcionalidades
 - [ ] **Cache offline** de filmes favoritos
 - [ ] **Modo escuro** automático
 - [ ] **Compartilhamento** de filmes
@@ -251,12 +341,13 @@ O Flutter DevTools está disponível em: `http://localhost:9101`
 - [ ] **Histórico de pesquisas**
 - [ ] **Perfil de usuário** com preferências
 
-### Melhorias Técnicas
+### 🔧 Melhorias Técnicas
 - [ ] **Testes de integração**
 - [ ] **CI/CD pipeline**
 - [ ] **Analytics** de uso
 - [ ] **Crash reporting**
 - [ ] **Performance monitoring**
+- [ ] **Code Coverage** 90%+
 
 ## 🤝 Contribuindo
 
@@ -279,26 +370,6 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 ---
 
 **Desenvolvido com ❤️ usando Flutter**
-
-
-
-
-
-
-
-
-## APP Screens:
-
-//TODO 
-
-- [X] Movie List Screen
-![Movie List Screen](https://picsum.photos/seed/picsum/200/300)
-
-
-## Known issues:
-
- - [ ] *Fix Clean Architecture*
- - [ ] *Fix Search feature*
 
 
 This Android app was built using [Flutter](https://flutter.dev/).
