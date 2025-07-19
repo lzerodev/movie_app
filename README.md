@@ -12,6 +12,67 @@ Um aplicativo de filmes desenvolvido em Flutter seguindo **Clean Architecture** 
 - ✅ **Configuração segura** - API keys protegidas
 - ✅ **Arquitetura escalável** - Preparada para novas features
 - ✅ **Testes abrangentes** - Cobertura completa com testes unitários
+- ✨ **Interface moderna** - Design System consistente com animações
+
+## 🎨 Design System & Interface
+
+### **Redesign da Lista de Filmes**
+A interface foi completamente redesenhada com foco na experiência do usuário:
+
+#### **🎭 Visual Enhancements**
+- **Gradientes suaves** - Background com transições de cor elegantes
+- **Sombras dinâmicas** - Elevação visual que responde ao hover
+- **Bordas consistentes** - Sistema unificado de bordas e raios
+- **Animações fluidas** - Transições suaves entre estados
+
+#### **🌟 Animações e Interações**
+- **Hover effects** - Escala e brilho no hover dos cards
+- **Hero animations** - Transições cinematográficas entre telas
+- **Entrada escalonada** - Items aparecem progressivamente
+- **Feedback tátil** - Resposta visual a todas as interações
+
+#### **🏷️ Sistema de Badges**
+- **Avaliações com gradiente** - Badges coloridos para notas dos filmes
+- **Labels de qualidade** - "Excelente", "Muito Bom", "Bom", etc.
+- **Ícones contextuais** - Estrelas, calendário e informações visuais
+- **Container estilizado** - Para sinopses e informações extras
+
+#### **📐 Layout Moderno**
+```dart
+// Exemplo do novo MovieListItem
+Container(
+  decoration: BoxDecoration(
+    gradient: LinearGradient(
+      colors: [cardColor, cardColor.withOpacity(0.8)],
+    ),
+    boxShadow: isHovered ? accentShadow : defaultShadow,
+  ),
+  child: AnimatedBuilder(
+    animation: scaleAnimation,
+    builder: (context, child) => Transform.scale(
+      scale: scaleAnimation.value,
+      child: MovieContent(),
+    ),
+  ),
+)
+```
+
+#### **🎯 Design System Expandido**
+```dart
+class AppDesignSystem {
+  // Cores de borda para cards
+  static const Color cardBorderColor = Color(0xFF3A3A4E);
+  static const Color cardBorderHoverColor = Color(0xFF4A4A5E);
+  static const Color noBorderColor = Colors.transparent;
+  
+  // Gradientes
+  static const LinearGradient cardGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [surfaceColor, cardColor],
+  );
+}
+```
 
 ## 🏗️ Arquitetura
 
@@ -414,6 +475,19 @@ class DependencyInjection {
 - **flutter_svg** 2.0.10+1 - Suporte a SVG
 - **intl** 0.19.0 - Internacionalização
 
+### 🎨 Design & Animações
+- **Material Design 3** - Sistema de design moderno
+- **AnimationController** - Animações personalizadas e fluidas
+- **Hero Widgets** - Transições cinematográficas entre telas
+- **Transform.scale** - Animações de escala responsivas ao hover
+- **BoxShadow** - Sistema de sombras dinâmicas
+- **LinearGradient** - Gradientes suaves para profundidade visual
+- **PageRouteBuilder** - Transições customizadas entre páginas
+- **AnimatedBuilder** - Reconstrução otimizada de animações
+- **BorderRadius** - Sistema unificado de bordas arredondadas
+- **InkWell** - Feedback tátil com efeito ripple
+- **ClipRRect** - Recortes precisos para imagens e containers
+
 ### Desenvolvimento
 - **bloc_test** 9.0.0 - Testes de BLoC
 - **mockito** 5.4.4 - Mocks para testes
@@ -681,6 +755,51 @@ flutter test --coverage
 genhtml coverage/lcov.info -o coverage/html
 open coverage/html/index.html
 ```
+
+## 📋 Changelog
+
+### v2.0.0 - Design System & Interface Moderna (2025-01-19)
+#### ✨ Novas Features
+- **🎨 Redesign completo da lista de filmes**
+  - Interface moderna com gradientes e animações
+  - Hover effects com escala e sombras dinâmicas
+  - Badges de avaliação com gradientes coloridos
+  - Labels de qualidade automáticas baseadas na nota
+
+- **🎭 Sistema de Animações**
+  - Hero animations para transições entre telas
+  - Animações de entrada escalonada para items da lista
+  - Transform.scale responsivo ao hover
+  - PageRouteBuilder com slide transitions
+
+- **🏷️ Design System Expandido**
+  - Cores de borda unificadas (cardBorderColor, cardBorderHoverColor)
+  - Sistema de cores transparentes (noBorderColor)
+  - Gradientes padronizados para consistência visual
+  - AppCard component com suporte a bordas customizadas
+
+#### 🐛 Correções
+- Eliminação de bordas visuais indesejadas nos movie cards
+- Unificação de cores entre seções poster e informações
+- Correção de espaçamentos inconsistentes
+
+#### ⚡ Performance
+- Otimização de loading para imagens de filmes
+- AnimatedBuilder para reconstrução eficiente
+- Uso de const constructors onde possível
+
+### v1.0.0 - Arquitetura Base (2025-01-18)
+#### ✨ Features Iniciais
+- **🏗️ Clean Architecture** com camadas bem definidas
+- **🧪 Result Pattern** para tratamento type-safe de erros
+- **🏛️ BLoC Pattern** moderno com throttling
+- **💉 Dependency Injection** com GetIt
+- **🎬 Funcionalidades core**:
+  - Lista de filmes em cartaz
+  - Pesquisa com debounce
+  - Scroll infinito
+  - Detalhes do filme
+- **🧪 Testes abrangentes** - 27 testes unitários
 
 ## 🤝 Contribuindo
 
