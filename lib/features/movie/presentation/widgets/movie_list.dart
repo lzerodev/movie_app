@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/features/movie/presentation/bloc/movie_list_bloc.dart';
+import 'package:movie_app/features/movie/presentation/bloc/movie_modern_bloc.dart';
 import 'package:movie_app/features/movie/presentation/widgets/movie_list_item.dart';
 
 class MovieListView extends StatefulWidget {
@@ -17,58 +17,71 @@ class _MovieListViewState extends State<MovieListView> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    
+    // Dispara o evento para carregar filmes em cartaz
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<MovieModernBloc>().add(
+        const MovieModernNowPlayingFetched(),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MovieListBloc, MovieListState>(
+    return BlocBuilder<MovieModernBloc, MovieModernState>(
       builder: (context, state) {
-        switch (state.status) {
-          case MovieListStatus.failure:
-            return const Center(child: Text('Falha ao carregar filmes'));
-          case MovieListStatus.sucess:
-            if (state.movies.isEmpty) {
-              return const Center(child: Text('Sem filmes'));
-            }
-            return ListView.builder(
-                controller: _scrollController,
-                itemCount: state.hasReachedMax
-                    ? state.movies.length
-                    : state.movies.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index >= state.movies.length) {
-                       return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 250),
-                          child: Center(
-                            child:
-                                CircularProgressIndicator(color: Colors.black),
-                          ),
-                        );
-                    } 
-                     
-                    return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 3.0, horizontal: 3.0),
-                          child: Material(
-                            type: MaterialType.canvas,
-                            elevation: 2.0,
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 1.0, horizontal: 1.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                                color: Colors.white,
-                              ),
-                              child: MovieListItem(movie: state.movies[index])
-                            ),
-                          ),
-                        );
-                });
-          case MovieListStatus.initial:
-            return const Center(
-                child: CircularProgressIndicator(color: Colors.black));
+        return switch (state.status) {
+          MovieModernStatus.initial => const Center(
+              child: CircularProgressIndicator(color: Colors.black)),
+          
+          MovieModernStatus.loading when state.movies.isEmpty => const Center(
+              child: CircularProgressIndicator(color: Colors.black)),
+          
+          MovieModernStatus.failure => Center(
+              child: Text('Erro: ${state.errorMessage ?? "Erro desconhecido"}')),
+          
+          MovieModernStatus.success => _buildMovieList(state.movies, state.hasReachedMax),
+          
+          MovieModernStatus.loading => _buildMovieList(state.movies, false), // Mostra loading no fim da lista
+        };
+      },
+    );
+  }
+
+  Widget _buildMovieList(List movies, bool hasReachedMax) {
+    if (movies.isEmpty) {
+      return const Center(child: Text('Nenhum filme encontrado'));
+    }
+
+    return ListView.builder(
+      controller: _scrollController,
+      itemCount: hasReachedMax ? movies.length : movies.length + 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index >= movies.length) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 250),
+            child: Center(
+              child: CircularProgressIndicator(color: Colors.black),
+            ),
+          );
         }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 3.0),
+          child: Material(
+            type: MaterialType.canvas,
+            elevation: 2.0,
+            borderRadius: BorderRadius.circular(8.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 1.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.white,
+              ),
+              child: MovieListItem(movie: movies[index]),
+            ),
+          ),
+        );
       },
     );
   }
@@ -82,7 +95,21 @@ class _MovieListViewState extends State<MovieListView> {
   }
 
   void _onScroll() {
-    if (_isBottom) context.read<MovieListBloc>().add(MovieListFetched());
+    if (_isBottom) {
+      final state = context.read<MovieModernBloc>().state;
+      
+      // Se está em modo de busca, carrega mais resultados da busca
+      if (state.isSearchMode && state.searchQuery != null) {
+        context.read<MovieModernBloc>().add(
+          MovieModernSearchRequested(state.searchQuery!),
+        );
+      } else {
+        // Senão, carrega mais filmes em cartaz
+        context.read<MovieModernBloc>().add(
+          const MovieModernNowPlayingFetched(),
+        );
+      }
+    }
   }
 
   bool get _isBottom {

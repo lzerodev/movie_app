@@ -1,7 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/features/movie/presentation/bloc/movie_list_bloc.dart';
+import '../../../../core/di/di_extensions.dart';
+import '../bloc/movie_modern_bloc.dart';
 import '../widgets/movie_list.dart';
 
 class NowPlayingMoviesPage extends StatelessWidget {
@@ -10,9 +10,10 @@ class NowPlayingMoviesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => MovieListBloc(dio: Dio())..add(MovieListFetched()),
-        child: const MovieListView()),
+      body: BlocProvider<MovieModernBloc>(
+        create: context.createMovieModernBloc,
+        child: const MovieListView(),
+      ),
     );
   }
 }
