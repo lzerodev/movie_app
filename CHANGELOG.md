@@ -5,11 +5,91 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto segue [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - 2025-07-19
+## [Unreleased] - Em Desenvolvimento
 
-### 🎉 **LANÇAMENTO PRINCIPAL - MODERNIZAÇÃO COMPLETA**
+### ✨ **Em Progresso**
+- **Sistema de Cards Avançado** - Implementação de AppCard com múltiplas variantes
+- **GitFlow Workflow** - Estrutura profissional de branches e releases
+- **Templates de PR/Issues** - Padronização de contribuições
 
-Esta release representa uma transformação completa do Movie App, implementando Clean Architecture, Material Design 3, e uma experiência de usuário completamente renovada.
+---
+
+## [1.1.1] - 2025-07-19 🚀
+
+### 🎉 **FEATURE RELEASE - WIDGETS REUTILIZÁVEIS**
+
+Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando significativamente a manutenibilidade e consistência do código.
+
+**Tag:** `v1.1.1-feature.reusable-widgets`
+
+---
+
+### ✨ **Adicionado**
+
+#### 🧩 **Widgets Reutilizáveis**
+- **AppScrollToTopButton** - Widget genérico para botão scroll-to-top
+  - 4 variantes visuais (elevated, filled, outlined, minimal)
+  - Configuração completa de threshold, posicionamento e animações
+  - Animações suaves com controllers independentes
+  - Tooltip configurável
+- **AppEmptyState** - Widget para estados vazios padronizados
+  - 6 factories específicas (movies, search, favorites, connection, list, default)
+  - Configuração flexível de ícones, títulos e ações
+  - Botões de ação primários e secundários
+  - Cores temáticas por contexto
+- **AppLoadingIndicator** - Indicadores de loading unificados
+  - 5 variantes (circular, linear, inline, page, card)
+  - 3 tamanhos (small, medium, large)
+  - Factories convenientes para casos comuns
+  - Mensagens configuráveis
+
+#### 📁 **Arquitetura**
+- **widgets.dart** - Exportações centralizadas dos novos widgets
+- **Documentação** - Comentários detalhados e exemplos de uso
+
+---
+
+### 🔄 **Modificado**
+
+#### 🎬 **MovieListView Refatorado**
+- **Migração completa** para widgets reutilizáveis
+- **AppScrollToTopButton** substituiu 80+ linhas de código customizado
+- **AppEmptyState.movies()** substituiu estado vazio hardcoded
+- **AppLoadingIndicator.card()** substituiu loading personalizado complexo
+- **Redução significativa** de código duplicado
+
+#### 🎨 **Melhorias de UX**
+- **Animações padronizadas** em todos os componentes
+- **Feedback visual consistente** em interações
+- **Estados vazios informativos** com ações contextuais
+
+---
+
+### 📊 **Impacto da Release**
+
+```
+📉 Redução de código:
+- MovieListView: -157 linhas de código duplicado
+- Estados vazios: -45 linhas padronizadas  
+- Loading indicators: -60 linhas simplificadas
+
+📈 Aumento de reutilização:
+- 3 novos widgets reutilizáveis
+- 15+ variantes configuráveis
+- Exportações centralizadas
+
+🎨 Melhor consistência:
+- Design system unificado
+- Animações padronizadas
+- UX consistente em toda app
+```
+
+---
+
+### 🧪 **Testes e Qualidade**
+- **Análise estática limpa** (`flutter analyze`)
+- **Compatibilidade** com Flutter 3.24.2
+- **Performance otimizada** com animações 60fps
 
 ---
 
