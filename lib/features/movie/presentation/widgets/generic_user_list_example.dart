@@ -186,7 +186,7 @@ class _UserListItem extends StatelessWidget {
           backgroundImage: NetworkImage(user.avatar),
           onBackgroundImageError: (_, __) {},
           child: user.avatar.isEmpty 
-            ? Icon(
+            ? const Icon(
                 Icons.person,
                 color: AppDesignSystem.iconSecondaryColor,
               )
@@ -228,7 +228,7 @@ class _UserListItem extends StatelessWidget {
             ),
           ],
         ),
-        trailing: Icon(
+        trailing: const Icon(
           Icons.arrow_forward_ios,
           color: AppDesignSystem.iconSecondaryColor,
           size: 16,

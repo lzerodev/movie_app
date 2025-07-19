@@ -57,9 +57,9 @@ class _MovieListViewNewState extends State<MovieListViewNew> {
             variant: AppEmptyStateVariant.movies,
           ),
           
-          scrollConfig: AppScrollConfig(
+          scrollConfig: const AppScrollConfig(
             showScrollToTop: true,
-            scrollToTopPosition: const EdgeInsets.only(
+            scrollToTopPosition: EdgeInsets.only(
               bottom: AppDesignSystem.spaceXl + 80, // Acima do FAB + navigation bar
               left: AppDesignSystem.spaceLg, // Lado esquerdo
             ),
