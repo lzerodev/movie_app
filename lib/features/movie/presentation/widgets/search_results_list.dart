@@ -34,22 +34,7 @@ class SearchResultsList extends StatelessWidget {
             vertical: 3.0,
             horizontal: 3.0,
           ),
-          child: Material(
-            type: MaterialType.canvas,
-            elevation: 2.0,
-            borderRadius: BorderRadius.circular(8.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 1.0,
-                horizontal: 1.0,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: Colors.white,
-              ),
-              child: MovieListItem(movie: movies[index]),
-            ),
-          ),
+          child: MovieListItem(movie: movies[index]),
         );
       },
     );

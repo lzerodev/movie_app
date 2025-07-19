@@ -180,7 +180,7 @@ class _MovieListItemState extends State<MovieListItem>
               if (loadingProgress == null) return child;
               return Container(
                 color: AppDesignSystem.surfaceColor,
-                child: Center(
+                child: const Center(
                   child: CircularProgressIndicator(
                     color: AppDesignSystem.accentColor,
                     strokeWidth: 2,
@@ -288,7 +288,7 @@ class _MovieListItemState extends State<MovieListItem>
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              const Icon(
                 Icons.calendar_today_rounded,
                 size: 14,
                 color: AppDesignSystem.textSecondaryColor,

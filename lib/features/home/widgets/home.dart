@@ -303,12 +303,11 @@ class HomePageState extends State<HomePage> {
   }
   
   Widget _buildFloatingActionButton() {
-    return FloatingActionButton.extended(
+    return FloatingActionButton(
       onPressed: _navigateToSearch,
       backgroundColor: AppDesignSystem.accentColor,
       foregroundColor: AppDesignSystem.textPrimaryColor,
-      icon: const Icon(Icons.search),
-      label: const Text('Buscar'),
+      child: const Icon(Icons.search),
     );
   }
   

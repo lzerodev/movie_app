@@ -54,7 +54,7 @@ class _MovieListViewState extends State<MovieListView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.movie_outlined,
               size: 64,
               color: AppDesignSystem.textSecondaryColor,
