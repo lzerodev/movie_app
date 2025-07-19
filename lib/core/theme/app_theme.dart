@@ -26,7 +26,7 @@ class AppTheme {
       ),
       
       // === SCAFFOLD ===
-      scaffoldBackgroundColor: const Color(0xFF0F0F23),
+      scaffoldBackgroundColor: const Color.fromARGB(124, 2, 2, 39),
       
       // === APP BAR ===
       appBarTheme: const AppBarTheme(

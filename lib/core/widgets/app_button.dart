@@ -1,35 +1,42 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_design_system.dart';
 
 /// Card personalizado que segue o Design System da aplicação.
-/// 
+///
 /// Fornece um container estilizado com elevação, bordas arredondadas
 /// e cores consistentes com o tema da aplicação.
 class AppCard extends StatelessWidget {
   /// Conteúdo do card
   final Widget child;
-  
+
   /// Padding interno do card
   final EdgeInsetsGeometry? padding;
-  
+
   /// Margin externo do card
   final EdgeInsetsGeometry? margin;
-  
+
   /// Função chamada quando o card é tocado
   final VoidCallback? onTap;
-  
+
   /// Cor de fundo personalizada (opcional)
   final Color? backgroundColor;
-  
+
   /// Elevação personalizada (opcional)
   final double? elevation;
-  
+
   /// Raio da borda personalizado (opcional)
   final BorderRadius? borderRadius;
-  
+
   /// Gradiente de fundo (opcional)
   final Gradient? gradient;
-  
+
+  /// Cor da borda (opcional)
+  final Color? borderColor;
+
+  /// Largura da borda (opcional)
+  final double? borderWidth;
+
   const AppCard({
     super.key,
     required this.child,
@@ -40,8 +47,10 @@ class AppCard extends StatelessWidget {
     this.elevation,
     this.borderRadius,
     this.gradient,
+    this.borderColor,
+    this.borderWidth,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     final cardContent = Container(
@@ -63,7 +72,7 @@ class AppCard extends StatelessWidget {
           : null,
       child: child,
     );
-    
+
     if (gradient != null) {
       return Container(
         margin: margin,
@@ -76,14 +85,22 @@ class AppCard extends StatelessWidget {
             : cardContent,
       );
     }
-    
+
     return Container(
       margin: margin,
       child: Card(
         color: backgroundColor ?? AppDesignSystem.cardColor,
-        elevation: elevation ?? 4,
+        elevation: borderColor != null
+            ? 0
+            : (elevation ?? 2), // Remove elevação se há borda custom
         shape: RoundedRectangleBorder(
           borderRadius: borderRadius ?? AppDesignSystem.borderRadiusMd,
+          side: borderColor != null
+              ? BorderSide(
+                  color: borderColor!,
+                  width: borderWidth ?? 1.0,
+                )
+              : BorderSide.none,
         ),
         child: onTap != null
             ? InkWell(
@@ -101,25 +118,25 @@ class AppCard extends StatelessWidget {
 class AppButton extends StatelessWidget {
   /// Texto do botão
   final String text;
-  
+
   /// Função chamada quando o botão é pressionado
   final VoidCallback? onPressed;
-  
+
   /// Ícone do botão (opcional)
   final IconData? icon;
-  
+
   /// Se o botão deve ocupar a largura total
   final bool fullWidth;
-  
+
   /// Variante do botão
   final AppButtonVariant variant;
-  
+
   /// Tamanho do botão
   final AppButtonSize size;
-  
+
   /// Se o botão está carregando
   final bool isLoading;
-  
+
   const AppButton({
     super.key,
     required this.text,
@@ -130,7 +147,7 @@ class AppButton extends StatelessWidget {
     this.size = AppButtonSize.medium,
     this.isLoading = false,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     final buttonChild = Row(
@@ -160,14 +177,14 @@ class AppButton extends StatelessWidget {
           ),
       ],
     );
-    
+
     return SizedBox(
       width: fullWidth ? double.infinity : null,
       height: _getHeight(),
       child: _buildButton(buttonChild),
     );
   }
-  
+
   Widget _buildButton(Widget child) {
     switch (variant) {
       case AppButtonVariant.primary:
@@ -183,7 +200,7 @@ class AppButton extends StatelessWidget {
           ),
           child: child,
         );
-      
+
       case AppButtonVariant.secondary:
         return OutlinedButton(
           onPressed: isLoading ? null : onPressed,
@@ -197,7 +214,7 @@ class AppButton extends StatelessWidget {
           ),
           child: child,
         );
-      
+
       case AppButtonVariant.text:
         return TextButton(
           onPressed: isLoading ? null : onPressed,
@@ -209,7 +226,7 @@ class AppButton extends StatelessWidget {
         );
     }
   }
-  
+
   EdgeInsets _getPadding() {
     switch (size) {
       case AppButtonSize.small:
@@ -229,7 +246,7 @@ class AppButton extends StatelessWidget {
         );
     }
   }
-  
+
   double _getHeight() {
     switch (size) {
       case AppButtonSize.small:
@@ -240,7 +257,7 @@ class AppButton extends StatelessWidget {
         return 56;
     }
   }
-  
+
   double _getIconSize() {
     switch (size) {
       case AppButtonSize.small:
@@ -251,7 +268,7 @@ class AppButton extends StatelessWidget {
         return 24;
     }
   }
-  
+
   TextStyle _getTextStyle() {
     switch (size) {
       case AppButtonSize.small:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/models/movie.dart';
@@ -7,19 +8,19 @@ import '../../data/models/movie.dart';
 class MovieCard extends StatelessWidget {
   /// Dados do filme
   final Movie movie;
-  
+
   /// Função chamada quando o card é tocado
   final VoidCallback? onTap;
-  
+
   /// Se deve mostrar o rating
   final bool showRating;
-  
+
   /// Se deve mostrar a data de lançamento
   final bool showReleaseDate;
-  
+
   /// Tamanho do card
   final MovieCardSize size;
-  
+
   const MovieCard({
     super.key,
     required this.movie,
@@ -28,7 +29,7 @@ class MovieCard extends StatelessWidget {
     this.showReleaseDate = true,
     this.size = MovieCardSize.medium,
   });
-  
+
   /// Factory para criar um card pequeno
   const MovieCard.small({
     super.key,
@@ -37,7 +38,7 @@ class MovieCard extends StatelessWidget {
     this.showRating = false,
     this.showReleaseDate = false,
   }) : size = MovieCardSize.small;
-  
+
   /// Factory para criar um card grande
   const MovieCard.large({
     super.key,
@@ -46,50 +47,57 @@ class MovieCard extends StatelessWidget {
     this.showRating = true,
     this.showReleaseDate = true,
   }) : size = MovieCardSize.large;
-  
+
   @override
   Widget build(BuildContext context) {
-    return AppCard(
-      onTap: onTap,
-      padding: EdgeInsets.zero,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildPosterSection(),
-          _buildInfoSection(),
-        ],
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppDesignSystem.cardColor,
+        borderRadius: AppDesignSystem.borderRadiusMd,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min, // Evita espaçamentos extras
+            children: [
+              _buildPosterSection(),
+              _buildInfoSection(),
+            ],
+          ),
+        ),
       ),
     );
   }
-  
+
   Widget _buildPosterSection() {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
+    return Container(
+      width: double.infinity,
+      height: _getImageHeight(),
+      color: AppDesignSystem.shimmerBaseColor,
       child: Stack(
         children: [
-          Container(
-            width: double.infinity,
-            height: _getImageHeight(),
-            color: AppDesignSystem.shimmerBaseColor,
-            child: movie.posterPath != null
-                ? Image.network(
-                    'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => _buildImagePlaceholder(),
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return AppShimmerBox(
-                        width: double.infinity,
-                        height: _getImageHeight(),
-                        borderRadius: BorderRadius.zero,
-                      );
-                    },
-                  )
-                : _buildImagePlaceholder(),
-          ),
+          movie.posterPath != null
+              ? Image.network(
+                  'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: _getImageHeight(),
+                  errorBuilder: (context, error, stackTrace) =>
+                      _buildImagePlaceholder(),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return AppShimmerBox(
+                      width: double.infinity,
+                      height: _getImageHeight(),
+                      borderRadius: BorderRadius.zero,
+                    );
+                  },
+                )
+              : _buildImagePlaceholder(),
           if (showRating && movie.voteAverage > 0)
             Positioned(
               top: AppDesignSystem.spaceSm,
@@ -100,7 +108,7 @@ class MovieCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildImagePlaceholder() {
     return Container(
       color: AppDesignSystem.shimmerBaseColor,
@@ -113,11 +121,11 @@ class MovieCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildRatingBadge() {
     final rating = movie.voteAverage;
     final color = _getRatingColor(rating);
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDesignSystem.spaceSm,
@@ -148,18 +156,22 @@ class MovieCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Color _getRatingColor(double rating) {
     if (rating >= 8.0) return AppDesignSystem.successColor;
     if (rating >= 6.0) return AppDesignSystem.warningColor;
     return AppDesignSystem.errorColor;
   }
-  
+
   Widget _buildInfoSection() {
-    return Padding(
+    return Container(
+      width: double.infinity,
+      color: AppDesignSystem.cardColor,
+      margin: EdgeInsets.zero, // Remove qualquer margem
       padding: const EdgeInsets.all(AppDesignSystem.spaceMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             movie.title,
@@ -201,7 +213,7 @@ class MovieCard extends StatelessWidget {
       ),
     );
   }
-  
+
   TextStyle _getTitleStyle() {
     switch (size) {
       case MovieCardSize.small:
@@ -221,7 +233,7 @@ class MovieCard extends StatelessWidget {
         );
     }
   }
-  
+
   double _getImageHeight() {
     switch (size) {
       case MovieCardSize.small:
@@ -232,14 +244,25 @@ class MovieCard extends StatelessWidget {
         return 280;
     }
   }
-  
+
   String _formatReleaseDate() {
     final date = movie.releaseDate;
     final months = [
-      '', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
-      'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+      '',
+      'Jan',
+      'Fev',
+      'Mar',
+      'Abr',
+      'Mai',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Set',
+      'Out',
+      'Nov',
+      'Dez'
     ];
-    
+
     return '${date.day} ${months[date.month]} ${date.year}';
   }
 }
@@ -255,22 +278,22 @@ enum MovieCardSize {
 class MovieGridView extends StatelessWidget {
   /// Lista de filmes
   final List<Movie> movies;
-  
+
   /// Se está carregando
   final bool isLoading;
-  
+
   /// Função chamada quando um filme é tocado
   final Function(Movie)? onMovieTap;
-  
+
   /// Tamanho dos cards
   final MovieCardSize cardSize;
-  
+
   /// Número de colunas no grid
   final int crossAxisCount;
-  
+
   /// Espaçamento entre os itens
   final double spacing;
-  
+
   const MovieGridView({
     super.key,
     required this.movies,
@@ -280,13 +303,13 @@ class MovieGridView extends StatelessWidget {
     this.crossAxisCount = 2,
     this.spacing = 16,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
       return _buildShimmerGrid();
     }
-    
+
     return GridView.builder(
       padding: EdgeInsets.all(spacing),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -306,7 +329,7 @@ class MovieGridView extends StatelessWidget {
       },
     );
   }
-  
+
   Widget _buildShimmerGrid() {
     return GridView.builder(
       padding: EdgeInsets.all(spacing),
@@ -325,7 +348,7 @@ class MovieGridView extends StatelessWidget {
       },
     );
   }
-  
+
   double _getAspectRatio() {
     switch (cardSize) {
       case MovieCardSize.small:
@@ -336,7 +359,7 @@ class MovieGridView extends StatelessWidget {
         return 0.6;
     }
   }
-  
+
   double _getCardHeight() {
     switch (cardSize) {
       case MovieCardSize.small:
