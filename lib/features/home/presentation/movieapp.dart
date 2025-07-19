@@ -14,7 +14,7 @@ class MovieApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('pt', 'BR')], // Português Brasileiro
+        Locale('pt', 'BR')],
       title: 'Movies App',
       debugShowCheckedModeBanner: false, 
       theme: ThemeData(
