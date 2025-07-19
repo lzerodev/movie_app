@@ -14,6 +14,31 @@ e este projeto segue [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.2.0] - 2025-07-19 🚀
+
+### 🎉 **MAJOR RELEASE - ADVANCED CARD SYSTEM & WIDGET REFACTORING**
+
+Esta release implementa o sistema avançado de cards e refatora componentes existentes para usar widgets reutilizáveis, completando a implementação do design system escalável.
+
+**Tag:** `v1.2.0-feature.advanced-cards`
+
+### ✨ **Adicionado**
+- Sistema AppCard com 5 variantes (elevated, primary, secondary, outlined, minimal) e 4 tamanhos
+- Suporte a gradientes, animações e hero transitions nos cards
+- Integração completa do sistema de widgets reutilizáveis
+
+### 🔄 **Refatorado**
+- MovieCard agora usa AppCard.elevated para consistência visual
+- MovieListItem atualizado para usar AppCard.elevated com gradientes
+- Removida duplicação de código em componentes de card
+
+### 📈 **Melhorias**
+- Performance otimizada com widgets reutilizáveis
+- Animações padronizadas em todos os cards
+- Melhor manutenibilidade do código
+
+---
+
 ## [1.1.1] - 2025-07-19 🚀
 
 ### 🎉 **FEATURE RELEASE - WIDGETS REUTILIZÁVEIS**

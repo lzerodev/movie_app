@@ -18,7 +18,6 @@ class _MovieListItemState extends State<MovieListItem>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
-  bool _isHovered = false;
 
   @override
   void initState() {
@@ -57,29 +56,7 @@ class _MovieListItemState extends State<MovieListItem>
               horizontal: AppDesignSystem.spaceMd,
               vertical: AppDesignSystem.spaceSm,
             ),
-            decoration: BoxDecoration(
-              color: AppDesignSystem.cardColor,
-              borderRadius: AppDesignSystem.borderRadiusMd,
-              boxShadow: _isHovered
-                  ? [
-                      BoxShadow(
-                        color: AppDesignSystem.accentColor.withOpacity(0.2),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ]
-                  : [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+            child: AppCard.elevated(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -88,55 +65,38 @@ class _MovieListItemState extends State<MovieListItem>
                   AppDesignSystem.cardColor.withOpacity(0.8),
                 ],
               ),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: AppDesignSystem.borderRadiusMd,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          MovieDetailPage(movie: widget.movie),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(1.0, 0.0);
-                        const end = Offset.zero;
-                        const curve = Curves.ease;
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        MovieDetailPage(movie: widget.movie),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.ease;
 
-                        var tween = Tween(begin: begin, end: end).chain(
-                          CurveTween(curve: curve),
-                        );
+                      var tween = Tween(begin: begin, end: end).chain(
+                        CurveTween(curve: curve),
+                      );
 
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-                },
-                onHover: (isHovered) {
-                  setState(() {
-                    _isHovered = isHovered;
-                  });
-                  if (isHovered) {
-                    _animationController.forward();
-                  } else {
-                    _animationController.reverse();
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(AppDesignSystem.spaceMd),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildPosterSection(),
-                      const SizedBox(width: AppDesignSystem.spaceMd),
-                      Expanded(child: _buildInfoSection(voteAverage, releaseDate)),
-                    ],
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
                   ),
-                ),
+                );
+              },
+              enableAnimation: true,
+              animationDuration: const Duration(milliseconds: 200),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildPosterSection(),
+                  const SizedBox(width: AppDesignSystem.spaceMd),
+                  Expanded(child: _buildInfoSection(voteAverage, releaseDate)),
+                ],
               ),
             ),
           ),
