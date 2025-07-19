@@ -127,23 +127,95 @@ class AppPageLayout extends StatelessWidget {
   
   PreferredSizeWidget? _buildAppBar(BuildContext context) {
     return AppBar(
-      title: titleWidget ?? (title != null ? Text(title!) : null),
+      title: titleWidget ?? (title != null ? _buildAppBarTitle() : null),
       actions: actions,
       leading: leading,
       automaticallyImplyLeading: automaticallyImplyLeading,
       backgroundColor: transparentAppBar 
           ? Colors.transparent 
           : AppDesignSystem.surfaceColor,
-      elevation: transparentAppBar ? 0 : 4,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      scrolledUnderElevation: 2,
+      shadowColor: AppDesignSystem.primaryColor.withOpacity(0.3),
       centerTitle: true,
-      toolbarHeight: appBarHeight,
+      toolbarHeight: appBarHeight ?? 64,
       titleTextStyle: AppDesignSystem.headlineSmall.copyWith(
         color: AppDesignSystem.textPrimaryColor,
         fontWeight: FontWeight.bold,
+        letterSpacing: 0.5,
       ),
       iconTheme: const IconThemeData(
         color: AppDesignSystem.iconPrimaryColor,
+        size: 24,
       ),
+      actionsIconTheme: const IconThemeData(
+        color: AppDesignSystem.iconPrimaryColor,
+        size: 24,
+      ),
+      shape: const Border(
+        bottom: BorderSide(
+          color: AppDesignSystem.cardBorderColor,
+          width: 0.5,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppBarTitle() {
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 800),
+      tween: Tween<double>(begin: 0.0, end: 1.0),
+      curve: Curves.easeOutBack,
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: 0.8 + (0.2 * value),
+          child: Opacity(
+            opacity: value,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDesignSystem.spaceMd,
+                vertical: AppDesignSystem.spaceSm,
+              ),
+              decoration: BoxDecoration(
+                gradient: AppDesignSystem.accentGradient,
+                borderRadius: AppDesignSystem.borderRadiusMd,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppDesignSystem.accentColor.withOpacity(0.4),
+                    blurRadius: 12,
+                    offset: const Offset(0, 3),
+                  ),
+                  BoxShadow(
+                    color: AppDesignSystem.accentColor.withOpacity(0.2),
+                    blurRadius: 24,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.movie_creation_outlined,
+                    color: AppDesignSystem.textPrimaryColor,
+                    size: 24,
+                  ),
+                  const SizedBox(width: AppDesignSystem.spaceSm),
+                  Text(
+                    title!,
+                    style: AppDesignSystem.headlineSmall.copyWith(
+                      color: AppDesignSystem.textPrimaryColor,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

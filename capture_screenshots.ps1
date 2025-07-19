@@ -12,7 +12,7 @@ if (!(Test-Path $ScreenshotsDir)) {
 }
 
 # Função para capturar screenshot no Android
-function Capture-Android {
+function Get-AndroidScreenshot {
     param(
         [string]$Filename,
         [string]$Description
@@ -51,27 +51,27 @@ if ($AndroidDevices) {
     
     Write-Host "`n1️⃣ Navegue para a tela principal (Home)"
     Read-Host "Pressione Enter quando estiver pronto"
-    Capture-Android "home_screen.png" "Tela Principal com navegação"
+    Get-AndroidScreenshot "home_screen.png" "Tela Principal com navegação"
     
     Write-Host "`n2️⃣ Navegue para a lista de filmes"
     Read-Host "Pressione Enter quando estiver pronto"
-    Capture-Android "movie_list.png" "Lista de filmes com design moderno"
+    Get-AndroidScreenshot "movie_list.png" "Lista de filmes com design moderno"
     
     Write-Host "`n3️⃣ Abra a pesquisa e digite algo"
     Read-Host "Pressione Enter quando estiver pronto"
-    Capture-Android "search_screen.png" "Interface de pesquisa"
+    Get-AndroidScreenshot "search_screen.png" "Interface de pesquisa"
     
     Write-Host "`n4️⃣ Abra os detalhes de um filme"
     Read-Host "Pressione Enter quando estiver pronto"
-    Capture-Android "movie_detail.png" "Tela de detalhes com SliverAppBar"
+    Get-AndroidScreenshot "movie_detail.png" "Tela de detalhes com SliverAppBar"
     
     Write-Host "`n5️⃣ Navegue para o perfil"
     Read-Host "Pressione Enter quando estiver pronto"
-    Capture-Android "profile_screen.png" "Seção de perfil do usuário"
+    Get-AndroidScreenshot "profile_screen.png" "Seção de perfil do usuário"
     
     Write-Host "`n6️⃣ Navegue para notificações"
     Read-Host "Pressione Enter quando estiver pronto"
-    Capture-Android "notifications_screen.png" "Centro de notificações"
+    Get-AndroidScreenshot "notifications_screen.png" "Centro de notificações"
     
 } else {
     Write-Host "🌐 Nenhum dispositivo Android detectado - Instruções para Web:" -ForegroundColor Yellow

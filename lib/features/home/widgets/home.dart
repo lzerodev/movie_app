@@ -18,12 +18,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return AppPageLayout(
       title: 'Testflix',
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: _navigateToSearch,
-        ),
-      ],
+      actions: _buildAppBarActions(),
       bottomNavigationBar: _buildBottomNavigationBar(),
       floatingActionButton: _buildFloatingActionButton(),
       body: _buildBody(),
@@ -239,75 +234,152 @@ class HomePageState extends State<HomePage> {
   }
   
   Widget _buildBottomNavigationBar() {
-    return NavigationBar(
-      selectedIndex: currentPageIndex,
-      onDestinationSelected: (index) {
-        setState(() {
-          currentPageIndex = index;
-        });
-      },
-      backgroundColor: AppDesignSystem.surfaceColor,
-      indicatorColor: AppDesignSystem.accentColor.withOpacity(0.2),
-      destinations: [
-        NavigationDestination(
-          icon: Icon(
-            Icons.home_outlined,
-            color: currentPageIndex == 0 
-                ? AppDesignSystem.accentColor 
-                : AppDesignSystem.iconSecondaryColor,
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: AppDesignSystem.cardBorderColor,
+            width: 0.5,
           ),
-          selectedIcon: const Icon(
-            Icons.home,
-            color: AppDesignSystem.accentColor,
-          ),
-          label: 'Home',
         ),
-        NavigationDestination(
-          icon: Badge(
-            label: const Text('2'),
-            backgroundColor: AppDesignSystem.accentColor,
-            textColor: AppDesignSystem.textPrimaryColor,
-            child: Icon(
-              Icons.notifications_outlined,
-              color: currentPageIndex == 1 
+      ),
+      child: NavigationBar(
+        selectedIndex: currentPageIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        backgroundColor: AppDesignSystem.surfaceColor,
+        indicatorColor: AppDesignSystem.accentColor.withOpacity(0.15),
+        indicatorShape: const RoundedRectangleBorder(
+          borderRadius: AppDesignSystem.borderRadiusMd,
+        ),
+        elevation: 0,
+        height: 80,
+        destinations: [
+          NavigationDestination(
+            icon: Icon(
+              Icons.home_outlined,
+              color: currentPageIndex == 0 
                   ? AppDesignSystem.accentColor 
                   : AppDesignSystem.iconSecondaryColor,
             ),
-          ),
-          selectedIcon: const Badge(
-            label: Text('2'),
-            backgroundColor: AppDesignSystem.accentColor,
-            textColor: AppDesignSystem.textPrimaryColor,
-            child: Icon(
-              Icons.notifications,
-              color: AppDesignSystem.accentColor,
+            selectedIcon: Container(
+              padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
+              decoration: BoxDecoration(
+                color: AppDesignSystem.accentColor.withOpacity(0.1),
+                borderRadius: AppDesignSystem.borderRadiusSm,
+              ),
+              child: const Icon(
+                Icons.home_rounded,
+                color: AppDesignSystem.accentColor,
+              ),
             ),
+            label: 'Home',
           ),
-          label: 'Notificações',
-        ),
-        NavigationDestination(
-          icon: Icon(
-            Icons.person_outline,
-            color: currentPageIndex == 2 
-                ? AppDesignSystem.accentColor 
-                : AppDesignSystem.iconSecondaryColor,
+          NavigationDestination(
+            icon: Badge(
+              label: const Text(
+                '2',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+              backgroundColor: AppDesignSystem.accentColor,
+              textColor: AppDesignSystem.textPrimaryColor,
+              child: Icon(
+                Icons.notifications_outlined,
+                color: currentPageIndex == 1 
+                    ? AppDesignSystem.accentColor 
+                    : AppDesignSystem.iconSecondaryColor,
+              ),
+            ),
+            selectedIcon: Badge(
+              label: const Text(
+                '2',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+              backgroundColor: AppDesignSystem.accentColor,
+              textColor: AppDesignSystem.textPrimaryColor,
+              child: Container(
+                padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
+                decoration: BoxDecoration(
+                  color: AppDesignSystem.accentColor.withOpacity(0.1),
+                  borderRadius: AppDesignSystem.borderRadiusSm,
+                ),
+                child: const Icon(
+                  Icons.notifications_rounded,
+                  color: AppDesignSystem.accentColor,
+                ),
+              ),
+            ),
+            label: 'Notificações',
           ),
-          selectedIcon: const Icon(
-            Icons.person,
-            color: AppDesignSystem.accentColor,
+          NavigationDestination(
+            icon: Icon(
+              Icons.person_outline_rounded,
+              color: currentPageIndex == 2 
+                  ? AppDesignSystem.accentColor 
+                  : AppDesignSystem.iconSecondaryColor,
+            ),
+            selectedIcon: Container(
+              padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
+              decoration: BoxDecoration(
+                color: AppDesignSystem.accentColor.withOpacity(0.1),
+                borderRadius: AppDesignSystem.borderRadiusSm,
+              ),
+              child: const Icon(
+                Icons.person_rounded,
+                color: AppDesignSystem.accentColor,
+              ),
+            ),
+            label: 'Perfil',
           ),
-          label: 'Perfil',
-        ),
-      ],
+        ],
+      ),
     );
   }
   
   Widget _buildFloatingActionButton() {
-    return FloatingActionButton(
-      onPressed: _navigateToSearch,
-      backgroundColor: AppDesignSystem.accentColor,
-      foregroundColor: AppDesignSystem.textPrimaryColor,
-      child: const Icon(Icons.search),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: AppDesignSystem.accentGradient,
+        borderRadius: AppDesignSystem.borderRadiusLg,
+        boxShadow: [
+          BoxShadow(
+            color: AppDesignSystem.accentColor.withOpacity(0.4),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+          BoxShadow(
+            color: AppDesignSystem.accentColor.withOpacity(0.2),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: FloatingActionButton.extended(
+        onPressed: _navigateToSearch,
+        backgroundColor: Colors.transparent,
+        foregroundColor: AppDesignSystem.textPrimaryColor,
+        elevation: 0,
+        highlightElevation: 0,
+        splashColor: AppDesignSystem.textPrimaryColor.withOpacity(0.1),
+        shape: const RoundedRectangleBorder(
+          borderRadius: AppDesignSystem.borderRadiusLg,
+        ),
+        icon: const Icon(
+          Icons.search_rounded,
+          size: 24,
+        ),
+        label: Text(
+          'Buscar',
+          style: AppDesignSystem.labelLarge.copyWith(
+            color: AppDesignSystem.textPrimaryColor,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ),
     );
   }
   
@@ -317,6 +389,306 @@ class HomePageState extends State<HomePage> {
       MaterialPageRoute(
         builder: (context) => const SearchMoviesPage(),
       ),
+    );
+  }
+
+  List<Widget> _buildAppBarActions() {
+    return [
+      // Botão de busca com badge
+      Container(
+        margin: const EdgeInsets.only(right: AppDesignSystem.spaceSm),
+        decoration: BoxDecoration(
+          color: AppDesignSystem.accentColor.withOpacity(0.1),
+          borderRadius: AppDesignSystem.borderRadiusSm,
+          border: Border.all(
+            color: AppDesignSystem.accentColor.withOpacity(0.3),
+            width: 1,
+          ),
+        ),
+        child: IconButton(
+          onPressed: _navigateToSearch,
+          icon: const Icon(
+            Icons.search_rounded,
+            color: AppDesignSystem.accentColor,
+          ),
+          tooltip: 'Buscar filmes',
+          splashRadius: 20,
+        ),
+      ),
+      // Menu de opções
+      Container(
+        margin: const EdgeInsets.only(right: AppDesignSystem.spaceMd),
+        decoration: BoxDecoration(
+          color: AppDesignSystem.cardColor,
+          borderRadius: AppDesignSystem.borderRadiusSm,
+          border: Border.all(
+            color: AppDesignSystem.cardBorderColor,
+            width: 1,
+          ),
+        ),
+        child: PopupMenuButton<String>(
+          onSelected: _handleMenuSelection,
+          icon: const Icon(
+            Icons.more_vert_rounded,
+            color: AppDesignSystem.iconPrimaryColor,
+          ),
+          tooltip: 'Mais opções',
+          shape: const RoundedRectangleBorder(
+            borderRadius: AppDesignSystem.borderRadiusMd,
+            side: BorderSide(
+              color: AppDesignSystem.cardBorderColor,
+            ),
+          ),
+          color: AppDesignSystem.cardColor,
+          elevation: 8,
+          shadowColor: AppDesignSystem.primaryColor.withOpacity(0.3),
+          itemBuilder: (context) => [
+            PopupMenuItem<String>(
+              value: 'favorites',
+              child: _buildMenuItem(
+                icon: Icons.favorite_outline,
+                title: 'Favoritos',
+                subtitle: 'Meus filmes salvos',
+              ),
+            ),
+            PopupMenuItem<String>(
+              value: 'watchlist',
+              child: _buildMenuItem(
+                icon: Icons.bookmark_outline,
+                title: 'Lista para assistir',
+                subtitle: 'Filmes salvos para depois',
+              ),
+            ),
+            const PopupMenuDivider(),
+            PopupMenuItem<String>(
+              value: 'settings',
+              child: _buildMenuItem(
+                icon: Icons.settings_outlined,
+                title: 'Configurações',
+                subtitle: 'Personalizar app',
+              ),
+            ),
+            PopupMenuItem<String>(
+              value: 'about',
+              child: _buildMenuItem(
+                icon: Icons.info_outline,
+                title: 'Sobre',
+                subtitle: 'Informações do app',
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
+
+  Widget _buildMenuItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppDesignSystem.spaceXs),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
+            decoration: BoxDecoration(
+              color: AppDesignSystem.accentColor.withOpacity(0.1),
+              borderRadius: AppDesignSystem.borderRadiusXs,
+            ),
+            child: Icon(
+              icon,
+              color: AppDesignSystem.accentColor,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: AppDesignSystem.spaceMd),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: AppDesignSystem.titleSmall.copyWith(
+                    color: AppDesignSystem.textPrimaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: AppDesignSystem.bodySmall.copyWith(
+                    color: AppDesignSystem.textSecondaryColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleMenuSelection(String value) {
+    switch (value) {
+      case 'favorites':
+        _showSnackBar('Favoritos - Em desenvolvimento');
+        break;
+      case 'watchlist':
+        _showSnackBar('Lista para assistir - Em desenvolvimento');
+        break;
+      case 'settings':
+        _showSnackBar('Configurações - Em desenvolvimento');
+        break;
+      case 'about':
+        _showAboutDialog();
+        break;
+    }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(
+              Icons.info_outline,
+              color: AppDesignSystem.textPrimaryColor,
+              size: 20,
+            ),
+            const SizedBox(width: AppDesignSystem.spaceMd),
+            Expanded(
+              child: Text(
+                message,
+                style: AppDesignSystem.bodyMedium.copyWith(
+                  color: AppDesignSystem.textPrimaryColor,
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: AppDesignSystem.cardColor,
+        behavior: SnackBarBehavior.floating,
+        shape: const RoundedRectangleBorder(
+          borderRadius: AppDesignSystem.borderRadiusMd,
+          side: BorderSide(
+            color: AppDesignSystem.cardBorderColor,
+          ),
+        ),
+        margin: const EdgeInsets.all(AppDesignSystem.spaceMd),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _showAboutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppDesignSystem.cardColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: AppDesignSystem.borderRadiusLg,
+          side: BorderSide(
+            color: AppDesignSystem.cardBorderColor,
+          ),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(AppDesignSystem.spaceSm),
+              decoration: const BoxDecoration(
+                gradient: AppDesignSystem.accentGradient,
+                borderRadius: AppDesignSystem.borderRadiusSm,
+              ),
+              child: const Icon(
+                Icons.movie_outlined,
+                color: AppDesignSystem.textPrimaryColor,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: AppDesignSystem.spaceMd),
+            Text(
+              'Testflix',
+              style: AppDesignSystem.headlineSmall.copyWith(
+                color: AppDesignSystem.textPrimaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Seu app de filmes favorito',
+              style: AppDesignSystem.bodyLarge.copyWith(
+                color: AppDesignSystem.textSecondaryColor,
+              ),
+            ),
+            const SizedBox(height: AppDesignSystem.spaceMd),
+            Container(
+              padding: const EdgeInsets.all(AppDesignSystem.spaceMd),
+              decoration: BoxDecoration(
+                color: AppDesignSystem.backgroundColor,
+                borderRadius: AppDesignSystem.borderRadiusMd,
+                border: Border.all(
+                  color: AppDesignSystem.cardBorderColor,
+                ),
+              ),
+              child: Column(
+                children: [
+                  _buildInfoRow('Versão', '1.0.0'),
+                  const SizedBox(height: AppDesignSystem.spaceSm),
+                  _buildInfoRow('Desenvolvido por', 'LZeroDev'),
+                  const SizedBox(height: AppDesignSystem.spaceSm),
+                  _buildInfoRow('Tecnologia', 'Flutter & TMDb API'),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: TextButton.styleFrom(
+              backgroundColor: AppDesignSystem.accentColor.withOpacity(0.1),
+              shape: const RoundedRectangleBorder(
+                borderRadius: AppDesignSystem.borderRadiusSm,
+              ),
+            ),
+            child: Text(
+              'Fechar',
+              style: AppDesignSystem.labelLarge.copyWith(
+                color: AppDesignSystem.accentColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: AppDesignSystem.bodyMedium.copyWith(
+            color: AppDesignSystem.textSecondaryColor,
+          ),
+        ),
+        Text(
+          value,
+          style: AppDesignSystem.bodyMedium.copyWith(
+            color: AppDesignSystem.textPrimaryColor,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }
