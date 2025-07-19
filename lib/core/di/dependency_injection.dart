@@ -3,6 +3,12 @@ import 'package:dio/dio.dart';
 import '../network/api_client.dart';
 import '../utils/secure_config.dart';
 import '../../features/movie/presentation/bloc/movie_list_bloc.dart';
+import '../../features/movie/presentation/bloc/movie_modern_bloc.dart';
+import '../../features/movie/data/repositories/movie_repository.dart';
+import '../../features/movie/data/repositories/movie_repository_adapter.dart';
+import '../../features/movie/domain/repositories/i_movie_repository.dart';
+import '../../features/movie/domain/usecases/search_movies_usecase.dart';
+import '../../features/movie/domain/usecases/get_now_playing_movies_usecase.dart';
 
 /// Configuração central de injeção de dependências.
 /// 
@@ -23,6 +29,14 @@ class DependencyInjection {
     final dio = Dio();
     _instances[Dio] = dio;
     _instances[ApiClient] = ApiClient(dio);
+
+    // Movie - Data Layer
+    _instances[MovieRepository] = MovieRepository(dio);
+    _instances[IMovieRepository] = MovieRepositoryAdapter(dio);
+
+    // Movie - Domain Layer (UseCases)
+    _instances[SearchMoviesUseCase] = SearchMoviesUseCase(get<IMovieRepository>());
+    _instances[GetNowPlayingMoviesUseCase] = GetNowPlayingMoviesUseCase(get<IMovieRepository>());
 
     _isInitialized = true;
   }
@@ -58,6 +72,14 @@ class DependencyInjection {
   /// Factory methods para criação de objetos que precisam de dependências
   static MovieListBloc createMovieListBloc() {
     return MovieListBloc(dio: get<Dio>());
+  }
+
+  /// Factory method para o BLoC moderno com UseCases
+  static MovieModernBloc createMovieModernBloc() {
+    return MovieModernBloc(
+      searchMoviesUseCase: get<SearchMoviesUseCase>(),
+      getNowPlayingMoviesUseCase: get<GetNowPlayingMoviesUseCase>(),
+    );
   }
 }
 
