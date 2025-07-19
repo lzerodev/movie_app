@@ -52,9 +52,18 @@ class _MovieListViewState extends State<MovieListView> {
             // Botão de voltar ao topo
             if (_showScrollToTop)
               Positioned(
-                bottom: AppDesignSystem.spaceLg,
-                right: AppDesignSystem.spaceLg,
-                child: _buildScrollToTopButton(),
+                bottom: AppDesignSystem.spaceXl + 80, // Acima do FAB + navigation bar
+                left: AppDesignSystem.spaceLg, // Mudança para o lado esquerdo
+                child: AnimatedScale(
+                  scale: _showScrollToTop ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOutBack,
+                  child: AnimatedOpacity(
+                    opacity: _showScrollToTop ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: _buildScrollToTopButton(),
+                  ),
+                ),
               ),
           ],
         );
@@ -63,27 +72,48 @@ class _MovieListViewState extends State<MovieListView> {
   }
 
   Widget _buildScrollToTopButton() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: AppDesignSystem.accentGradient,
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
+    return Tooltip(
+      message: 'Voltar ao topo',
+      preferBelow: false,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppDesignSystem.cardColor,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
             color: AppDesignSystem.accentColor.withOpacity(0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            width: 1.5,
           ),
-        ],
-      ),
-      child: FloatingActionButton(
-        mini: true,
-        onPressed: _scrollToTop,
-        backgroundColor: Colors.transparent,
-        foregroundColor: AppDesignSystem.textPrimaryColor,
-        elevation: 0,
-        child: const Icon(
-          Icons.keyboard_arrow_up_rounded,
-          size: 28,
+          boxShadow: [
+            BoxShadow(
+              color: AppDesignSystem.primaryColor.withOpacity(0.4),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+            BoxShadow(
+              color: AppDesignSystem.accentColor.withOpacity(0.1),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: _scrollToTop,
+            borderRadius: BorderRadius.circular(24),
+            splashColor: AppDesignSystem.accentColor.withOpacity(0.1),
+            highlightColor: AppDesignSystem.accentColor.withOpacity(0.05),
+            child: Container(
+              width: 48,
+              height: 48,
+              padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
+              child: Icon(
+                Icons.keyboard_arrow_up_rounded,
+                color: AppDesignSystem.accentColor,
+                size: 24,
+              ),
+            ),
+          ),
         ),
       ),
     );
