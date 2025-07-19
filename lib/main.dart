@@ -5,6 +5,7 @@ import 'package:movie_app/features/home/presentation/movieapp.dart';
 
 import 'core/utils/secure_config.dart';
 import 'core/di/dependency_injection.dart';
+import 'core/utils/simple_bloc_observer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
