@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import '../utils/const.dart';
+import '../utils/app_constants.dart';
+import '../utils/secrets.dart';
 
 /// Cliente HTTP centralizado para toda a aplicação.
 /// 
@@ -25,7 +26,7 @@ class ApiClient {
   /// Configura o Dio com interceptors e configurações base.
   void _configureDio() {
     _dio.options = BaseOptions(
-      baseUrl: host,
+      baseUrl: AppConstants.tmdbBaseUrl,
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       sendTimeout: const Duration(seconds: 30),
@@ -66,8 +67,8 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          options.queryParameters['api_key'] = apiKey;
-          options.queryParameters['language'] = defaultLanguage;
+          options.queryParameters['api_key'] = AppSecrets.tmdbApiKey;
+          options.queryParameters['language'] = 'pt-BR';
           handler.next(options);
         },
         onError: (error, handler) {

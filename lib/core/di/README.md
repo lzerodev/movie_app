@@ -12,7 +12,6 @@ O sistema de Dependency Injection foi atualizado para suportar a nova arquitetur
 - `ApiClient`: Cliente da API personalizado
 
 ### Movie Feature - Data Layer
-- `MovieRepository`: Repositório legado (para compatibilidade)
 - `IMovieRepository`: Interface moderna implementada pelo `MovieRepositoryAdapter`
 
 ### Movie Feature - Domain Layer (UseCases)
@@ -41,8 +40,7 @@ final searchUseCase = DependencyInjection.get<SearchMoviesUseCase>();
 final nowPlayingUseCase = DependencyInjection.get<GetNowPlayingMoviesUseCase>();
 
 // Acessar repositórios
-final modernRepo = DependencyInjection.get<IMovieRepository>();
-final legacyRepo = DependencyInjection.get<MovieRepository>();
+final repository = DependencyInjection.get<IMovieRepository>();
 ```
 
 ### 3. Factory Methods para BLoCs
@@ -104,7 +102,6 @@ DependencyInjection
 │   ├── Dio
 │   └── ApiClient
 ├── Data Layer
-│   ├── MovieRepository (legacy)
 │   └── IMovieRepository -> MovieRepositoryAdapter
 └── Domain Layer
     ├── SearchMoviesUseCase

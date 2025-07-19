@@ -1,25 +1,40 @@
 import 'package:dio/dio.dart';
 import 'package:movie_app/core/error/result.dart';
 import 'package:movie_app/core/error/failure.dart';
+import 'package:movie_app/core/utils/app_constants.dart';
+import 'package:movie_app/core/utils/secrets.dart';
 
 import '../../domain/repositories/i_movie_repository.dart';
 import '../models/movie.dart';
-import 'movie_repository.dart';
 
-/// Implementação do repositório de filmes que adapta o repositório legado
-/// para usar o novo padrão Result.
+/// Implementação moderna do repositório de filmes usando Result Pattern.
 /// 
-/// Esta classe serve como ponte entre a arquitetura legada e a nova arquitetura.
+/// Esta classe implementa IMovieRepository e faz requisições diretas à API
+/// seguindo os princípios da Clean Architecture.
 class MovieRepositoryAdapter implements IMovieRepository {
-  final MovieRepository _legacyRepository;
+  final Dio _dio;
 
-  MovieRepositoryAdapter(Dio dio) : _legacyRepository = MovieRepository(dio);
+  MovieRepositoryAdapter(this._dio);
 
   @override
   Future<Result<List<Movie>>> getNowPlayingMovies({int page = 1}) async {
     try {
-      final movies = await _legacyRepository.getNowPlayingMovies(startIndex: page);
-      return Success(movies);
+      final response = await _dio.get(
+        '${AppConstants.tmdbBaseUrl}/movie/now_playing',
+        queryParameters: {
+          'api_key': AppSecrets.tmdbApiKey,
+          'page': page,
+          'language': 'pt-BR',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> results = response.data['results'] ?? [];
+        final movies = results.map((movie) => Movie.fromJson(movie)).toList();
+        return Success(movies);
+      } else {
+        return Error(ServerFailure(message: 'Falha ao buscar filmes em cartaz: ${response.statusCode}'));
+      }
     } on DioException catch (e) {
       return Error(_mapDioExceptionToFailure(e));
     } catch (e) {
@@ -33,8 +48,23 @@ class MovieRepositoryAdapter implements IMovieRepository {
     int page = 1,
   }) async {
     try {
-      final movies = await _legacyRepository.searchMovies(query, page: page);
-      return Success(movies);
+      final response = await _dio.get(
+        '${AppConstants.tmdbBaseUrl}/search/movie',
+        queryParameters: {
+          'api_key': AppSecrets.tmdbApiKey,
+          'query': query,
+          'page': page,
+          'language': 'pt-BR',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> results = response.data['results'] ?? [];
+        final movies = results.map((json) => Movie.fromJson(json)).toList();
+        return Success(movies);
+      } else {
+        return Error(ServerFailure(message: 'Falha ao pesquisar filmes: ${response.statusCode}'));
+      }
     } on DioException catch (e) {
       return Error(_mapDioExceptionToFailure(e));
     } catch (e) {

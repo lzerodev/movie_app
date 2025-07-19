@@ -2,9 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../network/api_client.dart';
 import '../utils/secure_config.dart';
-import '../../features/movie/presentation/bloc/movie_list_bloc.dart';
 import '../../features/movie/presentation/bloc/movie_modern_bloc.dart';
-import '../../features/movie/data/repositories/movie_repository.dart';
 import '../../features/movie/data/repositories/movie_repository_adapter.dart';
 import '../../features/movie/domain/repositories/i_movie_repository.dart';
 import '../../features/movie/domain/usecases/search_movies_usecase.dart';
@@ -31,7 +29,6 @@ class DependencyInjection {
     _instances[ApiClient] = ApiClient(dio);
 
     // Movie - Data Layer
-    _instances[MovieRepository] = MovieRepository(dio);
     _instances[IMovieRepository] = MovieRepositoryAdapter(dio);
 
     // Movie - Domain Layer (UseCases)
@@ -67,11 +64,6 @@ class DependencyInjection {
   static void reset() {
     _instances.clear();
     _isInitialized = false;
-  }
-
-  /// Factory methods para criação de objetos que precisam de dependências
-  static MovieListBloc createMovieListBloc() {
-    return MovieListBloc(dio: get<Dio>());
   }
 
   /// Factory method para o BLoC moderno com UseCases
