@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/core/theme/app_design_system.dart';
+import 'package:movie_app/core/widgets/widgets.dart';
 import 'package:movie_app/features/movie/presentation/bloc/movie_modern_bloc.dart';
 import 'package:movie_app/features/movie/presentation/widgets/movie_list_item.dart';
 
@@ -13,7 +14,6 @@ class MovieListView extends StatefulWidget {
 
 class _MovieListViewState extends State<MovieListView> {
   final _scrollController = ScrollController();
-  bool _showScrollToTop = false;
 
   @override
   void initState() {
@@ -50,98 +50,25 @@ class _MovieListViewState extends State<MovieListView> {
                   state.movies, false), // Mostra loading no fim da lista
             },
 
-            // Botão de voltar ao topo
-            if (_showScrollToTop)
-              Positioned(
-                bottom: AppDesignSystem.spaceXl +
-                    80, // Acima do FAB + navigation bar
-                left: AppDesignSystem.spaceLg, // Mudança para o lado esquerdo
-                child: AnimatedScale(
-                  scale: _showScrollToTop ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOutBack,
-                  child: AnimatedOpacity(
-                    opacity: _showScrollToTop ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 200),
-                    child: _buildScrollToTopButton(),
-                  ),
-                ),
+            // Botão de voltar ao topo - usando o novo widget reutilizável
+            AppScrollToTopButton(
+              scrollController: _scrollController,
+              positioning: const EdgeInsets.only(
+                bottom: AppDesignSystem.spaceXl + 80, // Acima do FAB + navigation bar
+                left: AppDesignSystem.spaceLg, // Lado esquerdo
               ),
+              variant: AppScrollButtonVariant.elevated,
+              threshold: 500.0,
+            ),
           ],
         );
       },
     );
   }
 
-  Widget _buildScrollToTopButton() {
-    return Tooltip(
-      message: 'Voltar ao topo',
-      preferBelow: false,
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppDesignSystem.cardColor,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: AppDesignSystem.accentColor.withOpacity(0.3),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: AppDesignSystem.primaryColor.withOpacity(0.4),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-            BoxShadow(
-              color: AppDesignSystem.accentColor.withOpacity(0.1),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: _scrollToTop,
-            borderRadius: BorderRadius.circular(24),
-            splashColor: AppDesignSystem.accentColor.withOpacity(0.1),
-            highlightColor: AppDesignSystem.accentColor.withOpacity(0.05),
-            child: Container(
-              width: 48,
-              height: 48,
-              padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
-              child: const Icon(
-                Icons.keyboard_arrow_up_rounded,
-                color: AppDesignSystem.accentColor,
-                size: 24,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildMovieList(List movies, bool hasReachedMax) {
     if (movies.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.movie_outlined,
-              size: 64,
-              color: AppDesignSystem.textSecondaryColor,
-            ),
-            const SizedBox(height: AppDesignSystem.spaceMd),
-            Text(
-              'Nenhum filme encontrado',
-              style: AppDesignSystem.titleMedium.copyWith(
-                color: AppDesignSystem.textSecondaryColor,
-              ),
-            ),
-          ],
-        ),
-      );
+      return const AppEmptyState.movies();
     }
 
     return Container(
@@ -195,63 +122,8 @@ class _MovieListViewState extends State<MovieListView> {
           ),
           itemBuilder: (BuildContext context, int index) {
             if (index >= movies.length) {
-              return Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: AppDesignSystem.spaceXl),
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          AppDesignSystem.cardColor,
-                          AppDesignSystem.cardColor.withOpacity(0.8),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                AppDesignSystem.accentColor,
-                                AppDesignSystem.accentColor.withOpacity(0.7),
-                              ],
-                            ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.movie_creation_outlined,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        ),
-                        const SizedBox(height: AppDesignSystem.spaceMd),
-                        Text(
-                          'Carregando mais filmes...',
-                          style: AppDesignSystem.bodyMedium.copyWith(
-                            color: AppDesignSystem.textSecondaryColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              return const AppLoadingIndicator.card(
+                message: 'Carregando mais filmes...',
               );
             }
 
@@ -285,14 +157,6 @@ class _MovieListViewState extends State<MovieListView> {
   }
 
   void _onScroll() {
-    // Controle do botão "voltar ao topo"
-    final bool shouldShowButton = _scrollController.offset > 500;
-    if (shouldShowButton != _showScrollToTop) {
-      setState(() {
-        _showScrollToTop = shouldShowButton;
-      });
-    }
-
     // Carregamento infinito (pagination)
     if (_isBottom) {
       final state = context.read<MovieModernBloc>().state;
@@ -316,13 +180,5 @@ class _MovieListViewState extends State<MovieListView> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
-  }
-
-  void _scrollToTop() {
-    _scrollController.animateTo(
-      0,
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeOutCubic,
-    );
   }
 }
