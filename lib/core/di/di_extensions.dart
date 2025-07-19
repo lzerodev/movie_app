@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../di/dependency_injection.dart';
 import '../../features/movie/presentation/bloc/movie_modern_bloc.dart';
-import '../../features/movie/presentation/bloc/movie_list_bloc.dart';
 
 /// Extensões para facilitar o uso do Dependency Injection em Widgets.
 /// 
@@ -21,13 +20,6 @@ extension DIBlocExtensions on BuildContext {
   /// ```
   MovieModernBloc Function(BuildContext) get createMovieModernBloc =>
       (context) => DependencyInjection.createMovieModernBloc();
-
-  /// Cria e fornece um [MovieListBloc] usando DI (legacy).
-  /// 
-  /// Este BLoC usa a implementação legada.
-  /// Prefira usar [createMovieModernBloc] para novos desenvolvimentos.
-  MovieListBloc Function(BuildContext) get createMovieListBloc =>
-      (context) => DependencyInjection.createMovieListBloc();
 }
 
 /// Extensões para facilitar o acesso a dependências específicas.

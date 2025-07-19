@@ -51,12 +51,6 @@ final repository = DependencyInjection.get<IMovieRepository>();
 final modernBloc = DependencyInjection.createMovieModernBloc();
 ```
 
-#### BLoC Legado (Para compatibilidade)
-```dart
-// Criar MovieListBloc legado
-final legacyBloc = DependencyInjection.createMovieListBloc();
-```
-
 ### 4. Uso em Widgets com Extensões
 
 ```dart
