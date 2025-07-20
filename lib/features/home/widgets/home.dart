@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../core/widgets/app_button.dart' show AppCardLegacy;
 import '../../../core/theme/app_design_system.dart';
+import '../../../core/navigation/navigation.dart';
 import '../../movie/presentation/pages/now_playing_movies.dart';
 import '../../movie/presentation/pages/search_movies.dart';
+import '../../movie/presentation/pages/navigation_demo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -190,6 +192,12 @@ class HomePageState extends State<HomePage> {
           title: 'Ajuda',
           subtitle: 'Central de suporte e FAQ',
         ),
+        _buildProfileOption(
+          icon: Icons.navigation_rounded,
+          title: 'Demo de Navegação',
+          subtitle: 'Teste do sistema de navegação',
+          onTap: () => _navigateToNavigationDemo(),
+        ),
       ],
     );
   }
@@ -198,11 +206,12 @@ class HomePageState extends State<HomePage> {
     required IconData icon,
     required String title,
     required String subtitle,
+    VoidCallback? onTap,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppDesignSystem.spaceMd),
       child: AppCardLegacy(
-        onTap: () {
+        onTap: onTap ?? () {
           // TODO: Implementar navegação
         },
         child: ListTile(
@@ -385,12 +394,11 @@ class HomePageState extends State<HomePage> {
   }
   
   void _navigateToSearch() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SearchMoviesPage(),
-      ),
-    );
+    context.goToSearchMovies();
+  }
+
+  void _navigateToNavigationDemo() {
+    context.goToNavigationDemo();
   }
 
   List<Widget> _buildAppBarActions() {
