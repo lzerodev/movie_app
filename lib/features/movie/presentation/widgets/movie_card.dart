@@ -50,25 +50,17 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppDesignSystem.cardColor,
-        borderRadius: AppDesignSystem.borderRadiusMd,
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min, // Evita espaçamentos extras
-            children: [
-              _buildPosterSection(),
-              _buildInfoSection(),
-            ],
-          ),
-        ),
+    return AppCard.elevated(
+      padding: EdgeInsets.zero, // Remove padding padrão para controle total do layout
+      onTap: onTap,
+      size: _getCardSize(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Evita espaçamentos extras
+        children: [
+          _buildPosterSection(),
+          _buildInfoSection(),
+        ],
       ),
     );
   }
@@ -264,6 +256,17 @@ class MovieCard extends StatelessWidget {
     ];
 
     return '${date.day} ${months[date.month]} ${date.year}';
+  }
+
+  AppCardSize _getCardSize() {
+    switch (size) {
+      case MovieCardSize.small:
+        return AppCardSize.small;
+      case MovieCardSize.medium:
+        return AppCardSize.medium;
+      case MovieCardSize.large:
+        return AppCardSize.large;
+    }
   }
 }
 
