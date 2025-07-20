@@ -4,6 +4,7 @@ import '../../features/movie/data/models/movie.dart';
 import '../../features/movie/presentation/pages/movie_detail.dart';
 import '../../features/movie/presentation/pages/now_playing_movies.dart';
 import '../../features/movie/presentation/pages/search_movies.dart';
+import '../../features/movie/presentation/pages/navigation_demo.dart';
 import '../../features/home/widgets/home.dart';
 
 /// Definições de todas as rotas da aplicação
@@ -13,6 +14,7 @@ class AppRoutes {
   static const String nowPlayingMovies = '/movies/now-playing';
   static const String searchMovies = '/movies/search';
   static const String movieDetail = '/movies/detail';
+  static const String navigationDemo = '/navigation-demo';
 
   // === ROTAS PRINCIPAIS ===
 
@@ -28,12 +30,16 @@ class AppRoutes {
   /// Rota para detalhes do filme
   static MovieDetailRoute movieDetailRoute(Movie movie) => MovieDetailRoute(movie);
 
+  /// Rota para demo de navegação
+  static NavigationDemoRoute navigationDemoRoute() => NavigationDemoRoute();
+
   // === MAPA DE ROTAS NOMEADAS ===
   
   static Map<String, WidgetBuilder> get namedRoutes => {
     home: (context) => const HomePage(),
     nowPlayingMovies: (context) => const NowPlayingMoviesPage(),
     searchMovies: (context) => const SearchMoviesPage(),
+    navigationDemo: (context) => const NavigationDemoPage(),
     // movieDetail precisa de parâmetros, então não incluímos aqui
   };
 
@@ -172,4 +178,21 @@ class MovieDetailRoute extends AppRoute<void> {
       transitionDuration: const Duration(milliseconds: 400),
     );
   }
+}
+
+/// Rota para demo de navegação
+class NavigationDemoRoute extends AppRoute<void> {
+  @override
+  String get name => AppRoutes.navigationDemo;
+  
+  @override
+  String get path => '/navigation-demo';
+  
+  @override
+  Widget get page => const NavigationDemoPage();
+  
+  @override
+  AppRouteConfig get config => const AppRouteConfig(
+    transitionDuration: Duration(milliseconds: 350),
+  );
 }
