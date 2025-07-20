@@ -278,7 +278,7 @@ class HomePageState extends State<HomePage> {
           crossAxisCount: columns,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: deviceType == DeviceType.largeDesktop ? 3.2 : 3.5,
+          childAspectRatio: deviceType == DeviceType.largeDesktop ? 3.8 : 4.2,
         ),
         itemCount: options.length,
         itemBuilder: (itemContext, index) {
@@ -373,9 +373,11 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                   
-                  // Mostra subtitle apenas se há espaço suficiente
-                  if (deviceType != DeviceType.desktop || 
-                      option.subtitle.length < 35) ...[
+                  // Mostra subtitle com lógica melhorada
+                  if (deviceType == DeviceType.mobile || 
+                      deviceType == DeviceType.tablet ||
+                      (deviceType == DeviceType.desktop && option.subtitle.length < 30) ||
+                      (deviceType == DeviceType.largeDesktop && option.subtitle.length < 35)) ...[
                     const SizedBox(height: 4),
                     Flexible(
                       child: Text(
@@ -388,7 +390,7 @@ class HomePageState extends State<HomePage> {
                         ).copyWith(
                           color: AppDesignSystem.textSecondaryColor,
                         ),
-                        maxLines: deviceType == DeviceType.desktop ? 1 : 2,
+                        maxLines: deviceType == DeviceType.mobile ? 2 : 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
