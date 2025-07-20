@@ -60,11 +60,6 @@ extension NavigationExtensions on BuildContext {
     );
   }
 
-  /// Navega para a demo de navegação
-  Future<void> goToNavigationDemo() {
-    return AppRouter.push(AppRoutes.navigationDemoRoute());
-  }
-
   // === UTILIDADES ===
 
   /// Mostra bottom sheet modal
