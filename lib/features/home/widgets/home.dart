@@ -6,8 +6,8 @@ import '../../../core/utils/responsive_utils.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../movie/presentation/pages/now_playing_movies.dart';
 
-/// Dados para opções do perfil
-class _ProfileOptionData {
+  /// Dados para opções do perfil
+  class _ProfileOptionData {
   final IconData icon;
   final String title;
   final String subtitle;
@@ -356,16 +356,20 @@ class HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    option.title,
-                    style: ResponsiveUtils.responsive<TextStyle>(
-                      context,
-                      mobile: AppDesignSystem.titleSmall,
-                      tablet: AppDesignSystem.titleMedium,
-                      desktop: AppDesignSystem.titleMedium,
-                    ).copyWith(
-                      color: AppDesignSystem.textPrimaryColor,
-                      fontWeight: FontWeight.w600,
+                  Flexible(
+                    child: Text(
+                      option.title,
+                      style: ResponsiveUtils.responsive<TextStyle>(
+                        context,
+                        mobile: AppDesignSystem.titleSmall,
+                        tablet: AppDesignSystem.titleMedium,
+                        desktop: AppDesignSystem.titleMedium,
+                      ).copyWith(
+                        color: AppDesignSystem.textPrimaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   
@@ -373,18 +377,20 @@ class HomePageState extends State<HomePage> {
                   if (deviceType != DeviceType.desktop || 
                       option.subtitle.length < 35) ...[
                     const SizedBox(height: 4),
-                    Text(
-                      option.subtitle,
-                      style: ResponsiveUtils.responsive<TextStyle>(
-                        context,
-                        mobile: AppDesignSystem.bodySmall,
-                        tablet: AppDesignSystem.bodyMedium,
-                        desktop: AppDesignSystem.bodyMedium,
-                      ).copyWith(
-                        color: AppDesignSystem.textSecondaryColor,
+                    Flexible(
+                      child: Text(
+                        option.subtitle,
+                        style: ResponsiveUtils.responsive<TextStyle>(
+                          context,
+                          mobile: AppDesignSystem.bodySmall,
+                          tablet: AppDesignSystem.bodyMedium,
+                          desktop: AppDesignSystem.bodyMedium,
+                        ).copyWith(
+                          color: AppDesignSystem.textSecondaryColor,
+                        ),
+                        maxLines: deviceType == DeviceType.desktop ? 1 : 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: deviceType == DeviceType.desktop ? 1 : 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ],
