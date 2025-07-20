@@ -142,9 +142,9 @@ class HomePageState extends State<HomePage> {
               ),
               child: Column(
                 children: [
-                  _buildResponsiveProfileHeader(deviceType),
+                  _buildResponsiveProfileHeader(deviceType, context),
                   SizedBox(height: ResponsiveUtils.responsiveSpacing(context)),
-                  _buildResponsiveProfileOptions(deviceType),
+                  _buildResponsiveProfileOptions(deviceType, context),
                 ],
               ),
             ),
@@ -154,7 +154,7 @@ class HomePageState extends State<HomePage> {
     );
   }
   
-  Widget _buildResponsiveProfileHeader(DeviceType deviceType) {
+  Widget _buildResponsiveProfileHeader(DeviceType deviceType, BuildContext context) {
     final avatarSize = ResponsiveUtils.responsive<double>(
       context,
       mobile: 80,
@@ -234,7 +234,7 @@ class HomePageState extends State<HomePage> {
     );
   }
   
-  Widget _buildResponsiveProfileOptions(DeviceType deviceType) {
+  Widget _buildResponsiveProfileOptions(DeviceType deviceType, BuildContext context) {
     final options = [
       _ProfileOptionData(
         icon: Icons.favorite_outline,
@@ -281,8 +281,8 @@ class HomePageState extends State<HomePage> {
           childAspectRatio: deviceType == DeviceType.largeDesktop ? 3.2 : 3.5,
         ),
         itemCount: options.length,
-        itemBuilder: (context, index) {
-          return _buildResponsiveProfileOption(options[index], deviceType);
+        itemBuilder: (itemContext, index) {
+          return _buildResponsiveProfileOption(options[index], deviceType, context);
         },
       );
     } else {
@@ -291,7 +291,7 @@ class HomePageState extends State<HomePage> {
         children: options.map((option) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: _buildResponsiveProfileOption(option, deviceType),
+            child: _buildResponsiveProfileOption(option, deviceType, context),
           );
         }).toList(),
       );
@@ -301,6 +301,7 @@ class HomePageState extends State<HomePage> {
   Widget _buildResponsiveProfileOption(
     _ProfileOptionData option,
     DeviceType deviceType,
+    BuildContext context,
   ) {
     final iconSize = ResponsiveUtils.responsive<double>(
       context,
