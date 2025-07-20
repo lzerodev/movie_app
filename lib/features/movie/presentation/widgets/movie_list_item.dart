@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_design_system.dart';
+import '../../../../core/navigation/navigation.dart';
 import '../../data/models/movie.dart';
-import '../pages/movie_detail.dart';
 
 class MovieListItem extends StatefulWidget {
   const MovieListItem({required this.movie, super.key});
@@ -94,27 +94,8 @@ class _MovieListItemState extends State<MovieListItem>
               child: InkWell(
                 borderRadius: AppDesignSystem.borderRadiusMd,
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          MovieDetailPage(movie: widget.movie),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(1.0, 0.0);
-                        const end = Offset.zero;
-                        const curve = Curves.ease;
-
-                        var tween = Tween(begin: begin, end: end).chain(
-                          CurveTween(curve: curve),
-                        );
-
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
+                  // Usa o novo sistema de navegação com transição hero
+                  context.goToMovieDetailWithHero(widget.movie);
                 },
                 onHover: (isHovered) {
                   setState(() {
