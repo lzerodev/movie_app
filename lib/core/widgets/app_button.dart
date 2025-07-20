@@ -6,7 +6,7 @@ import '../theme/app_design_system.dart';
 ///
 /// Fornece um container estilizado com elevação, bordas arredondadas
 /// e cores consistentes com o tema da aplicação.
-/// 
+///
 /// @deprecated Use AppCard instead
 class AppCardLegacy extends StatelessWidget {
   /// Conteúdo do card

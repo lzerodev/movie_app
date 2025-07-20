@@ -7,6 +7,7 @@ O **Sistema de Navegação AppRouter** é uma implementação type-safe e centra
 ## 🎯 Principais Características
 
 ### ✨ **Funcionalidades Core**
+
 - **Type-Safe**: Navegação tipada com parâmetros seguros
 - **Centralizado**: Todas as rotas em um local
 - **Transições Customizáveis**: 11+ tipos de transições pré-definidas
@@ -15,6 +16,7 @@ O **Sistema de Navegação AppRouter** é uma implementação type-safe e centra
 - **Mensagens Unificadas**: SnackBars com tipos específicos
 
 ### 🏗️ **Arquitetura**
+
 ```
 core/navigation/
 ├── app_router.dart          # Router principal
@@ -27,6 +29,7 @@ core/navigation/
 ## 🚀 Uso Básico
 
 ### 1. **Navegação Simples**
+
 ```dart
 // Navegar para uma nova tela
 context.goToMovieDetail(movie);
@@ -39,6 +42,7 @@ context.popRoute();
 ```
 
 ### 2. **Navegação Type-Safe**
+
 ```dart
 // Usando rotas tipadas
 final route = AppRoutes.movieDetailRoute(movie);
@@ -49,6 +53,7 @@ final result = await context.pushRoute<bool>(confirmationRoute);
 ```
 
 ### 3. **Navegação com Nome**
+
 ```dart
 // Para rotas simples
 AppRouter.pushNamed('/search-movies');
@@ -60,6 +65,7 @@ AppRouter.pushNamed('/movie-detail', arguments: movie);
 ## 🎨 Transições Disponíveis
 
 ### **Tipos de Transição**
+
 ```dart
 enum AppTransitionType {
   slideRight,         // Slide da direita
@@ -78,6 +84,7 @@ enum AppTransitionType {
 ```
 
 ### **Uso de Transições**
+
 ```dart
 // Transição customizada
 final route = PageRouteBuilder<void>(
@@ -91,6 +98,7 @@ Navigator.of(context).push(route);
 ## 🛠️ Configuração de Rotas
 
 ### **Definindo uma Nova Rota**
+
 ```dart
 class MyCustomRoute extends AppRoute<String> {
   final String parameter;
@@ -99,13 +107,13 @@ class MyCustomRoute extends AppRoute<String> {
 
   @override
   String get name => '/my-custom-route';
-  
+
   @override
   String get path => '/my-custom-route/$parameter';
-  
+
   @override
   Widget get page => MyCustomPage(parameter: parameter);
-  
+
   @override
   AppRouteConfig get config => const AppRouteConfig(
     transitionDuration: Duration(milliseconds: 400),
@@ -115,6 +123,7 @@ class MyCustomRoute extends AppRoute<String> {
 ```
 
 ### **Configurações Pré-definidas**
+
 ```dart
 // Para modals
 AppRouteConfig.modal
@@ -136,6 +145,7 @@ AppRouteConfig(
 ## 💬 Sistema de Dialogs e Mensagens
 
 ### **Dialogs**
+
 ```dart
 // Dialog de confirmação
 final confirmed = await context.showConfirmationDialog(
@@ -157,6 +167,7 @@ await context.showLoadingDialog(
 ```
 
 ### **Bottom Sheets**
+
 ```dart
 await context.showAppBottomSheet(
   content: MyBottomSheetContent(),
@@ -165,6 +176,7 @@ await context.showAppBottomSheet(
 ```
 
 ### **Mensagens (SnackBars)**
+
 ```dart
 // Mensagem simples
 context.showMessage('Mensagem básica');
@@ -179,6 +191,7 @@ context.showErrorMessage('Erro!');
 ## 📱 Integração com MaterialApp
 
 ### **Configuração Completa**
+
 ```dart
 MaterialApp(
   navigatorKey: AppRouter.navigatorKey,
@@ -191,6 +204,7 @@ MaterialApp(
 ## 🔧 Extensões do BuildContext
 
 ### **Navegação Específica**
+
 ```dart
 extension NavigationExtensions on BuildContext {
   // Navegação para telas específicas
@@ -198,7 +212,7 @@ extension NavigationExtensions on BuildContext {
   Future<void> goToNowPlayingMovies();
   Future<void> goToSearchMovies();
   Future<void> goToMovieDetail(Movie movie);
-  
+
   // Navegação genérica
   Future<T?> pushRoute<T>(AppRoute<T> route);
   Future<T?> pushReplacementRoute<T, TO>(AppRoute<T> route);
@@ -208,6 +222,7 @@ extension NavigationExtensions on BuildContext {
 ```
 
 ### **Extensões de Entidades**
+
 ```dart
 extension MovieRouteExtensions on Movie {
   MovieDetailRoute get detailRoute;
@@ -218,23 +233,24 @@ extension MovieRouteExtensions on Movie {
 
 ## 📊 Benefícios vs. Navegação Manual
 
-| Aspecto | Manual | AppRouter |
-|---------|---------|-----------|
-| **Type Safety** | ❌ Sem tipagem | ✅ Type-safe completo |
-| **Centralização** | ❌ Espalhado | ✅ Centralizado |
-| **Transições** | ❌ Repetitivas | ✅ Reutilizáveis |
-| **Manutenção** | ❌ Complexa | ✅ Simples |
-| **Debugging** | ❌ Difícil | ✅ Fácil |
-| **Consistency** | ❌ Variável | ✅ Padronizada |
+| Aspecto           | Manual         | AppRouter             |
+| ----------------- | -------------- | --------------------- |
+| **Type Safety**   | ❌ Sem tipagem | ✅ Type-safe completo |
+| **Centralização** | ❌ Espalhado   | ✅ Centralizado       |
+| **Transições**    | ❌ Repetitivas | ✅ Reutilizáveis      |
+| **Manutenção**    | ❌ Complexa    | ✅ Simples            |
+| **Debugging**     | ❌ Difícil     | ✅ Fácil              |
+| **Consistency**   | ❌ Variável    | ✅ Padronizada        |
 
 ## 🎯 Casos de Uso Práticos
 
 ### 1. **Navegação em Listas**
+
 ```dart
 // Em um MovieListItem
 class MovieListItem extends StatelessWidget {
   final Movie movie;
-  
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -246,6 +262,7 @@ class MovieListItem extends StatelessWidget {
 ```
 
 ### 2. **Fluxo de Autenticação**
+
 ```dart
 // Login bem-sucedido
 if (loginSuccess) {
@@ -256,31 +273,36 @@ if (loginSuccess) {
 ```
 
 ### 3. **Confirmações de Ação**
+
 ```dart
 Future<void> deleteMovie(BuildContext context) async {
   final confirmed = await context.showConfirmationDialog(
     title: 'Excluir Filme',
     message: 'Esta ação não pode ser desfeita.',
   );
-  
+
   if (confirmed == true) {
     await context.showLoadingDialog(
       message: 'Excluindo...',
       future: movieService.delete(movie.id),
     );
-    
+
     context.showSuccessMessage('Filme excluído!');
     context.popRoute();
   }
 }
 ```
 
-## 🚀 Exemplo Completo
+## 🚀 Exemplos Práticos
 
-Veja a implementação completa no arquivo:
-`lib/features/movie/presentation/pages/navigation_demo.dart`
+Veja a implementação em arquivos funcionais:
 
-Este exemplo demonstra:
+- `lib/features/movie/presentation/pages/search_movies.dart` - Navegação e estados
+- `lib/features/movie/presentation/pages/movie_detail.dart` - Transições hero
+- `lib/features/home/widgets/home.dart` - Navegação em tabs
+
+Estes exemplos demonstram:
+
 - ✅ Navegação básica
 - ✅ Transições customizadas
 - ✅ Dialogs e modals

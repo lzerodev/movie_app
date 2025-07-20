@@ -49,17 +49,6 @@ class _MovieListViewState extends State<MovieListView> {
               MovieModernStatus.loading => _buildMovieList(
                   state.movies, false), // Mostra loading no fim da lista
             },
-
-            // Botão de voltar ao topo - usando o novo widget reutilizável
-            AppScrollToTopButton(
-              scrollController: _scrollController,
-              positioning: const EdgeInsets.only(
-                bottom: AppDesignSystem.spaceXl + 80, // Acima do FAB + navigation bar
-                left: AppDesignSystem.spaceLg, // Lado esquerdo
-              ),
-              variant: AppScrollButtonVariant.elevated,
-              threshold: 500.0,
-            ),
           ],
         );
       },

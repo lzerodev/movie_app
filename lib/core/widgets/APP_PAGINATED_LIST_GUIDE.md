@@ -2,19 +2,20 @@
 
 ## 📋 Visão Geral
 
-O `AppPaginatedList<T>` é um widget genérico altamente configurável que fornece funcionalidade completa de scroll infinito, pull-to-refresh, estados de loading/error/empty e scroll-to-top automático. É a evolução natural das implementações específicas de lista, proporcionando reutilização máxima.
+O `AppPaginatedList<T>` é um widget genérico altamente configurável que fornece funcionalidade completa de scroll infinito, pull-to-refresh e estados de loading/error/empty. É a evolução natural das implementações específicas de lista, proporcionando reutilização máxima.
 
 ## 🎯 Principais Características
 
 ### ✨ **Funcionalidades Core**
+
 - **Genérico**: Funciona com qualquer tipo de dados `<T>`
 - **Scroll Infinito**: Carregamento automático ao chegar no final
 - **Pull-to-Refresh**: Gesto padrão para recarregar
 - **Estados Automáticos**: Loading, Error, Empty state integrados
-- **Scroll-to-Top**: Botão flutuante automático com animações
 - **Separadores**: Opção de separadores customizáveis entre itens
 
 ### 🛠️ **Configurações Avançadas**
+
 - **AppEmptyStateConfig**: Configuração completa do estado vazio
 - **AppScrollConfig**: Controle total do comportamento de scroll
 - **AppListLayoutConfig**: Layout, padding, performance e decorações
@@ -38,6 +39,7 @@ AppPaginatedList<Movie>(
 ## 🎨 Configurações Detalhadas
 
 ### 1. **Empty State Configuration**
+
 ```dart
 emptyStateConfig: AppEmptyStateConfig(
   icon: Icons.movie_outlined,
@@ -53,12 +55,9 @@ emptyStateConfig: AppEmptyStateConfig(
 ```
 
 ### 2. **Scroll Configuration**
+
 ```dart
 scrollConfig: AppScrollConfig(
-  showScrollToTop: true,
-  scrollToTopPosition: EdgeInsets.only(bottom: 20, right: 20),
-  scrollToTopVariant: AppScrollButtonVariant.elevated,
-  scrollToTopThreshold: 500.0,
   loadMoreThreshold: 0.9, // Carrega aos 90%
   scrollPhysics: AppScrollPhysicsType.bouncing,
   refreshIndicatorColor: Colors.blue,
@@ -67,6 +66,7 @@ scrollConfig: AppScrollConfig(
 ```
 
 ### 3. **Layout Configuration**
+
 ```dart
 layoutConfig: AppListLayoutConfig(
   padding: EdgeInsets.all(16),
@@ -82,6 +82,7 @@ layoutConfig: AppListLayoutConfig(
 ```
 
 ### 4. **Animation Configuration**
+
 ```dart
 animationConfig: AppListAnimationConfig(
   enableItemAnimation: true,
@@ -94,6 +95,7 @@ animationConfig: AppListAnimationConfig(
 ## 📝 Exemplos Práticos
 
 ### 1. **Lista de Filmes (MovieListView)**
+
 ```dart
 class MovieListViewNew extends StatefulWidget {
   @override
@@ -107,24 +109,20 @@ class MovieListViewNew extends StatefulWidget {
           isLoading: state.status == MovieModernStatus.loading && state.movies.isEmpty,
           hasError: state.status == MovieModernStatus.failure,
           errorMessage: state.errorMessage,
-          
+
           itemBuilder: (context, movie, index) => MovieListItem(movie: movie),
           onLoadMore: () => _handleLoadMore(state),
           onRefresh: () => _handleRefresh(),
           onRetry: () => _handleRetry(),
-          
+
           emptyStateConfig: AppEmptyStateConfig(
             icon: Icons.movie_outlined,
             title: 'Nenhum filme encontrado',
             variant: AppEmptyStateVariant.movies,
           ),
-          
+
           scrollConfig: AppScrollConfig(
-            scrollToTopPosition: EdgeInsets.only(
-              bottom: 100, // Acima da navigation bar
-              left: 16,
-            ),
-            scrollToTopVariant: AppScrollButtonVariant.elevated,
+            loadMoreThreshold: 0.8,
           ),
         );
       },
@@ -134,6 +132,7 @@ class MovieListViewNew extends StatefulWidget {
 ```
 
 ### 2. **Lista Genérica de Usuários**
+
 ```dart
 class GenericUserList extends StatefulWidget {
   @override
@@ -142,23 +141,22 @@ class GenericUserList extends StatefulWidget {
       items: _users,
       hasReachedMax: _hasReachedMax,
       isLoadingMore: _isLoading && _users.isNotEmpty,
-      
+
       itemBuilder: (context, user, index) {
         return UserListItem(user: user, index: index);
       },
-      
+
       onLoadMore: _loadMoreUsers,
       onRefresh: _handleRefresh,
       onRetry: _retryLoad,
-      
+
       emptyStateConfig: AppEmptyStateConfig(
         icon: Icons.people_outline,
         title: 'Nenhum usuário encontrado',
         variant: AppEmptyStateVariant.list,
       ),
-      
+
       scrollConfig: AppScrollConfig(
-        scrollToTopVariant: AppScrollButtonVariant.filled,
         loadMoreThreshold: 0.8, // Carrega aos 80%
       ),
     );
@@ -169,6 +167,7 @@ class GenericUserList extends StatefulWidget {
 ## 🔧 Tipos e Enums
 
 ### AppScrollPhysicsType
+
 ```dart
 enum AppScrollPhysicsType {
   bouncing,   // iOS style (padrão)
@@ -179,6 +178,7 @@ enum AppScrollPhysicsType {
 ```
 
 ### Configurações de Performance
+
 - **cacheExtent**: 500.0 (pixels de cache extra)
 - **addAutomaticKeepAlives**: true (mantém widgets na memória)
 - **addRepaintBoundaries**: true (otimiza repaint)
@@ -186,15 +186,14 @@ enum AppScrollPhysicsType {
 
 ## 📈 Benefícios vs. Implementação Manual
 
-| Aspecto | Manual | AppPaginatedList |
-|---------|---------|------------------|
-| **Linhas de Código** | ~180 linhas | ~30 linhas |
-| **Estados de Loading** | Implementação manual | Automático |
-| **Scroll-to-Top** | Código duplicado | Integrado |
-| **Configurabilidade** | Limitada | Extensiva |
-| **Reutilização** | Baixa | Alta |
-| **Manutenção** | Complexa | Simples |
-| **Consistency** | Variável | Padronizada |
+| Aspecto                | Manual               | AppPaginatedList |
+| ---------------------- | -------------------- | ---------------- |
+| **Linhas de Código**   | ~180 linhas          | ~30 linhas       |
+| **Estados de Loading** | Implementação manual | Automático       |
+| **Configurabilidade**  | Limitada             | Extensiva        |
+| **Reutilização**       | Baixa                | Alta             |
+| **Manutenção**         | Complexa             | Simples          |
+| **Consistency**        | Variável             | Padronizada      |
 
 ## 🎯 Casos de Uso Ideais
 

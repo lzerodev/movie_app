@@ -1,59 +1,59 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_design_system.dart';
 import 'app_empty_state.dart';
 import 'app_loading_indicator.dart';
-import 'app_scroll_to_top_button.dart';
 
 /// Widget genérico para listas paginadas.
-/// 
+///
 /// Fornece funcionalidade de scroll infinito, pull-to-refresh,
-/// estados de loading, error e empty, além de scroll-to-top automático.
+/// estados de loading, error e empty.
 class AppPaginatedList<T> extends StatefulWidget {
   /// Lista de itens a serem exibidos
   final List<T> items;
-  
+
   /// Builder para cada item da lista
   final Widget Function(BuildContext context, T item, int index) itemBuilder;
-  
+
   /// Se a lista chegou ao máximo de itens
   final bool hasReachedMax;
-  
+
   /// Se está carregando mais itens
   final bool isLoadingMore;
-  
+
   /// Se está carregando inicial
   final bool isLoading;
-  
+
   /// Se houve erro
   final bool hasError;
-  
+
   /// Mensagem de erro
   final String? errorMessage;
-  
+
   /// Callback para carregar mais itens
   final VoidCallback? onLoadMore;
-  
+
   /// Callback para refresh
   final Future<void> Function()? onRefresh;
-  
+
   /// Callback para retry após erro
   final VoidCallback? onRetry;
-  
+
   /// Configurações de empty state
   final AppEmptyStateConfig? emptyStateConfig;
-  
+
   /// Configurações de scroll
   final AppScrollConfig? scrollConfig;
-  
+
   /// Configurações de layout
   final AppListLayoutConfig? layoutConfig;
-  
+
   /// Se deve usar separadores entre itens
   final bool useSeparator;
-  
+
   /// Builder personalizado para separador
   final Widget Function(BuildContext context, int index)? separatorBuilder;
-  
+
   /// Configurações de animação
   final AppListAnimationConfig? animationConfig;
 
@@ -83,7 +83,7 @@ class AppPaginatedList<T> extends StatefulWidget {
 
 class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
   late ScrollController _scrollController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -100,11 +100,11 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
 
   void _onScroll() {
     if (!_scrollController.hasClients) return;
-    
+
     final scrollConfig = widget.scrollConfig ?? const AppScrollConfig();
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
-    
+
     // Trigger load more quando chegar no threshold
     if (currentScroll >= (maxScroll * scrollConfig.loadMoreThreshold) &&
         !widget.isLoadingMore &&
@@ -120,12 +120,12 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
     if (widget.isLoading && widget.items.isEmpty) {
       return _buildInitialLoading();
     }
-    
+
     // Estado de erro inicial
     if (widget.hasError && widget.items.isEmpty) {
       return _buildError();
     }
-    
+
     // Estado vazio
     if (widget.items.isEmpty) {
       return _buildEmptyState();
@@ -136,7 +136,7 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
 
   Widget _buildInitialLoading() {
     final layoutConfig = widget.layoutConfig ?? const AppListLayoutConfig();
-    
+
     return Container(
       decoration: layoutConfig.decoration,
       child: const AppLoadingIndicator.page(
@@ -147,7 +147,7 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
 
   Widget _buildError() {
     final emptyConfig = widget.emptyStateConfig ?? const AppEmptyStateConfig();
-    
+
     return AppEmptyState.connection(
       title: emptyConfig.errorTitle ?? 'Ops! Algo deu errado',
       subtitle: widget.errorMessage ?? emptyConfig.errorMessage,
@@ -158,7 +158,7 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
 
   Widget _buildEmptyState() {
     final emptyConfig = widget.emptyStateConfig ?? const AppEmptyStateConfig();
-    
+
     return AppEmptyState(
       icon: emptyConfig.icon,
       title: emptyConfig.title,
@@ -218,32 +218,23 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
     if (widget.onRefresh != null) {
       listWidget = RefreshIndicator(
         onRefresh: widget.onRefresh!,
-        color: scrollConfig.refreshIndicatorColor ?? AppDesignSystem.accentColor,
-        backgroundColor: scrollConfig.refreshBackgroundColor ?? AppDesignSystem.cardColor,
+        color:
+            scrollConfig.refreshIndicatorColor ?? AppDesignSystem.accentColor,
+        backgroundColor:
+            scrollConfig.refreshBackgroundColor ?? AppDesignSystem.cardColor,
         strokeWidth: scrollConfig.refreshStrokeWidth ?? 3.0,
         displacement: scrollConfig.refreshDisplacement ?? 50.0,
         child: listWidget,
       );
     }
 
-    // Stack com scroll-to-top button
-    return Stack(
-      children: [
-        listWidget,
-        if (scrollConfig.showScrollToTop)
-          AppScrollToTopButton(
-            scrollController: _scrollController,
-            positioning: scrollConfig.scrollToTopPosition,
-            variant: scrollConfig.scrollToTopVariant,
-            threshold: scrollConfig.scrollToTopThreshold,
-          ),
-      ],
-    );
+    // Retorna o widget da lista diretamente
+    return listWidget;
   }
 
   ScrollPhysics _getScrollPhysics() {
     final scrollConfig = widget.scrollConfig ?? const AppScrollConfig();
-    
+
     switch (scrollConfig.scrollPhysics) {
       case AppScrollPhysicsType.bouncing:
         return const BouncingScrollPhysics(
@@ -274,12 +265,14 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
     }
 
     final item = widget.items[index];
-    final animationConfig = widget.animationConfig ?? const AppListAnimationConfig();
-    
+    final animationConfig =
+        widget.animationConfig ?? const AppListAnimationConfig();
+
     if (animationConfig.enableItemAnimation) {
       return AnimatedContainer(
         duration: Duration(
-          milliseconds: animationConfig.animationDuration + (index * animationConfig.staggerDelay),
+          milliseconds: animationConfig.animationDuration +
+              (index * animationConfig.staggerDelay),
         ),
         curve: animationConfig.animationCurve,
         child: widget.itemBuilder(context, item, index),
@@ -291,7 +284,7 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
 
   Widget _buildDefaultSeparator(BuildContext context, int index) {
     final layoutConfig = widget.layoutConfig ?? const AppListLayoutConfig();
-    
+
     return SizedBox(
       height: layoutConfig.separatorHeight,
       width: layoutConfig.separatorWidth,
@@ -300,7 +293,7 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
 
   Widget _buildLoadingMoreIndicator() {
     final scrollConfig = widget.scrollConfig ?? const AppScrollConfig();
-    
+
     return Padding(
       padding: scrollConfig.loadingMorePadding,
       child: AppLoadingIndicator.inline(
@@ -337,10 +330,6 @@ class AppEmptyStateConfig {
 
 /// Configurações de scroll
 class AppScrollConfig {
-  final bool showScrollToTop;
-  final EdgeInsets scrollToTopPosition;
-  final AppScrollButtonVariant scrollToTopVariant;
-  final double scrollToTopThreshold;
   final double loadMoreThreshold;
   final AppScrollPhysicsType scrollPhysics;
   final Color? refreshIndicatorColor;
@@ -351,13 +340,6 @@ class AppScrollConfig {
   final String? loadingMoreMessage;
 
   const AppScrollConfig({
-    this.showScrollToTop = true,
-    this.scrollToTopPosition = const EdgeInsets.only(
-      bottom: 100,
-      right: 16,
-    ),
-    this.scrollToTopVariant = AppScrollButtonVariant.elevated,
-    this.scrollToTopThreshold = 500.0,
     this.loadMoreThreshold = 0.9,
     this.scrollPhysics = AppScrollPhysicsType.bouncing,
     this.refreshIndicatorColor,

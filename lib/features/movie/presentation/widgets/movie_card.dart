@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/mixins/design_system_mixin.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/models/movie.dart';
 
 /// Card de filme moderno seguindo o Design System.
-class MovieCard extends StatelessWidget {
+class MovieCard extends StatelessWidget with DesignSystemMixin {
   /// Dados do filme
   final Movie movie;
 
@@ -144,7 +145,7 @@ class MovieCard extends StatelessWidget {
             size: 12,
             color: AppDesignSystem.textPrimaryColor,
           ),
-          const SizedBox(width: 2),
+          const SizedBox(width: AppDesignSystem.spaceXs),
           Text(
             rating.toStringAsFixed(1),
             style: AppDesignSystem.labelSmall.copyWith(
@@ -199,7 +200,7 @@ class MovieCard extends StatelessWidget {
                   size: 14,
                   color: AppDesignSystem.iconSecondaryColor,
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: AppDesignSystem.spaceXs),
                 Text(
                   _formatReleaseDate(),
                   style: AppDesignSystem.labelSmall.copyWith(

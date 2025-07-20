@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../utils/app_constants.dart';
-import '../utils/secrets.dart';
+import '../utils/secure_config.dart';
 
 /// Cliente HTTP centralizado para toda a aplicação.
 /// 
@@ -67,7 +67,7 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          options.queryParameters['api_key'] = AppSecrets.tmdbApiKey;
+          options.queryParameters['api_key'] = SecureConfig.tmdbApiKey;
           options.queryParameters['language'] = 'pt-BR';
           handler.next(options);
         },

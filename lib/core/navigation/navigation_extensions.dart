@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+
+import '../../features/movie/data/models/movie.dart';
 import 'app_router.dart';
 import 'app_routes.dart';
-import '../../features/movie/data/models/movie.dart';
 
 /// Extensões para facilitar a navegação
 extension NavigationExtensions on BuildContext {
   // === NAVEGAÇÃO BÁSICA ===
-  
+
   /// Navega para uma nova rota
   Future<T?> pushRoute<T extends Object?>(AppRoute<T> route) {
     return AppRouter.push(route);
@@ -31,7 +32,7 @@ extension NavigationExtensions on BuildContext {
   }
 
   // === NAVEGAÇÃO ESPECÍFICA DA APP ===
-  
+
   /// Navega para a tela inicial
   Future<void> goToHome() {
     return AppRouter.pushReplacementNamed(AppRoutes.home);
@@ -65,7 +66,7 @@ extension NavigationExtensions on BuildContext {
   }
 
   // === UTILIDADES ===
-  
+
   /// Mostra bottom sheet modal
   Future<T?> showAppBottomSheet<T>({
     required Widget content,
@@ -132,7 +133,7 @@ extension NavigationExtensions on BuildContext {
 extension MovieRouteExtensions on Movie {
   /// Cria rota para detalhes deste filme
   MovieDetailRoute get detailRoute => AppRoutes.movieDetailRoute(this);
-  
+
   /// Navega para detalhes deste filme
   Future<void> navigateToDetail(BuildContext context) {
     return context.goToMovieDetail(this);
@@ -213,18 +214,18 @@ extension DialogExtensions on BuildContext {
     try {
       // Executa a operação
       final result = await future;
-      
+
       // Remove o dialog
       AppRouter.pop();
-      
+
       return result;
     } catch (error) {
       // Remove o dialog
       AppRouter.pop();
-      
+
       // Mostra erro
       showErrorMessage('Erro: $error');
-      
+
       rethrow;
     }
   }

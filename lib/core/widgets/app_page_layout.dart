@@ -1,68 +1,69 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_design_system.dart';
 
 /// Layout base para páginas da aplicação.
-/// 
+///
 /// Fornece uma estrutura consistente com AppBar, corpo da página
 /// e opções de personalização comuns.
 class AppPageLayout extends StatelessWidget {
   /// Título da página
   final String? title;
-  
+
   /// Widget personalizado para o título (substitui o title)
   final Widget? titleWidget;
-  
+
   /// Corpo da página
   final Widget body;
-  
+
   /// Ações da AppBar
   final List<Widget>? actions;
-  
+
   /// Widget de leading da AppBar
   final Widget? leading;
-  
+
   /// Se deve mostrar o botão de voltar automaticamente
   final bool automaticallyImplyLeading;
-  
+
   /// Floating Action Button
   final Widget? floatingActionButton;
-  
+
   /// Posição do FAB
   final FloatingActionButtonLocation? floatingActionButtonLocation;
-  
+
   /// Bottom Navigation Bar
   final Widget? bottomNavigationBar;
-  
+
   /// Drawer lateral
   final Widget? drawer;
-  
+
   /// End Drawer
   final Widget? endDrawer;
-  
+
   /// Bottom Sheet persistente
   final Widget? bottomSheet;
-  
+
   /// Se deve usar SafeArea
   final bool useSafeArea;
-  
+
   /// Se deve usar SingleChildScrollView
   final bool scrollable;
-  
+
   /// Padding do corpo da página
   final EdgeInsetsGeometry? padding;
-  
+
   /// Cor de fundo personalizada
   final Color? backgroundColor;
-  
+
   /// Se deve mostrar a AppBar
   final bool showAppBar;
-  
+
   /// Altura personalizada da AppBar
   final double? appBarHeight;
-  
+
   /// Se a AppBar deve ser transparente
   final bool transparentAppBar;
-  
+
   const AppPageLayout({
     super.key,
     this.title,
@@ -85,11 +86,11 @@ class AppPageLayout extends StatelessWidget {
     this.appBarHeight,
     this.transparentAppBar = false,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     Widget pageBody = body;
-    
+
     // Aplica padding se especificado
     if (padding != null) {
       pageBody = Padding(
@@ -97,21 +98,21 @@ class AppPageLayout extends StatelessWidget {
         child: pageBody,
       );
     }
-    
+
     // Aplica scroll se especificado
     if (scrollable) {
       pageBody = SingleChildScrollView(
         child: pageBody,
       );
     }
-    
+
     // Aplica SafeArea se especificado
     if (useSafeArea) {
       pageBody = SafeArea(
         child: pageBody,
       );
     }
-    
+
     return Scaffold(
       backgroundColor: backgroundColor ?? AppDesignSystem.backgroundColor,
       appBar: showAppBar ? _buildAppBar(context) : null,
@@ -124,16 +125,15 @@ class AppPageLayout extends StatelessWidget {
       bottomSheet: bottomSheet,
     );
   }
-  
+
   PreferredSizeWidget? _buildAppBar(BuildContext context) {
     return AppBar(
       title: titleWidget ?? (title != null ? _buildAppBarTitle() : null),
       actions: actions,
       leading: leading,
       automaticallyImplyLeading: automaticallyImplyLeading,
-      backgroundColor: transparentAppBar 
-          ? Colors.transparent 
-          : AppDesignSystem.surfaceColor,
+      backgroundColor:
+          transparentAppBar ? Colors.transparent : AppDesignSystem.surfaceColor,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       scrolledUnderElevation: 2,
@@ -172,11 +172,11 @@ class AppPageLayout extends StatelessWidget {
         final safeValue = value.isNaN ? 0.0 : value.clamp(0.0, 1.0);
         final safeOpacity = safeValue.clamp(0.0, 1.0);
         final safeScale = (0.85 + (0.15 * safeValue)).clamp(0.7, 1.0);
-        
+
         // Proteção adicional para opacidade das sombras
         final shadowOpacity1 = (0.3 * safeOpacity).clamp(0.0, 1.0);
         final shadowOpacity2 = (0.15 * safeOpacity).clamp(0.0, 1.0);
-        
+
         return Transform.scale(
           scale: safeScale,
           child: Opacity(
@@ -189,18 +189,22 @@ class AppPageLayout extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: AppDesignSystem.accentGradient,
                 borderRadius: AppDesignSystem.borderRadiusMd,
-                boxShadow: safeOpacity > 0 ? [
-                  BoxShadow(
-                    color: AppDesignSystem.accentColor.withOpacity(shadowOpacity1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                  BoxShadow(
-                    color: AppDesignSystem.accentColor.withOpacity(shadowOpacity2),
-                    blurRadius: 16,
-                    offset: const Offset(0, 4),
-                  ),
-                ] : [],
+                boxShadow: safeOpacity > 0
+                    ? [
+                        BoxShadow(
+                          color: AppDesignSystem.accentColor
+                              .withOpacity(shadowOpacity1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                        BoxShadow(
+                          color: AppDesignSystem.accentColor
+                              .withOpacity(shadowOpacity2),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
+                        ),
+                      ]
+                    : [],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -233,20 +237,20 @@ class AppPageLayout extends StatelessWidget {
 class AppLoadingPageLayout extends StatelessWidget {
   /// Título da página
   final String? title;
-  
+
   /// Mensagem de carregamento
   final String? loadingMessage;
-  
+
   /// Se deve mostrar a AppBar
   final bool showAppBar;
-  
+
   const AppLoadingPageLayout({
     super.key,
     this.title,
     this.loadingMessage,
     this.showAppBar = true,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return AppPageLayout(
@@ -280,25 +284,25 @@ class AppLoadingPageLayout extends StatelessWidget {
 class AppErrorPageLayout extends StatelessWidget {
   /// Título da página
   final String? title;
-  
+
   /// Título do erro
   final String errorTitle;
-  
+
   /// Mensagem de erro
   final String errorMessage;
-  
+
   /// Ícone do erro
   final IconData? errorIcon;
-  
+
   /// Texto do botão de retry
   final String? retryButtonText;
-  
+
   /// Função chamada quando o botão de retry é pressionado
   final VoidCallback? onRetry;
-  
+
   /// Se deve mostrar a AppBar
   final bool showAppBar;
-  
+
   const AppErrorPageLayout({
     super.key,
     this.title,
@@ -309,7 +313,7 @@ class AppErrorPageLayout extends StatelessWidget {
     this.onRetry,
     this.showAppBar = true,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return AppPageLayout(
@@ -370,28 +374,28 @@ class AppErrorPageLayout extends StatelessWidget {
 class AppEmptyPageLayout extends StatelessWidget {
   /// Título da página
   final String? title;
-  
+
   /// Título do estado vazio
   final String emptyTitle;
-  
+
   /// Mensagem do estado vazio
   final String emptyMessage;
-  
+
   /// Ícone do estado vazio
   final IconData? emptyIcon;
-  
+
   /// Widget de ilustração personalizada
   final Widget? illustration;
-  
+
   /// Texto do botão de ação
   final String? actionButtonText;
-  
+
   /// Função chamada quando o botão de ação é pressionado
   final VoidCallback? onAction;
-  
+
   /// Se deve mostrar a AppBar
   final bool showAppBar;
-  
+
   const AppEmptyPageLayout({
     super.key,
     this.title,
@@ -403,7 +407,7 @@ class AppEmptyPageLayout extends StatelessWidget {
     this.onAction,
     this.showAppBar = true,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return AppPageLayout(

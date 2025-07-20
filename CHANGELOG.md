@@ -8,6 +8,7 @@ e este projeto segue [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased] - Em Desenvolvimento
 
 ### ✨ **Em Progresso**
+
 - **Sistema de Cards Avançado** - Implementação de AppCard com múltiplas variantes
 - **GitFlow Workflow** - Estrutura profissional de branches e releases
 - **Templates de PR/Issues** - Padronização de contribuições
@@ -27,6 +28,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 ### ✨ **Adicionado**
 
 #### 🧩 **Widgets Reutilizáveis**
+
 - **AppScrollToTopButton** - Widget genérico para botão scroll-to-top
   - 4 variantes visuais (elevated, filled, outlined, minimal)
   - Configuração completa de threshold, posicionamento e animações
@@ -44,6 +46,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
   - Mensagens configuráveis
 
 #### 📁 **Arquitetura**
+
 - **widgets.dart** - Exportações centralizadas dos novos widgets
 - **Documentação** - Comentários detalhados e exemplos de uso
 
@@ -52,6 +55,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 ### 🔄 **Modificado**
 
 #### 🎬 **MovieListView Refatorado**
+
 - **Migração completa** para widgets reutilizáveis
 - **AppScrollToTopButton** substituiu 80+ linhas de código customizado
 - **AppEmptyState.movies()** substituiu estado vazio hardcoded
@@ -59,6 +63,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 - **Redução significativa** de código duplicado
 
 #### 🎨 **Melhorias de UX**
+
 - **Animações padronizadas** em todos os componentes
 - **Feedback visual consistente** em interações
 - **Estados vazios informativos** com ações contextuais
@@ -70,7 +75,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 ```
 📉 Redução de código:
 - MovieListView: -157 linhas de código duplicado
-- Estados vazios: -45 linhas padronizadas  
+- Estados vazios: -45 linhas padronizadas
 - Loading indicators: -60 linhas simplificadas
 
 📈 Aumento de reutilização:
@@ -87,6 +92,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 ---
 
 ### 🧪 **Testes e Qualidade**
+
 - **Análise estática limpa** (`flutter analyze`)
 - **Compatibilidade** com Flutter 3.24.2
 - **Performance otimizada** com animações 60fps
@@ -96,6 +102,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 ### ✨ **Adicionado**
 
 #### 🏗️ **Arquitetura e Infraestrutura**
+
 - **Clean Architecture completa** com camadas bem definidas (Data, Domain, Presentation)
 - **Pattern Result** para tratamento type-safe de erros
 - **UseCase pattern** para casos de uso organizados
@@ -105,6 +112,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 - **Configuração segura** para API keys e variáveis de ambiente
 
 #### 🎨 **Design System e UI/UX**
+
 - **Material Design 3** implementado completamente
 - **Design System unificado** com cores, tipografia e espaçamentos consistentes
 - **AppBar moderna** com animações e gradientes
@@ -113,6 +121,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 - **Sistema de temas** abrangente e organizados
 
 #### 🎬 **Funcionalidades de Filmes**
+
 - **Lista de filmes modernizada** com design cards elevados
 - **Scroll infinito** otimizado com paginação
 - **Pull-to-refresh** para atualização de conteúdo
@@ -122,6 +131,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 - **Interface de busca** melhorada com resultados em tempo real
 
 #### 🔧 **Performance e Experiência**
+
 - **Configurações avançadas de scroll** (BouncingScrollPhysics, cache otimizado)
 - **Animações fluidas** em transições e interações
 - **Loading states** melhorados com indicadores visuais
@@ -129,6 +139,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 - **Otimizações de performance** para listas grandes
 
 #### 📱 **Interface do Usuário**
+
 - **Seção de perfil** com opções organizadas
 - **Centro de notificações** com cards informativos
 - **Menu PopUp** na AppBar com opções contextuais
@@ -137,12 +148,14 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 - **FloatingActionButton** estendido com gradientes
 
 #### 🧪 **Testes e Qualidade**
+
 - **Testes unitários completos** para Clean Architecture
 - **Coverage de UseCase** com testes abrangentes
 - **Mocks e stubs** organizados para testes
 - **BlocTest** implementado para gerenciamento de estado
 
 #### 📚 **Documentação**
+
 - **README completo** com documentação técnica
 - **Guias de screenshot** e captura de imagens
 - **Scripts de automação** para screenshot
@@ -154,12 +167,14 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 ### 🔄 **Modificado**
 
 #### 🏗️ **Refatorações de Arquitetura**
+
 - **Migração para Clean Architecture** de toda a base de código
 - **Reorganização de pastas** seguindo convenções modernas
 - **Separação de responsabilidades** entre camadas
 - **Dependency Injection** completamente reformulado
 
 #### 🎨 **Melhorias Visuais**
+
 - **Lista de filmes** redesenhada com material design
 - **Cards de filme** com sombras e gradientes melhorados
 - **Paleta de cores** atualizada para Material Design 3
@@ -167,6 +182,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 - **Espaçamentos** padronizados em todo o app
 
 #### ⚡ **Otimizações de Performance**
+
 - **ScrollController** otimizado para listas grandes
 - **Cache de widgets** implementado
 - **Lazy loading** melhorado para imagens
@@ -177,18 +193,21 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 ### 🐛 **Corrigido**
 
 #### 🔧 **Correções de Layout**
+
 - **Overflow de texto** em diferentes tamanhos de tela
 - **Sobreposição de botões** (FAB vs botão voltar ao topo)
 - **Problemas de padding** em listas e cards
 - **Inconsistências visuais** entre componentes
 
 #### 🎯 **Correções de Funcionalidade**
+
 - **Erro de opacidade** na animação da AppBar
 - **Problemas de inicialização** do Dependency Injection
 - **Referências órfãs** de arquivos removidos
 - **Warnings do Flutter** relacionados a deprecated APIs
 
 #### 📱 **Melhorias de UX**
+
 - **Estados de loading** mais informativos
 - **Feedback visual** em todas as interações
 - **Navegação** mais intuitiva entre telas
@@ -199,6 +218,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 ### 🗑️ **Removido**
 
 #### 🧹 **Limpeza de Código**
+
 - **Arquivos legacy** da arquitetura anterior
 - **Código duplicado** e redundante
 - **Dependências não utilizadas** do pubspec.yaml
@@ -210,6 +230,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 ### 🔧 **Técnico**
 
 #### 📦 **Dependências**
+
 - **Flutter**: 3.24.2 (stable)
 - **Dart**: >=3.4.4 <4.0.0
 - **BLoC**: ^8.1.0 para gerenciamento de estado
@@ -217,6 +238,7 @@ Esta release implementa um sistema robusto de widgets reutilizáveis, melhorando
 - **Equatable**: ^2.0.3 para comparações de objetos
 
 #### 🏗️ **Estrutura do Projeto**
+
 ```
 lib/
 ├── core/           # Funcionalidades centrais
@@ -228,6 +250,7 @@ lib/
 ```
 
 #### 🎯 **Arquitetura Implementada**
+
 - **Data Layer**: Repositories, DataSources, Models
 - **Domain Layer**: Entities, UseCases, Repository Interfaces
 - **Presentation Layer**: Pages, Widgets, BLoC
@@ -237,6 +260,7 @@ lib/
 ### 📸 **Screenshots e Demonstrações**
 
 #### 📱 **Telas Implementadas**
+
 - ✅ **Home Screen** - Navegação principal com abas
 - ✅ **Movie List** - Lista moderna com scroll infinito
 - ✅ **Movie Details** - Tela de detalhes com SliverAppBar
@@ -245,6 +269,7 @@ lib/
 - ✅ **Notifications** - Centro de notificações
 
 #### 🎬 **Animações e Transições**
+
 - ✅ **Hero Animations** entre telas
 - ✅ **Scroll to Top** com animação suave
 - ✅ **Loading States** com indicadores visuais
@@ -256,6 +281,7 @@ lib/
 ### 🚀 **Para Desenvolvedores**
 
 #### 📚 **Como Começar**
+
 ```bash
 # Clone o repositório
 git clone https://github.com/lzerodev/movie_app.git
@@ -271,6 +297,7 @@ flutter run
 ```
 
 #### 🧪 **Executar Testes**
+
 ```bash
 # Todos os testes
 flutter test
@@ -280,6 +307,7 @@ flutter test test/features/movie/
 ```
 
 #### 📸 **Capturar Screenshots**
+
 ```bash
 # Script automatizado (Unix/Linux/macOS)
 ./capture_screenshots.sh
@@ -293,6 +321,7 @@ flutter test test/features/movie/
 ### 🎯 **Próximos Passos (v1.2.0)**
 
 #### 🔄 **Planejado**
+
 - [ ] **Favoritos**: Sistema de filmes favoritos
 - [ ] **Watchlist**: Lista de filmes para assistir
 - [ ] **Histórico**: Filmes já assistidos

@@ -1,50 +1,51 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_design_system.dart';
 
 /// Widget reutilizável para exibir estados vazios.
-/// 
+///
 /// Fornece uma interface consistente para quando não há dados
 /// para exibir, com opções de customização para diferentes contextos.
 class AppEmptyState extends StatelessWidget {
   /// Ícone principal
   final IconData icon;
-  
+
   /// Título principal
   final String title;
-  
+
   /// Subtítulo/descrição opcional
   final String? subtitle;
-  
+
   /// Ação principal (botão) opcional
   final String? actionLabel;
-  
+
   /// Callback da ação principal
   final VoidCallback? onAction;
-  
+
   /// Ação secundária opcional
   final String? secondaryActionLabel;
-  
+
   /// Callback da ação secundária
   final VoidCallback? onSecondaryAction;
-  
+
   /// Tamanho do ícone
   final double iconSize;
-  
+
   /// Cor personalizada do ícone
   final Color? iconColor;
-  
+
   /// Estilo personalizado do título
   final TextStyle? titleStyle;
-  
+
   /// Estilo personalizado do subtítulo
   final TextStyle? subtitleStyle;
-  
+
   /// Padding personalizado
   final EdgeInsetsGeometry? padding;
-  
+
   /// Widget customizado para ilustração (substitui o ícone)
   final Widget? illustration;
-  
+
   /// Variante do estado vazio
   final AppEmptyStateVariant variant;
 
@@ -78,13 +79,13 @@ class AppEmptyState extends StatelessWidget {
     this.iconSize = 64.0,
     this.padding,
     this.illustration,
-  }) : icon = Icons.inbox_outlined,
-       title = title ?? 'Nenhum item encontrado',
-       subtitle = subtitle ?? 'Não há itens para exibir no momento.',
-       iconColor = null,
-       titleStyle = null,
-       subtitleStyle = null,
-       variant = AppEmptyStateVariant.list;
+  })  : icon = Icons.inbox_outlined,
+        title = title ?? 'Nenhum item encontrado',
+        subtitle = subtitle ?? 'Não há itens para exibir no momento.',
+        iconColor = null,
+        titleStyle = null,
+        subtitleStyle = null,
+        variant = AppEmptyStateVariant.list;
 
   /// Factory para estado de busca vazia
   const AppEmptyState.search({
@@ -98,13 +99,13 @@ class AppEmptyState extends StatelessWidget {
     this.iconSize = 64.0,
     this.padding,
     this.illustration,
-  }) : icon = Icons.search_off_outlined,
-       title = title ?? 'Nenhum resultado encontrado',
-       subtitle = subtitle ?? 'Tente ajustar sua busca ou filtros.',
-       iconColor = null,
-       titleStyle = null,
-       subtitleStyle = null,
-       variant = AppEmptyStateVariant.search;
+  })  : icon = Icons.search_off_outlined,
+        title = title ?? 'Nenhum resultado encontrado',
+        subtitle = subtitle ?? 'Tente ajustar sua busca ou filtros.',
+        iconColor = null,
+        titleStyle = null,
+        subtitleStyle = null,
+        variant = AppEmptyStateVariant.search;
 
   /// Factory para estado de filmes vazios
   const AppEmptyState.movies({
@@ -118,13 +119,13 @@ class AppEmptyState extends StatelessWidget {
     this.iconSize = 64.0,
     this.padding,
     this.illustration,
-  }) : icon = Icons.movie_outlined,
-       title = title ?? 'Nenhum filme encontrado',
-       subtitle = subtitle ?? 'Não encontramos filmes para exibir.',
-       iconColor = null,
-       titleStyle = null,
-       subtitleStyle = null,
-       variant = AppEmptyStateVariant.movies;
+  })  : icon = Icons.movie_outlined,
+        title = title ?? 'Nenhum filme encontrado',
+        subtitle = subtitle ?? 'Não encontramos filmes para exibir.',
+        iconColor = null,
+        titleStyle = null,
+        subtitleStyle = null,
+        variant = AppEmptyStateVariant.movies;
 
   /// Factory para estado de favoritos vazios
   const AppEmptyState.favorites({
@@ -138,13 +139,13 @@ class AppEmptyState extends StatelessWidget {
     this.iconSize = 64.0,
     this.padding,
     this.illustration,
-  }) : icon = Icons.favorite_border_outlined,
-       title = title ?? 'Nenhum favorito ainda',
-       subtitle = subtitle ?? 'Adicione filmes aos seus favoritos.',
-       iconColor = null,
-       titleStyle = null,
-       subtitleStyle = null,
-       variant = AppEmptyStateVariant.favorites;
+  })  : icon = Icons.favorite_border_outlined,
+        title = title ?? 'Nenhum favorito ainda',
+        subtitle = subtitle ?? 'Adicione filmes aos seus favoritos.',
+        iconColor = null,
+        titleStyle = null,
+        subtitleStyle = null,
+        variant = AppEmptyStateVariant.favorites;
 
   /// Factory para estado de erro de conexão
   const AppEmptyState.connection({
@@ -158,17 +159,17 @@ class AppEmptyState extends StatelessWidget {
     this.iconSize = 64.0,
     this.padding,
     this.illustration,
-  }) : icon = Icons.wifi_off_outlined,
-       title = title ?? 'Sem conexão',
-       subtitle = subtitle ?? 'Verifique sua conexão com a internet.',
-       iconColor = null,
-       titleStyle = null,
-       subtitleStyle = null,
-       variant = AppEmptyStateVariant.connection;
+  })  : icon = Icons.wifi_off_outlined,
+        title = title ?? 'Sem conexão',
+        subtitle = subtitle ?? 'Verifique sua conexão com a internet.',
+        iconColor = null,
+        titleStyle = null,
+        subtitleStyle = null,
+        variant = AppEmptyStateVariant.connection;
 
   @override
   Widget build(BuildContext context) {
-    final effectivePadding = padding ?? 
+    final effectivePadding = padding ??
         const EdgeInsets.symmetric(horizontal: AppDesignSystem.spaceLg);
 
     return Center(
@@ -216,7 +217,7 @@ class AppEmptyState extends StatelessWidget {
   }
 
   Widget _buildTitle() {
-    final effectiveStyle = titleStyle ?? 
+    final effectiveStyle = titleStyle ??
         AppDesignSystem.titleMedium.copyWith(
           color: AppDesignSystem.textPrimaryColor,
           fontWeight: FontWeight.w600,
@@ -230,7 +231,7 @@ class AppEmptyState extends StatelessWidget {
   }
 
   Widget _buildSubtitle() {
-    final effectiveStyle = subtitleStyle ?? 
+    final effectiveStyle = subtitleStyle ??
         AppDesignSystem.bodyMedium.copyWith(
           color: AppDesignSystem.textSecondaryColor,
         );
@@ -324,19 +325,19 @@ class AppEmptyState extends StatelessWidget {
 enum AppEmptyStateVariant {
   /// Estado padrão
   default_,
-  
+
   /// Estado de lista vazia
   list,
-  
+
   /// Estado de busca sem resultados
   search,
-  
+
   /// Estado de filmes vazios
   movies,
-  
+
   /// Estado de favoritos vazios
   favorites,
-  
+
   /// Estado de erro de conexão
   connection,
 }

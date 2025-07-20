@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
 /// Sistema de navegação type-safe para a aplicação.
-/// 
+///
 /// Centraliza todas as rotas e fornece navegação type-safe
 /// com parâmetros tipados e transições customizáveis.
 class AppRouter {
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
   /// Contexto do navigator atual
   static BuildContext? get currentContext => navigatorKey.currentContext;
-  
+
   /// State do navigator atual
   static NavigatorState? get currentState => navigatorKey.currentState;
 
   // === NAVEGAÇÃO BÁSICA ===
-  
+
   /// Navega para uma nova rota
   static Future<T?> push<T extends Object?>(AppRoute<T> route) {
     return currentState!.push(route.materialPageRoute);
@@ -25,7 +26,8 @@ class AppRouter {
     AppRoute<T> route, {
     TO? result,
   }) {
-    return currentState!.pushReplacement(route.materialPageRoute, result: result);
+    return currentState!
+        .pushReplacement(route.materialPageRoute, result: result);
   }
 
   /// Navega e remove todas as rotas anteriores
@@ -128,16 +130,16 @@ class AppRouter {
 abstract class AppRoute<T> {
   /// Nome da rota
   String get name;
-  
+
   /// Caminho da rota
   String get path;
-  
+
   /// Widget da página
   Widget get page;
-  
+
   /// Configurações da rota
   AppRouteConfig get config;
-  
+
   /// Cria o MaterialPageRoute
   MaterialPageRoute<T> get materialPageRoute {
     return MaterialPageRoute<T>(
@@ -148,7 +150,7 @@ abstract class AppRoute<T> {
       allowSnapshotting: config.allowSnapshotting,
     );
   }
-  
+
   /// Cria PageRouteBuilder customizado
   PageRouteBuilder<T> customPageRoute({
     required Widget Function(
@@ -164,10 +166,12 @@ abstract class AppRoute<T> {
       pageBuilder: (context, animation, secondaryAnimation) => page,
       settings: RouteSettings(name: name),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return transitionsBuilder(context, animation, secondaryAnimation, child);
+        return transitionsBuilder(
+            context, animation, secondaryAnimation, child);
       },
       transitionDuration: transitionDuration ?? config.transitionDuration,
-      reverseTransitionDuration: reverseTransitionDuration ?? config.reverseTransitionDuration,
+      reverseTransitionDuration:
+          reverseTransitionDuration ?? config.reverseTransitionDuration,
       fullscreenDialog: config.fullscreenDialog,
       maintainState: config.maintainState,
       opaque: config.opaque,
@@ -179,19 +183,19 @@ abstract class AppRoute<T> {
 class AppRouteConfig {
   /// Se é um dialog fullscreen
   final bool fullscreenDialog;
-  
+
   /// Se deve manter o state
   final bool maintainState;
-  
+
   /// Se permite snapshots
   final bool allowSnapshotting;
-  
+
   /// Se a rota é opaca
   final bool opaque;
-  
+
   /// Duração da transição
   final Duration transitionDuration;
-  
+
   /// Duração da transição reversa
   final Duration reverseTransitionDuration;
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_design_system.dart';
+
 import '../../../../core/navigation/navigation.dart';
+import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/models/movie.dart';
 
@@ -20,17 +21,14 @@ class NavigationDemoPage extends StatelessWidget {
             _buildSectionTitle('Navegação Básica'),
             const SizedBox(height: AppDesignSystem.spaceMd),
             _buildNavigationButtons(context),
-            
             const SizedBox(height: AppDesignSystem.spaceXl),
             _buildSectionTitle('Transições Customizadas'),
             const SizedBox(height: AppDesignSystem.spaceMd),
             _buildTransitionButtons(context),
-            
             const SizedBox(height: AppDesignSystem.spaceXl),
             _buildSectionTitle('Dialogs e Modals'),
             const SizedBox(height: AppDesignSystem.spaceMd),
             _buildDialogButtons(context),
-            
             const SizedBox(height: AppDesignSystem.spaceXl),
             _buildSectionTitle('Mensagens'),
             const SizedBox(height: AppDesignSystem.spaceMd),
@@ -86,7 +84,8 @@ class NavigationDemoPage extends StatelessWidget {
         AppButton(
           text: 'Slide com Fade',
           icon: Icons.slideshow,
-          onPressed: () => _showTransitionDemo(context, AppTransitionType.slideFade),
+          onPressed: () =>
+              _showTransitionDemo(context, AppTransitionType.slideFade),
           variant: AppButtonVariant.primary,
         ),
         const SizedBox(height: AppDesignSystem.spaceMd),
@@ -100,7 +99,8 @@ class NavigationDemoPage extends StatelessWidget {
         AppButton(
           text: 'Modal Slide',
           icon: Icons.vertical_align_bottom,
-          onPressed: () => _showTransitionDemo(context, AppTransitionType.modalSlide),
+          onPressed: () =>
+              _showTransitionDemo(context, AppTransitionType.modalSlide),
           variant: AppButtonVariant.secondary,
         ),
       ],
@@ -156,7 +156,8 @@ class NavigationDemoPage extends StatelessWidget {
         AppButton(
           text: 'Mensagem de Sucesso',
           icon: Icons.check_circle,
-          onPressed: () => context.showSuccessMessage('Operação realizada com sucesso!'),
+          onPressed: () =>
+              context.showSuccessMessage('Operação realizada com sucesso!'),
           variant: AppButtonVariant.secondary,
         ),
         const SizedBox(height: AppDesignSystem.spaceMd),
@@ -175,17 +176,19 @@ class NavigationDemoPage extends StatelessWidget {
     final movie = Movie(
       id: 999,
       title: 'Filme de Demonstração',
-      overview: 'Este é um filme de exemplo para demonstrar o sistema de navegação.',
+      overview:
+          'Este é um filme de exemplo para demonstrar o sistema de navegação.',
       posterPath: '/example.jpg',
       backdropPath: '/example-backdrop.jpg',
       releaseDate: DateTime.now(),
       voteAverage: 8.5,
     );
-    
+
     context.goToMovieDetailWithHero(movie);
   }
 
-  void _showTransitionDemo(BuildContext context, AppTransitionType transitionType) {
+  void _showTransitionDemo(
+      BuildContext context, AppTransitionType transitionType) {
     final route = PageRouteBuilder<void>(
       pageBuilder: (context, animation, secondaryAnimation) {
         return _TransitionDemoPage(transitionType: transitionType);
@@ -193,7 +196,7 @@ class NavigationDemoPage extends StatelessWidget {
       transitionsBuilder: transitionType.builder,
       transitionDuration: const Duration(milliseconds: 500),
     );
-    
+
     Navigator.of(context).push(route);
   }
 
@@ -204,10 +207,12 @@ class NavigationDemoPage extends StatelessWidget {
       confirmText: 'Sim',
       cancelText: 'Não',
     );
-    
+
     if (result == true) {
+      // ignore: use_build_context_synchronously
       context.showSuccessMessage('Ação confirmada!');
     } else {
+      // ignore: use_build_context_synchronously
       context.showMessage('Ação cancelada.');
     }
   }
@@ -226,9 +231,11 @@ class NavigationDemoPage extends StatelessWidget {
         message: 'Processando...',
         future: Future.delayed(const Duration(seconds: 2)),
       );
-      
+
+      // ignore: use_build_context_synchronously
       context.showSuccessMessage('Processamento concluído!');
     } catch (error) {
+      // ignore: use_build_context_synchronously
       context.showErrorMessage('Erro no processamento: $error');
     }
   }

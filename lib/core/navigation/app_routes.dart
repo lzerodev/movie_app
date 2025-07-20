@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../navigation/app_router.dart';
+
+import '../../features/home/widgets/home.dart';
 import '../../features/movie/data/models/movie.dart';
 import '../../features/movie/presentation/pages/movie_detail.dart';
 import '../../features/movie/presentation/pages/now_playing_movies.dart';
 import '../../features/movie/presentation/pages/search_movies.dart';
-import '../../features/movie/presentation/pages/navigation_demo.dart';
-import '../../features/home/widgets/home.dart';
+import '../navigation/app_router.dart';
 
 /// Definições de todas as rotas da aplicação
 class AppRoutes {
@@ -14,44 +14,42 @@ class AppRoutes {
   static const String nowPlayingMovies = '/movies/now-playing';
   static const String searchMovies = '/movies/search';
   static const String movieDetail = '/movies/detail';
-  static const String navigationDemo = '/navigation-demo';
 
   // === ROTAS PRINCIPAIS ===
 
   /// Rota para a tela inicial
   static HomeRoute homeRoute() => HomeRoute();
-  
+
   /// Rota para filmes em cartaz
-  static NowPlayingMoviesRoute nowPlayingMoviesRoute() => NowPlayingMoviesRoute();
-  
+  static NowPlayingMoviesRoute nowPlayingMoviesRoute() =>
+      NowPlayingMoviesRoute();
+
   /// Rota para busca de filmes
   static SearchMoviesRoute searchMoviesRoute() => SearchMoviesRoute();
-  
-  /// Rota para detalhes do filme
-  static MovieDetailRoute movieDetailRoute(Movie movie) => MovieDetailRoute(movie);
 
-  /// Rota para demo de navegação
-  static NavigationDemoRoute navigationDemoRoute() => NavigationDemoRoute();
+  /// Rota para detalhes do filme
+  static MovieDetailRoute movieDetailRoute(Movie movie) =>
+      MovieDetailRoute(movie);
 
   // === MAPA DE ROTAS NOMEADAS ===
-  
+
   static Map<String, WidgetBuilder> get namedRoutes => {
-    home: (context) => const HomePage(),
-    nowPlayingMovies: (context) => const NowPlayingMoviesPage(),
-    searchMovies: (context) => const SearchMoviesPage(),
-    navigationDemo: (context) => const NavigationDemoPage(),
-    // movieDetail precisa de parâmetros, então não incluímos aqui
-  };
+        home: (context) => const HomePage(),
+        nowPlayingMovies: (context) => const NowPlayingMoviesPage(),
+        searchMovies: (context) => const SearchMoviesPage(),
+        // movieDetail precisa de parâmetros, então não incluímos aqui
+      };
 
   /// Gerador de rotas para rotas dinâmicas
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case movieDetail:
         if (settings.arguments is Movie) {
-          return movieDetailRoute(settings.arguments as Movie).materialPageRoute;
+          return movieDetailRoute(settings.arguments as Movie)
+              .materialPageRoute;
         }
         return _errorRoute('Movie parameter required for movie detail route');
-      
+
       default:
         return _errorRoute('Route ${settings.name} not found');
     }
@@ -95,13 +93,13 @@ class AppRoutes {
 class HomeRoute extends AppRoute<void> {
   @override
   String get name => AppRoutes.home;
-  
+
   @override
   String get path => '/';
-  
+
   @override
   Widget get page => const HomePage();
-  
+
   @override
   AppRouteConfig get config => AppRouteConfig.fast;
 }
@@ -110,13 +108,13 @@ class HomeRoute extends AppRoute<void> {
 class NowPlayingMoviesRoute extends AppRoute<void> {
   @override
   String get name => AppRoutes.nowPlayingMovies;
-  
+
   @override
   String get path => '/movies/now-playing';
-  
+
   @override
   Widget get page => const NowPlayingMoviesPage();
-  
+
   @override
   AppRouteConfig get config => const AppRouteConfig();
 }
@@ -125,13 +123,13 @@ class NowPlayingMoviesRoute extends AppRoute<void> {
 class SearchMoviesRoute extends AppRoute<void> {
   @override
   String get name => AppRoutes.searchMovies;
-  
+
   @override
   String get path => '/movies/search';
-  
+
   @override
   Widget get page => const SearchMoviesPage();
-  
+
   @override
   AppRouteConfig get config => const AppRouteConfig();
 }
@@ -144,18 +142,18 @@ class MovieDetailRoute extends AppRoute<void> {
 
   @override
   String get name => AppRoutes.movieDetail;
-  
+
   @override
   String get path => '/movies/detail/${movie.id}';
-  
+
   @override
   Widget get page => MovieDetailPage(movie: movie);
-  
+
   @override
   AppRouteConfig get config => const AppRouteConfig(
-    transitionDuration: Duration(milliseconds: 400),
-    reverseTransitionDuration: Duration(milliseconds: 300),
-  );
+        transitionDuration: Duration(milliseconds: 400),
+        reverseTransitionDuration: Duration(milliseconds: 300),
+      );
 
   /// Cria transição customizada para detalhes do filme
   PageRouteBuilder<void> get heroTransitionRoute {
@@ -178,21 +176,4 @@ class MovieDetailRoute extends AppRoute<void> {
       transitionDuration: const Duration(milliseconds: 400),
     );
   }
-}
-
-/// Rota para demo de navegação
-class NavigationDemoRoute extends AppRoute<void> {
-  @override
-  String get name => AppRoutes.navigationDemo;
-  
-  @override
-  String get path => '/navigation-demo';
-  
-  @override
-  Widget get page => const NavigationDemoPage();
-  
-  @override
-  AppRouteConfig get config => const AppRouteConfig(
-    transitionDuration: Duration(milliseconds: 350),
-  );
 }

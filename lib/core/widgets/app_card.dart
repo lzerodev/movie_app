@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_design_system.dart';
 
 /// Sistema de cards unificado seguindo o Design System.
-/// 
+///
 /// Fornece cards padronizados com múltiplas variantes visuais,
 /// tamanhos configuráveis e comportamentos consistentes.
 class AppCard extends StatelessWidget {
@@ -92,12 +93,12 @@ class AppCard extends StatelessWidget {
     this.animationDuration = const Duration(milliseconds: 200),
     this.enableSplash = true,
     this.heroTag,
-  }) : variant = AppCardVariant.primary,
-       backgroundColor = null,
-       elevation = null,
-       gradient = null,
-       borderColor = null,
-       borderWidth = null;
+  })  : variant = AppCardVariant.primary,
+        backgroundColor = null,
+        elevation = null,
+        gradient = null,
+        borderColor = null,
+        borderWidth = null;
 
   /// Factory para card secundário (surface color)
   const AppCard.secondary({
@@ -113,12 +114,12 @@ class AppCard extends StatelessWidget {
     this.animationDuration = const Duration(milliseconds: 200),
     this.enableSplash = true,
     this.heroTag,
-  }) : variant = AppCardVariant.secondary,
-       backgroundColor = null,
-       elevation = null,
-       gradient = null,
-       borderColor = null,
-       borderWidth = null;
+  })  : variant = AppCardVariant.secondary,
+        backgroundColor = null,
+        elevation = null,
+        gradient = null,
+        borderColor = null,
+        borderWidth = null;
 
   /// Factory para card outlined (apenas borda)
   const AppCard.outlined({
@@ -136,10 +137,10 @@ class AppCard extends StatelessWidget {
     this.animationDuration = const Duration(milliseconds: 200),
     this.enableSplash = true,
     this.heroTag,
-  }) : variant = AppCardVariant.outlined,
-       backgroundColor = null,
-       elevation = null,
-       gradient = null;
+  })  : variant = AppCardVariant.outlined,
+        backgroundColor = null,
+        elevation = null,
+        gradient = null;
 
   /// Factory para card minimal (background transparente)
   const AppCard.minimal({
@@ -155,12 +156,12 @@ class AppCard extends StatelessWidget {
     this.animationDuration = const Duration(milliseconds: 200),
     this.enableSplash = true,
     this.heroTag,
-  }) : variant = AppCardVariant.minimal,
-       backgroundColor = null,
-       elevation = null,
-       gradient = null,
-       borderColor = null,
-       borderWidth = null;
+  })  : variant = AppCardVariant.minimal,
+        backgroundColor = null,
+        elevation = null,
+        gradient = null,
+        borderColor = null,
+        borderWidth = null;
 
   /// Factory para card pequeno
   const AppCard.small({
@@ -254,7 +255,8 @@ class AppCard extends StatelessWidget {
         onLongPress: onLongPress,
         borderRadius: _getEffectiveBorderRadius(),
         splashColor: enableSplash ? _getSplashColor() : Colors.transparent,
-        highlightColor: enableSplash ? _getHighlightColor() : Colors.transparent,
+        highlightColor:
+            enableSplash ? _getHighlightColor() : Colors.transparent,
         child: content,
       ),
     );
@@ -403,16 +405,16 @@ class AppCard extends StatelessWidget {
 enum AppCardVariant {
   /// Card com elevação e sombra (padrão)
   elevated,
-  
+
   /// Card com cor primária/accent
   primary,
-  
+
   /// Card com cor secundária/surface
   secondary,
-  
+
   /// Card apenas com borda
   outlined,
-  
+
   /// Card minimalista sem background
   minimal,
 }
@@ -421,13 +423,13 @@ enum AppCardVariant {
 enum AppCardSize {
   /// Card pequeno
   small,
-  
+
   /// Card médio (padrão)
   medium,
-  
+
   /// Card grande
   large,
-  
+
   /// Card extra grande
   xl,
 }

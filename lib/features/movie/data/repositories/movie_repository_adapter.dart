@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:movie_app/core/error/result.dart';
 import 'package:movie_app/core/error/failure.dart';
 import 'package:movie_app/core/utils/app_constants.dart';
-import 'package:movie_app/core/utils/secrets.dart';
+import 'package:movie_app/core/utils/secure_config.dart';
 
 import '../../domain/repositories/i_movie_repository.dart';
 import '../models/movie.dart';
@@ -22,7 +22,7 @@ class MovieRepositoryAdapter implements IMovieRepository {
       final response = await _dio.get(
         '${AppConstants.tmdbBaseUrl}/movie/now_playing',
         queryParameters: {
-          'api_key': AppSecrets.tmdbApiKey,
+          'api_key': SecureConfig.tmdbApiKey,
           'page': page,
           'language': 'pt-BR',
         },
@@ -51,7 +51,7 @@ class MovieRepositoryAdapter implements IMovieRepository {
       final response = await _dio.get(
         '${AppConstants.tmdbBaseUrl}/search/movie',
         queryParameters: {
-          'api_key': AppSecrets.tmdbApiKey,
+          'api_key': SecureConfig.tmdbApiKey,
           'query': query,
           'page': page,
           'language': 'pt-BR',

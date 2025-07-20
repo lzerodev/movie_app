@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../core/mixins/design_system_mixin.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/models/movie.dart';
@@ -14,7 +16,7 @@ class MovieDetailPage extends StatefulWidget {
 }
 
 class _MovieDetailPageState extends State<MovieDetailPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, DesignSystemMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -53,10 +55,27 @@ class _MovieDetailPageState extends State<MovieDetailPage>
     super.dispose();
   }
 
+  Widget _buildDecoratedButton({
+    required Widget icon,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      margin: compactPadding,
+      decoration: cardDecoration.copyWith(
+        color: AppDesignSystem.cardColor.withOpacity(0.9),
+      ),
+      child: IconButton(
+        icon: icon,
+        onPressed: onPressed,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final releaseDate = DateFormat.yMMMd('pt_BR').format(widget.movie.releaseDate);
-    
+    final releaseDate =
+        DateFormat.yMMMd('pt_BR').format(widget.movie.releaseDate);
+
     return Scaffold(
       backgroundColor: AppDesignSystem.backgroundColor,
       body: CustomScrollView(
@@ -90,52 +109,26 @@ class _MovieDetailPageState extends State<MovieDetailPage>
       pinned: true,
       backgroundColor: AppDesignSystem.backgroundColor,
       foregroundColor: AppDesignSystem.textPrimaryColor,
-      leading: Container(
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppDesignSystem.cardColor.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+      leading: _buildDecoratedButton(
+        icon: const Icon(
+          Icons.arrow_back_ios_new,
+          color: AppDesignSystem.textPrimaryColor,
         ),
-        child: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: AppDesignSystem.textPrimaryColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
+        onPressed: () => Navigator.pop(context),
       ),
       actions: [
-        Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppDesignSystem.cardColor.withOpacity(0.9),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
+        _buildDecoratedButton(
+          icon: Icon(
+            _isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: _isFavorite
+                ? AppDesignSystem.accentColor
+                : AppDesignSystem.textPrimaryColor,
           ),
-          child: IconButton(
-            icon: Icon(
-              _isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: _isFavorite ? AppDesignSystem.accentColor : AppDesignSystem.textPrimaryColor,
-            ),
-            onPressed: () {
-              setState(() {
-                _isFavorite = !_isFavorite;
-              });
-            },
-          ),
+          onPressed: () {
+            setState(() {
+              _isFavorite = !_isFavorite;
+            });
+          },
         ),
       ],
       flexibleSpace: FlexibleSpaceBar(
@@ -316,10 +309,10 @@ class _MovieDetailPageState extends State<MovieDetailPage>
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(AppDesignSystem.spaceSm),
           decoration: BoxDecoration(
             color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppDesignSystem.borderRadiusMd,
           ),
           child: Icon(
             icon,
@@ -355,7 +348,7 @@ class _MovieDetailPageState extends State<MovieDetailPage>
 
   Widget _buildMovieOverview() {
     if (widget.movie.overview.isEmpty) return const SizedBox.shrink();
-    
+
     return Padding(
       padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
       child: AppCardLegacy(
@@ -367,10 +360,10 @@ class _MovieDetailPageState extends State<MovieDetailPage>
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
+                    padding: compactPadding,
+                    decoration: const BoxDecoration(
                       gradient: AppDesignSystem.primaryGradient,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: AppDesignSystem.borderRadiusSm,
                     ),
                     child: const Icon(
                       Icons.description_rounded,

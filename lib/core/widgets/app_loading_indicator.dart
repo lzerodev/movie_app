@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_design_system.dart';
 
 /// Widget reutilizável para indicadores de loading.
-/// 
+///
 /// Oferece diferentes variantes de loading adaptadas para
 /// diferentes contextos da aplicação.
 class AppLoadingIndicator extends StatelessWidget {
   /// Tamanho do indicador
   final AppLoadingSize size;
-  
+
   /// Variante visual do loading
   final AppLoadingVariant variant;
-  
+
   /// Cor personalizada (opcional)
   final Color? color;
-  
+
   /// Largura da linha do indicador
   final double? strokeWidth;
-  
+
   /// Texto de loading opcional
   final String? message;
-  
+
   /// Estilo do texto
   final TextStyle? messageStyle;
-  
+
   /// Se deve mostrar o texto abaixo do indicador
   final bool showMessage;
 
@@ -55,10 +56,10 @@ class AppLoadingIndicator extends StatelessWidget {
     this.color,
     this.message,
     this.messageStyle,
-  }) : size = AppLoadingSize.small,
-       variant = AppLoadingVariant.inline,
-       strokeWidth = null,
-       showMessage = true;
+  })  : size = AppLoadingSize.small,
+        variant = AppLoadingVariant.inline,
+        strokeWidth = null,
+        showMessage = true;
 
   /// Factory para loading de página inteira
   const AppLoadingIndicator.page({
@@ -66,10 +67,10 @@ class AppLoadingIndicator extends StatelessWidget {
     this.color,
     this.message,
     this.messageStyle,
-  }) : size = AppLoadingSize.large,
-       variant = AppLoadingVariant.page,
-       strokeWidth = null,
-       showMessage = true;
+  })  : size = AppLoadingSize.large,
+        variant = AppLoadingVariant.page,
+        strokeWidth = null,
+        showMessage = true;
 
   /// Factory para loading de card personalizado
   const AppLoadingIndicator.card({
@@ -77,11 +78,11 @@ class AppLoadingIndicator extends StatelessWidget {
     String? message,
     this.color,
     this.messageStyle,
-  }) : size = AppLoadingSize.medium,
-       variant = AppLoadingVariant.card,
-       strokeWidth = null,
-       showMessage = true,
-       message = message ?? 'Carregando...';
+  })  : size = AppLoadingSize.medium,
+        variant = AppLoadingVariant.card,
+        strokeWidth = null,
+        showMessage = true,
+        message = message ?? 'Carregando...';
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +265,7 @@ class AppLoadingIndicator extends StatelessWidget {
   }
 
   Widget _buildMessage() {
-    final effectiveStyle = messageStyle ?? 
+    final effectiveStyle = messageStyle ??
         AppDesignSystem.bodyMedium.copyWith(
           color: AppDesignSystem.textSecondaryColor,
           fontWeight: FontWeight.w500,
@@ -311,16 +312,16 @@ enum AppLoadingSize {
 enum AppLoadingVariant {
   /// Indicador circular simples
   circular,
-  
+
   /// Indicador linear/barra
   linear,
-  
+
   /// Loading inline para listas
   inline,
-  
+
   /// Loading de página inteira
   page,
-  
+
   /// Loading estilizado em card
   card,
 }

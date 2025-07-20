@@ -17,48 +17,56 @@ Um aplicativo de filmes desenvolvido em Flutter seguindo **Clean Architecture** 
 ## 📱 Screenshots
 
 ### **🏠 Tela Principal**
+
 <div align="center">
   <img src="screenshots/home_screen.png" alt="Tela Principal" width="300"/>
   <p><em>Navegação principal com abas e lista de filmes em cartaz</em></p>
 </div>
 
 ### **🎬 Lista de Filmes**
+
 <div align="center">
   <img src="screenshots/movie_list.png" alt="Lista de Filmes" width="300"/>
   <p><em>Interface moderna com gradientes e animações fluidas</em></p>
 </div>
 
 ### **🔍 Pesquisa de Filmes**
+
 <div align="center">
   <img src="screenshots/search_screen.png" alt="Pesquisa de Filmes" width="300"/>
   <p><em>Busca em tempo real com throttling e resultados instantâneos</em></p>
 </div>
 
 ### **📄 Detalhes do Filme**
+
 <div align="center">
   <img src="screenshots/movie_detail.png" alt="Detalhes do Filme" width="300"/>
   <p><em>SliverAppBar expansível com informações completas e animações</em></p>
 </div>
 
 ### **👤 Perfil do Usuário**
+
 <div align="center">
   <img src="screenshots/profile_screen.png" alt="Perfil do Usuário" width="300"/>
   <p><em>Seção de perfil com opções personalizadas e cards estilizados</em></p>
 </div>
 
 ### **🔔 Notificações**
+
 <div align="center">
   <img src="screenshots/notifications_screen.png" alt="Notificações" width="300"/>
   <p><em>Centro de notificações com cards informativos e badges coloridos</em></p>
 </div>
 
 ### **🎭 Animações e Transições**
+
 <div align="center">
   <img src="screenshots/animations_demo.gif" alt="Demonstração de Animações" width="300"/>
   <p><em>Hero animations, hover effects e transições suaves entre telas</em></p>
 </div>
 
 > **📷 Como adicionar screenshots:**
+>
 > 1. Crie uma pasta `screenshots/` na raiz do projeto
 > 2. Capture as telas do app em diferentes dispositivos
 > 3. Salve as imagens com nomes descritivos
@@ -68,27 +76,32 @@ Um aplicativo de filmes desenvolvido em Flutter seguindo **Clean Architecture** 
 ## 🎨 Design System & Interface
 
 ### **Redesign da Lista de Filmes**
+
 A interface foi completamente redesenhada com foco na experiência do usuário:
 
 #### **🎭 Visual Enhancements**
+
 - **Gradientes suaves** - Background com transições de cor elegantes
 - **Sombras dinâmicas** - Elevação visual que responde ao hover
 - **Bordas consistentes** - Sistema unificado de bordas e raios
 - **Animações fluidas** - Transições suaves entre estados
 
 #### **🌟 Animações e Interações**
+
 - **Hover effects** - Escala e brilho no hover dos cards
 - **Hero animations** - Transições cinematográficas entre telas
 - **Entrada escalonada** - Items aparecem progressivamente
 - **Feedback tátil** - Resposta visual a todas as interações
 
 #### **🏷️ Sistema de Badges**
+
 - **Avaliações com gradiente** - Badges coloridos para notas dos filmes
 - **Labels de qualidade** - "Excelente", "Muito Bom", "Bom", etc.
 - **Ícones contextuais** - Estrelas, calendário e informações visuais
 - **Container estilizado** - Para sinopses e informações extras
 
 #### **📐 Layout Moderno**
+
 ```dart
 // Exemplo do novo MovieListItem
 Container(
@@ -109,13 +122,14 @@ Container(
 ```
 
 #### **🎯 Design System Expandido**
+
 ```dart
 class AppDesignSystem {
   // Cores de borda para cards
   static const Color cardBorderColor = Color(0xFF3A3A4E);
   static const Color cardBorderHoverColor = Color(0xFF4A4A5E);
   static const Color noBorderColor = Colors.transparent;
-  
+
   // Gradientes
   static const LinearGradient cardGradient = LinearGradient(
     begin: Alignment.topLeft,
@@ -173,6 +187,7 @@ lib/
 ## 🎯 Padrões Arquiteturais Implementados
 
 ### **Result Pattern**
+
 Sistema type-safe para tratamento de erros sem exceptions:
 
 ```dart
@@ -202,6 +217,7 @@ switch (result) {
 ### **Clean Architecture - Camadas**
 
 #### **Domain Layer** 🧠
+
 ```dart
 // UseCase Pattern
 abstract class UseCase<Type, Params> {
@@ -211,14 +227,14 @@ abstract class UseCase<Type, Params> {
 // Exemplo: SearchMoviesUseCase
 class SearchMoviesUseCase implements UseCase<List<Movie>, SearchMoviesParams> {
   final IMovieRepository repository;
-  
+
   @override
   Future<Result<List<Movie>>> call(SearchMoviesParams params) async {
     // Validações de negócio
     if (params.query.trim().isEmpty) {
       return const Error(ValidationFailure(message: 'Query de pesquisa não pode estar vazia'));
     }
-    
+
     // Delegação para repositório
     return await repository.searchMovies(params.query, params.page);
   }
@@ -226,11 +242,12 @@ class SearchMoviesUseCase implements UseCase<List<Movie>, SearchMoviesParams> {
 ```
 
 #### **Data Layer** 📊
+
 ```dart
 // Repository Pattern
 class MovieRepository implements IMovieRepository {
   final MovieRemoteDataSource remoteDataSource;
-  
+
   @override
   Future<Result<List<Movie>>> searchMovies(String query, int page) async {
     try {
@@ -244,6 +261,7 @@ class MovieRepository implements IMovieRepository {
 ```
 
 #### **Presentation Layer** 🖼️
+
 ```dart
 // BLoC com Clean Architecture
 class MovieModernBloc extends Bloc<MovieModernEvent, MovieModernState> {
@@ -278,31 +296,32 @@ class MovieModernBloc extends Bloc<MovieModernEvent, MovieModernState> {
 ```
 
 ### **Dependency Injection** 💉
+
 Sistema centralizado para gerenciamento de dependências:
 
 ```dart
 class DependencyInjection {
   static GetIt get sl => GetIt.instance;
-  
+
   static Future<void> setup() async {
     // Network
     sl.registerLazySingleton<Dio>(() => createDio());
-    
+
     // DataSources
     sl.registerLazySingleton<MovieRemoteDataSource>(
       () => MovieRemoteDataSource(sl()),
     );
-    
+
     // Repositories
     sl.registerLazySingleton<IMovieRepository>(
       () => MovieRepository(sl()),
     );
-    
+
     // UseCases
     sl.registerLazySingleton(() => SearchMoviesUseCase(sl()));
     sl.registerLazySingleton(() => GetNowPlayingMoviesUseCase(sl()));
   }
-  
+
   // Factory methods para BLoCs
   static MovieModernBloc createMovieModernBloc() {
     return MovieModernBloc(
@@ -316,6 +335,7 @@ class DependencyInjection {
 ## 🧪 Testes Unitários
 
 ### Estratégia de Testes
+
 - **27 testes implementados** com cobertura completa
 - **Frameworks**: `flutter_test`, `bloc_test`, `mocktail`
 - **Padrões**: Arrange-Act-Assert, Given-When-Then
@@ -324,6 +344,7 @@ class DependencyInjection {
 ### **Testes de UseCases** (19 testes)
 
 #### SearchMoviesUseCase (9 testes)
+
 ```dart
 group('SearchMoviesUseCase', () {
   blocTest<SearchMoviesUseCase, Result<List<Movie>>>(
@@ -332,12 +353,12 @@ group('SearchMoviesUseCase', () {
     // Valida transformação de dados
     // Verifica Result Pattern
   );
-  
+
   test('deve retornar ValidationFailure quando query estiver vazia', () {
     // Testa validações de negócio
     // Verifica mensagens de erro específicas
   });
-  
+
   test('deve retornar NetworkFailure quando repositório falhar', () {
     // Testa cenários de falha
     // Valida propagação de erros
@@ -346,13 +367,14 @@ group('SearchMoviesUseCase', () {
 ```
 
 #### GetNowPlayingMoviesUseCase (10 testes)
+
 ```dart
 group('GetNowPlayingMoviesUseCase', () {
   test('deve retornar lista de filmes em cartaz quando bem-sucedida', () {
     // Testa busca padrão
     // Valida paginação
   });
-  
+
   test('deve retornar ValidationFailure quando page for menor que 1', () {
     // Testa validação de página
     // Verifica limites de entrada
@@ -363,6 +385,7 @@ group('GetNowPlayingMoviesUseCase', () {
 ### **Testes de BLoC** (8 testes)
 
 #### MovieModernBloc
+
 ```dart
 group('MovieModernBloc', () {
   blocTest<MovieModernBloc, MovieModernState>(
@@ -380,7 +403,7 @@ group('MovieModernBloc', () {
           .having((s) => s.movies.length, 'movies length', 2),
     ],
   );
-  
+
   blocTest<MovieModernBloc, MovieModernState>(
     'deve buscar filmes por query',
     // Testa mode de busca
@@ -393,6 +416,7 @@ group('MovieModernBloc', () {
 ### **Ferramentas de Teste**
 
 #### Mocking com Mocktail
+
 ```dart
 // Mocks dos UseCases
 class MockSearchMoviesUseCase extends Mock implements SearchMoviesUseCase {}
@@ -407,6 +431,7 @@ setUpAll(() {
 ```
 
 #### BLoC Testing
+
 ```dart
 blocTest<MovieModernBloc, MovieModernState>(
   'descrição do teste',
@@ -419,6 +444,7 @@ blocTest<MovieModernBloc, MovieModernState>(
 ```
 
 ### **Executar Testes**
+
 ```bash
 # Todos os testes
 flutter test
@@ -433,13 +459,15 @@ genhtml coverage/lcov.info -o coverage/html
 ```
 
 ### **Métricas de Qualidade**
+
 - ✅ **27/27 testes passando** (100%)
 - ✅ **Cobertura de UseCases**: Completa
 - ✅ **Cobertura de BLoC**: Estados e eventos
 - ✅ **Mocking**: Dependências isoladas
 - ✅ **Result Pattern**: Cenários de sucesso e falha
 - ✅ **Validações**: Regras de negócio testadas
-```
+
+````
 
 #### **UseCase Pattern**
 ```dart
@@ -450,9 +478,10 @@ abstract class UseCase<Type, Params> {
 abstract class NoParamsUseCase<Type> {
   Future<Result<Type>> call();
 }
-```
+````
 
 #### **Dependency Injection**
+
 ```dart
 class DependencyInjection {
   static Future<void> setup() async { /* ... */ }
@@ -463,6 +492,7 @@ class DependencyInjection {
 ### 🧱 Camadas Implementadas
 
 #### Core ✅
+
 - **Exceptions**: `ServerException`, `NetworkException`, `ValidationException`
 - **Failures**: `ServerFailure`, `NetworkFailure`, `ValidationFailure`
 - **UseCases**: Abstrações para casos de uso com Result Pattern
@@ -476,12 +506,14 @@ class DependencyInjection {
 #### Features
 
 ##### Home ✅
+
 - Navegação principal
 - Interface com abas (Home, Notificações, Perfil)
 - Carrosséis promocionais
 
 ##### Movie ✅
-- **Data Layer**: 
+
+- **Data Layer**:
   - ✅ Modelos de dados
   - ✅ Repositório da API TMDB
   - ✅ Tratamento de requisições HTTP
@@ -498,10 +530,12 @@ class DependencyInjection {
 ## 🔧 Tecnologias Utilizadas
 
 ### Framework & Linguagem
+
 - **Flutter** 3.24.2
 - **Dart** 3.4.4+
 
 ### Gerenciamento de Estado
+
 - **flutter_bloc** 8.1.6 - Implementação do padrão BLoC
 - **bloc** 8.1.0 - Core do BLoC
 - **bloc_concurrency** 0.2.5 - Throttling e concorrência
@@ -509,24 +543,29 @@ class DependencyInjection {
 - **equatable** 2.0.3 - Comparação de objetos
 
 ### Rede & APIs
+
 - **dio** 5.5.0+1 - Cliente HTTP robusto
 - **flutter_dotenv** 5.1.0 - Variáveis de ambiente
 
 ### Dependency Injection
+
 - **get_it** 7.7.0 - Service locator pattern
 - **provider** 6.1.2 - Injeção de dependências na UI
 
 ### Testes
+
 - **flutter_test** - Framework de testes do Flutter
 - **bloc_test** 9.1.7 - Testes específicos para BLoC
 - **mocktail** 1.0.4 - Mocking moderno para Dart
 - **test** 1.25.8 - Core de testes
 
 ### UI & UX
+
 - **flutter_svg** 2.0.10+1 - Suporte a SVG
 - **intl** 0.19.0 - Internacionalização
 
 ### 🎨 Design & Animações
+
 - **Material Design 3** - Sistema de design moderno
 - **AnimationController** - Animações personalizadas e fluidas
 - **Hero Widgets** - Transições cinematográficas entre telas
@@ -540,6 +579,7 @@ class DependencyInjection {
 - **ClipRRect** - Recortes precisos para imagens e containers
 
 ### Desenvolvimento
+
 - **bloc_test** 9.0.0 - Testes de BLoC
 - **mockito** 5.4.4 - Mocks para testes
 - **flutter_test** - Testes unitários
@@ -547,6 +587,7 @@ class DependencyInjection {
 ## 🚀 Como Executar
 
 ### Pré-requisitos
+
 - Flutter 3.24.2 ou superior
 - Dart 3.4.4 ou superior
 - API Key do TMDB
@@ -554,12 +595,14 @@ class DependencyInjection {
 ### Configuração
 
 1. **Clone o repositório**
+
 ```bash
 git clone https://github.com/lzerodev/movie_app.git
 cd movie_app
 ```
 
 2. **Instale as dependências**
+
 ```bash
 flutter pub get
 ```
@@ -567,12 +610,14 @@ flutter pub get
 3. **Configure a API Key** (Escolha uma opção):
 
    **Opção A: Arquivo .env (Recomendado)**
+
    ```bash
    # Crie o arquivo .env na raiz do projeto
    TMDB_API_KEY=sua_chave_api_aqui
    ```
 
    **Opção B: Arquivo secrets.dart**
+
    ```bash
    # Copie o template
    cp lib/core/utils/secrets.dart.example lib/core/utils/secrets.dart
@@ -580,6 +625,7 @@ flutter pub get
    ```
 
 4. **Execute o aplicativo**
+
 ```bash
 # Android
 flutter run
@@ -597,12 +643,14 @@ flutter run -d windows  # ou macos/linux
 ## 🔒 Segurança
 
 ### API Key Protection
+
 - ✅ **Ambiente de desenvolvimento**: Arquivo `.env` (ignorado pelo Git)
 - ✅ **Fallback seguro**: Arquivo `secrets.dart` (ignorado pelo Git)
 - ✅ **Validação**: Verificação automática de configuração
 - ✅ **Documentação**: Templates para novos desenvolvedores
 
 ### Arquivos Sensíveis (Gitignore)
+
 ```
 .env
 secrets.dart
@@ -612,24 +660,28 @@ api_keys.dart
 ## 📋 Funcionalidades Detalhadas
 
 ### 🏠 Tela Principal
+
 - **AppBar** customizada com logo e pesquisa
 - **Navegação inferior** com 3 abas
 - **Carrosséis** promocionais
 - **Lista de filmes** em exibição
 
 ### 🔍 Sistema de Pesquisa
+
 - **Busca em tempo real** com debounce de 500ms
 - **Validação de entrada** (mínimo 2 caracteres)
 - **Estados visuais**: loading, erro, vazio, resultados
 - **Interface responsiva** para diferentes dispositivos
 
 ### 🎭 Lista de Filmes
+
 - **Scroll infinito** com paginação automática
 - **Tratamento de erros** de rede
 - **Loading states** informativos
 - **Transições suaves** entre estados
 
 ### 🎨 Interface
+
 - **Material Design 3** com tema customizado
 - **Fonte Poppins** em todas as variações
 - **Cores consistentes** seguindo design system
@@ -637,6 +689,7 @@ api_keys.dart
 - **Widgets reutilizáveis** (`AppLoadingWidget`, `AppErrorWidget`, `AppEmptyWidget`)
 
 ### 🛠️ Arquitetura Avançada
+
 - **Result Pattern** para tratamento de erros type-safe
 - **UseCase Pattern** para isolamento de regras de negócio
 - **Dependency Injection** para inversão de controle
@@ -645,6 +698,7 @@ api_keys.dart
 - **Extension Methods** para código mais limpo e reutilizável
 
 ### 🔧 Sistema Core
+
 - **ApiClient** centralizado com interceptadores Dio
 - **SecureConfig** para proteção de API keys
 - **AppConstants** para constantes organizadas
@@ -655,6 +709,7 @@ api_keys.dart
 ## 🧪 Testes
 
 ### Executar Testes
+
 ```bash
 # Todos os testes
 flutter test
@@ -667,6 +722,7 @@ flutter test --coverage
 ```
 
 ### Cobertura de Testes
+
 - ✅ Casos de uso (SearchController)
 - ✅ Widgets principais
 - ⏳ BLoCs (em desenvolvimento)
@@ -675,6 +731,7 @@ flutter test --coverage
 ## 📦 Build
 
 ### Android
+
 ```bash
 # Debug
 flutter build apk --debug
@@ -684,16 +741,19 @@ flutter build apk --release
 ```
 
 ### iOS
+
 ```bash
 flutter build ios --release
 ```
 
 ### Web
+
 ```bash
 flutter build web
 ```
 
 ### Desktop
+
 ```bash
 # Windows
 flutter build windows
@@ -708,6 +768,7 @@ flutter build linux
 ## 🐛 Debugging
 
 ### Hot Reload
+
 ```bash
 # Durante execução, pressione:
 r  # Hot reload
@@ -716,11 +777,13 @@ q  # Quit
 ```
 
 ### DevTools
+
 O Flutter DevTools está disponível em: `http://localhost:9101`
 
 ## 📈 Roadmap
 
 ### ✅ Arquitetura Implementada (v1.0)
+
 - [x] **Clean Architecture** com separation of concerns
 - [x] **Result Pattern** para tratamento de erros
 - [x] **UseCase Pattern** para casos de uso
@@ -738,13 +801,15 @@ O Flutter DevTools está disponível em: `http://localhost:9101`
 - [x] **Mocking Strategy** com mocktail
 
 ### 🎯 Status do Projeto
+
 ✅ **Clean Architecture** - Implementação completa  
 ✅ **Testes Unitários** - 27 testes com 100% de sucesso  
 ✅ **Result Pattern** - Sistema type-safe de erros  
 ✅ **BLoC Pattern** - Estados reativos modernos  
-✅ **Dependency Injection** - Sistema centralizado  
+✅ **Dependency Injection** - Sistema centralizado
 
 ### 🚀 Próximas Funcionalidades
+
 - [ ] **Cache offline** de filmes favoritos
 - [ ] **Modo escuro** automático
 - [ ] **Compartilhamento** de filmes
@@ -756,6 +821,7 @@ O Flutter DevTools está disponível em: `http://localhost:9101`
 - [ ] **CI/CD pipeline** automatizada
 
 ### 🔧 Melhorias Técnicas Planejadas
+
 - [ ] **Integration Tests** para fluxos completos
 - [ ] **Widget Tests** para componentes UI
 - [ ] **Golden Tests** para validação visual
@@ -768,11 +834,13 @@ O Flutter DevTools está disponível em: `http://localhost:9101`
 ## 🎯 Como Executar
 
 ### Pré-requisitos
+
 - Flutter 3.24.2+
 - Dart 3.4.4+
 - API Key do TMDB
 
 ### Instalação
+
 ```bash
 # Clone o repositório
 git clone https://github.com/lzerodev/movie_app.git
@@ -793,6 +861,7 @@ flutter run
 ```
 
 ### Executar Testes
+
 ```bash
 # Todos os testes
 flutter test
@@ -810,8 +879,11 @@ open coverage/html/index.html
 ## 📋 Changelog
 
 ### v2.1.0 - Documentação Visual (2025-01-19)
+
 #### 📷 Screenshots e Documentação
+
 - **📱 Seção de Screenshots** adicionada ao README
+
   - Layout organizado para todas as telas principais
   - Orientações detalhadas para captura de imagens
   - Estrutura de pastas preparada para screenshots
@@ -824,14 +896,18 @@ open coverage/html/index.html
   - Scripts de automação para screenshots
 
 ### v2.0.0 - Design System & Interface Moderna (2025-01-19)
+
 #### ✨ Novas Features
+
 - **🎨 Redesign completo da lista de filmes**
+
   - Interface moderna com gradientes e animações
   - Hover effects com escala e sombras dinâmicas
   - Badges de avaliação com gradientes coloridos
   - Labels de qualidade automáticas baseadas na nota
 
 - **🎭 Sistema de Animações**
+
   - Hero animations para transições entre telas
   - Animações de entrada escalonada para items da lista
   - Transform.scale responsivo ao hover
@@ -844,17 +920,21 @@ open coverage/html/index.html
   - AppCard component com suporte a bordas customizadas
 
 #### 🐛 Correções
+
 - Eliminação de bordas visuais indesejadas nos movie cards
 - Unificação de cores entre seções poster e informações
 - Correção de espaçamentos inconsistentes
 
 #### ⚡ Performance
+
 - Otimização de loading para imagens de filmes
 - AnimatedBuilder para reconstrução eficiente
 - Uso de const constructors onde possível
 
 ### v1.0.0 - Arquitetura Base (2025-01-18)
+
 #### ✨ Features Iniciais
+
 - **🏗️ Clean Architecture** com camadas bem definidas
 - **🧪 Result Pattern** para tratamento type-safe de erros
 - **🏛️ BLoC Pattern** moderno com throttling
@@ -877,6 +957,7 @@ open coverage/html/index.html
 7. Abra um Pull Request
 
 ### Padrões de Commit
+
 - `feat:` Nova funcionalidade
 - `fix:` Correção de bug
 - `test:` Adição ou modificação de testes
