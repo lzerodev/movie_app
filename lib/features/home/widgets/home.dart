@@ -2,8 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../../../core/navigation/navigation_extensions.dart';
 import '../../../core/theme/app_design_system.dart';
+import '../../../core/utils/responsive_utils.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../movie/presentation/pages/now_playing_movies.dart';
+
+/// Dados para opções do perfil
+class _ProfileOptionData {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  _ProfileOptionData({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -117,122 +131,285 @@ class HomePageState extends State<HomePage> {
   }
   
   Widget _buildProfilePage() {
-    return Padding(
-      padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
-      child: Column(
-        children: [
-          _buildProfileHeader(),
-          const SizedBox(height: AppDesignSystem.spaceXl),
-          _buildProfileOptions(),
-        ],
+    return ResponsiveBuilder(
+      builder: (context, deviceType) {
+        return SingleChildScrollView(
+          padding: ResponsiveUtils.responsivePadding(context),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: ResponsiveUtils.getMaxContentWidth(context),
+              ),
+              child: Column(
+                children: [
+                  _buildResponsiveProfileHeader(deviceType),
+                  SizedBox(height: ResponsiveUtils.responsiveSpacing(context)),
+                  _buildResponsiveProfileOptions(deviceType),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+  
+  Widget _buildResponsiveProfileHeader(DeviceType deviceType) {
+    final avatarSize = ResponsiveUtils.responsive<double>(
+      context,
+      mobile: 80,
+      tablet: 100,
+      desktop: 120,
+      largeDesktop: 140,
+    );
+    final iconSize = avatarSize * 0.5;
+    
+    return AppCard(
+      child: Padding(
+        padding: ResponsiveUtils.responsive<EdgeInsets>(
+          context,
+          mobile: const EdgeInsets.all(24),
+          tablet: const EdgeInsets.all(32),
+          desktop: const EdgeInsets.all(40),
+        ),
+        child: Column(
+          children: [
+            // Avatar com tamanho responsivo
+            Container(
+              width: avatarSize,
+              height: avatarSize,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: AppDesignSystem.accentGradient,
+              ),
+              child: Icon(
+                Icons.person,
+                size: iconSize,
+                color: AppDesignSystem.textPrimaryColor,
+              ),
+            ),
+            SizedBox(height: ResponsiveUtils.responsiveSpacing(context) * 0.75),
+            
+            // Nome com tipografia responsiva
+            Text(
+              'Usuário',
+              style: ResponsiveUtils.responsive<TextStyle>(
+                context,
+                mobile: AppDesignSystem.titleLarge,
+                tablet: AppDesignSystem.headlineSmall,
+                desktop: AppDesignSystem.headlineMedium,
+              ).copyWith(
+                color: AppDesignSystem.textPrimaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: ResponsiveUtils.responsiveSpacing(context) * 0.5),
+            
+            // Descrição com layout responsivo
+            Container(
+              constraints: BoxConstraints(
+                maxWidth: ResponsiveUtils.responsive<double>(
+                  context,
+                  mobile: 300,
+                  tablet: 400,
+                  desktop: 500,
+                ),
+              ),
+              child: Text(
+                'Cinéfilo apaixonado por aventuras cinematográficas',
+                style: ResponsiveUtils.responsive<TextStyle>(
+                  context,
+                  mobile: AppDesignSystem.bodyMedium,
+                  tablet: AppDesignSystem.bodyLarge,
+                  desktop: AppDesignSystem.bodyLarge,
+                ).copyWith(
+                  color: AppDesignSystem.textSecondaryColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
   
-  Widget _buildProfileHeader() {
-    return AppCardLegacy(
-      child: Column(
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: AppDesignSystem.accentGradient,
-            ),
-            child: const Icon(
-              Icons.person,
-              size: 40,
-              color: AppDesignSystem.textPrimaryColor,
-            ),
-          ),
-          const SizedBox(height: AppDesignSystem.spaceMd),
-          Text(
-            'Usuário',
-            style: AppDesignSystem.headlineSmall.copyWith(
-              color: AppDesignSystem.textPrimaryColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: AppDesignSystem.spaceSm),
-          Text(
-            'Cinéfilo apaixonado por aventuras',
-            style: AppDesignSystem.bodyMedium.copyWith(
-              color: AppDesignSystem.textSecondaryColor,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+  Widget _buildResponsiveProfileOptions(DeviceType deviceType) {
+    final options = [
+      _ProfileOptionData(
+        icon: Icons.favorite_outline,
+        title: 'Meus Favoritos',
+        subtitle: 'Filmes salvos para assistir depois',
       ),
-    );
-  }
-  
-  Widget _buildProfileOptions() {
-    return Column(
-      children: [
-        _buildProfileOption(
-          icon: Icons.favorite_outline,
-          title: 'Meus Favoritos',
-          subtitle: 'Filmes salvos para assistir depois',
+      _ProfileOptionData(
+        icon: Icons.history,
+        title: 'Histórico',
+        subtitle: 'Filmes que você já assistiu',
+      ),
+      _ProfileOptionData(
+        icon: Icons.settings_outlined,
+        title: 'Configurações',
+        subtitle: 'Personalize sua experiência',
+      ),
+      _ProfileOptionData(
+        icon: Icons.help_outline,
+        title: 'Ajuda',
+        subtitle: 'Central de suporte e FAQ',
+      ),
+      _ProfileOptionData(
+        icon: Icons.info_outline,
+        title: 'Sobre',
+        subtitle: 'Informações do aplicativo',
+      ),
+      _ProfileOptionData(
+        icon: Icons.logout_outlined,
+        title: 'Sair',
+        subtitle: 'Fazer logout da conta',
+      ),
+    ];
+
+    // Layout em grid para desktop/largeDesktop
+    if (deviceType == DeviceType.desktop || deviceType == DeviceType.largeDesktop) {
+      final columns = deviceType == DeviceType.largeDesktop ? 3 : 2;
+      return GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: columns,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: deviceType == DeviceType.largeDesktop ? 3.2 : 3.5,
         ),
-        _buildProfileOption(
-          icon: Icons.history,
-          title: 'Histórico',
-          subtitle: 'Filmes que você já assistiu',
-        ),
-        _buildProfileOption(
-          icon: Icons.settings_outlined,
-          title: 'Configurações',
-          subtitle: 'Personalize sua experiência',
-        ),
-        _buildProfileOption(
-          icon: Icons.help_outline,
-          title: 'Ajuda',
-          subtitle: 'Central de suporte e FAQ',
-        ),
-      ],
-    );
-  }
-  
-  Widget _buildProfileOption({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    VoidCallback? onTap,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppDesignSystem.spaceMd),
-      child: AppCardLegacy(
-        onTap: onTap ?? () {
-          // TODO: Implementar navegação
+        itemCount: options.length,
+        itemBuilder: (context, index) {
+          return _buildResponsiveProfileOption(options[index], deviceType);
         },
-        child: ListTile(
-          leading: Icon(
-            icon,
-            color: AppDesignSystem.accentColor,
-            size: 24,
-          ),
-          title: Text(
-            title,
-            style: AppDesignSystem.titleMedium.copyWith(
-              color: AppDesignSystem.textPrimaryColor,
-              fontWeight: FontWeight.w600,
+      );
+    } else {
+      // Layout em coluna para mobile e tablet
+      return Column(
+        children: options.map((option) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _buildResponsiveProfileOption(option, deviceType),
+          );
+        }).toList(),
+      );
+    }
+  }
+
+  Widget _buildResponsiveProfileOption(
+    _ProfileOptionData option,
+    DeviceType deviceType,
+  ) {
+    final iconSize = ResponsiveUtils.responsive<double>(
+      context,
+      mobile: 24,
+      tablet: 26,
+      desktop: 28,
+      largeDesktop: 30,
+    );
+    
+    final padding = ResponsiveUtils.responsive<EdgeInsets>(
+      context,
+      mobile: const EdgeInsets.all(16),
+      tablet: const EdgeInsets.all(20),
+      desktop: const EdgeInsets.all(24),
+    );
+    
+    return AppCard(
+      onTap: () {
+        // TODO: Implementar navegação específica para cada opção
+        _handleProfileOptionTap(option.title);
+      },
+      child: Padding(
+        padding: padding,
+        child: Row(
+          children: [
+            // Ícone com container decorativo
+            Container(
+              width: iconSize + 8,
+              height: iconSize + 8,
+              decoration: BoxDecoration(
+                color: AppDesignSystem.accentColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(
+                  ResponsiveUtils.responsive<double>(
+                    context,
+                    mobile: 8,
+                    tablet: 10,
+                    desktop: 12,
+                  ),
+                ),
+              ),
+              child: Icon(
+                option.icon,
+                color: AppDesignSystem.accentColor,
+                size: iconSize,
+              ),
             ),
-          ),
-          subtitle: Text(
-            subtitle,
-            style: AppDesignSystem.bodyMedium.copyWith(
-              color: AppDesignSystem.textSecondaryColor,
+            SizedBox(width: ResponsiveUtils.responsiveSpacing(context) * 0.75),
+            
+            // Conteúdo expandido
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    option.title,
+                    style: ResponsiveUtils.responsive<TextStyle>(
+                      context,
+                      mobile: AppDesignSystem.titleSmall,
+                      tablet: AppDesignSystem.titleMedium,
+                      desktop: AppDesignSystem.titleMedium,
+                    ).copyWith(
+                      color: AppDesignSystem.textPrimaryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  
+                  // Mostra subtitle apenas se há espaço suficiente
+                  if (deviceType != DeviceType.desktop || 
+                      option.subtitle.length < 35) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      option.subtitle,
+                      style: ResponsiveUtils.responsive<TextStyle>(
+                        context,
+                        mobile: AppDesignSystem.bodySmall,
+                        tablet: AppDesignSystem.bodyMedium,
+                        desktop: AppDesignSystem.bodyMedium,
+                      ).copyWith(
+                        color: AppDesignSystem.textSecondaryColor,
+                      ),
+                      maxLines: deviceType == DeviceType.desktop ? 1 : 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ],
+              ),
             ),
-          ),
-          trailing: const Icon(
-            Icons.arrow_forward_ios,
-            color: AppDesignSystem.iconSecondaryColor,
-            size: 16,
-          ),
+            
+            // Ícone de navegação
+            Icon(
+              Icons.arrow_forward_ios,
+              color: AppDesignSystem.iconSecondaryColor,
+              size: ResponsiveUtils.responsive<double>(
+                context,
+                mobile: 16,
+                tablet: 18,
+                desktop: 20,
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  void _handleProfileOptionTap(String option) {
+    // TODO: Implementar navegação baseada na opção selecionada
+    context.showMessage('Navegando para: $option');
   }
   
   Widget _buildBottomNavigationBar() {
