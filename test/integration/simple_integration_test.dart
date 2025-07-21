@@ -77,7 +77,7 @@ void main() {
       test('deve emitir estado de erro quando usecase falha', () async {
         // Arrange
         when(() => mockNowPlayingUseCase(any())).thenAnswer(
-          (_) async => Error(NetworkFailure(message: 'Network error')),
+          (_) async => const Error(NetworkFailure(message: 'Network error')),
         );
 
         // Act & Assert

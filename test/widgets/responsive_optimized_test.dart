@@ -18,7 +18,7 @@ void main() {
           data: MediaQueryData(
             size: screenSize ?? mobileSize,
             devicePixelRatio: 3.0,
-            textScaleFactor: 1.0,
+            textScaler: const TextScaler.linear(1.0),
           ),
           child: Scaffold(body: child),
         ),

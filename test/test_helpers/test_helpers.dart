@@ -23,7 +23,7 @@ class TestHelpers {
         data: MediaQueryData(
           size: screenSize ?? const Size(414, 896), // iPhone 11 Pro size
           devicePixelRatio: 3.0,
-          textScaleFactor: textScaleFactor ?? 1.0,
+          textScaler: TextScaler.linear(textScaleFactor ?? 1.0),
         ),
         child: Scaffold(body: child),
       ),

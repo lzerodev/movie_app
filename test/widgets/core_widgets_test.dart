@@ -28,8 +28,8 @@ void main() {
       testWidgets('deve aplicar tamanhos diferentes corretamente', (WidgetTester tester) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
-            child: Column(
-              children: const [
+            child: const Column(
+              children: [
                 AppCard.small(child: Text('Small Card')),
                 AppCard(child: Text('Medium Card')),
                 AppCard.large(child: Text('Large Card')),
@@ -55,15 +55,15 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(AppCard));
+        await tester.tap(find.byType(AppCard), warnIfMissed: false);
         expect(tapped, isTrue);
       });
 
       testWidgets('deve aplicar variantes visuais corretamente', (WidgetTester tester) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
-            child: Column(
-              children: const [
+            child: const Column(
+              children: [
                 AppCard(child: Text('Default')),
                 AppCard.secondary(child: Text('Secondary')),
                 AppCard.outlined(child: Text('Outlined')),
@@ -117,8 +117,8 @@ void main() {
       testWidgets('deve aplicar diferentes variantes', (WidgetTester tester) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
-            child: Column(
-              children: const [
+            child: const Column(
+              children: [
                 AppButton(
                   text: 'Primary',
                   variant: AppButtonVariant.primary,
@@ -147,8 +147,8 @@ void main() {
       testWidgets('deve aplicar diferentes tamanhos', (WidgetTester tester) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
-            child: Column(
-              children: const [
+            child: const Column(
+              children: [
                 AppButton(
                   text: 'Small',
                   size: AppButtonSize.small,
@@ -279,8 +279,8 @@ void main() {
       testWidgets('deve aplicar diferentes tamanhos', (WidgetTester tester) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
-            child: Column(
-              children: const [
+            child: const Column(
+              children: [
                 AppLoadingIndicator(size: AppLoadingSize.small),
                 AppLoadingIndicator(size: AppLoadingSize.medium),
                 AppLoadingIndicator(size: AppLoadingSize.large),
@@ -365,8 +365,8 @@ void main() {
       testWidgets('deve manter espaçamentos consistentes', (WidgetTester tester) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
-            child: Column(
-              children: const [
+            child: const Column(
+              children: [
                 AppCard(child: Text('Card 1')),
                 SizedBox(height: AppDesignSystem.spaceMd),
                 AppCard(child: Text('Card 2')),
@@ -384,7 +384,7 @@ void main() {
       testWidgets('deve aplicar tipografia consistente', (WidgetTester tester) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
-            child: Column(
+            child: const Column(
               children: [
                 Text(
                   'Título',

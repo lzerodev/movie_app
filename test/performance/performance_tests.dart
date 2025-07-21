@@ -242,7 +242,7 @@ void main() {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.movie, size: 24),
+                    const Icon(Icons.movie, size: 24),
                     const SizedBox(height: 8),
                     Text('Item $index'),
                     const SizedBox(height: 8),
