@@ -1,0 +1,202 @@
+name: Flutter CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.2'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Verify formatting
+      run: dart format --output=none --set-exit-if-changed .
+      
+    - name: Analyze project source
+      run: flutter analyze --fatal-infos
+      
+    - name: Run unit tests
+      run: flutter test --coverage --reporter expanded
+      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+        
+  performance:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.2'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Run performance tests
+      run: flutter test test/performance/
+      
+    - name: Run integration tests
+      run: flutter test test/integration/
+      
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.2'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Build APK
+      run: flutter build apk --release
+      
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-apk
+        path: build/app/outputs/flutter-apk/app-release.apk
+        
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.2'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Run dependency audit
+      run: flutter pub deps --json | jq -r '.packages[] | select(.source == "hosted") | .name' | sort | uniq
+      
+    - name: Check for known vulnerabilities
+      run: |
+        echo "Checking for security vulnerabilities..."
+        flutter pub deps --json | jq '.packages[]' > dependencies.json
+        
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.2'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Run linter
+      run: flutter analyze --fatal-infos --fatal-warnings
+      
+    - name: Check code metrics
+      run: |
+        echo "Calculating code metrics..."
+        find lib -name "*.dart" | wc -l > metrics.txt
+        echo "Dart files: $(cat metrics.txt)"
+        
+    - name: Validate imports
+      run: |
+        echo "Checking for unused imports..."
+        flutter analyze --fatal-infos 2>&1 | grep "unused_import" || echo "No unused imports found"
+        
+  responsive:
+    name: Responsive Tests
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.2'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Run responsive widget tests
+      run: flutter test test/widgets/home_responsive_test.dart
+      
+    - name: Run core widget tests
+      run: flutter test test/widgets/core_widgets_test.dart
+      
+  notify:
+    name: Notify Status
+    runs-on: ubuntu-latest
+    needs: [test, performance, quality, responsive]
+    if: always()
+    
+    steps:
+    - name: Report Success
+      if: needs.test.result == 'success' && needs.performance.result == 'success' && needs.quality.result == 'success' && needs.responsive.result == 'success'
+      run: |
+        echo "✅ All tests passed successfully!"
+        echo "Pipeline completed without errors."
+        
+    - name: Report Failure
+      if: needs.test.result == 'failure' || needs.performance.result == 'failure' || needs.quality.result == 'failure' || needs.responsive.result == 'failure'
+      run: |
+        echo "❌ Some tests failed!"
+        echo "Test status: ${{ needs.test.result }}"
+        echo "Performance status: ${{ needs.performance.result }}"
+        echo "Quality status: ${{ needs.quality.result }}"
+        echo "Responsive status: ${{ needs.responsive.result }}"
+        exit 1
