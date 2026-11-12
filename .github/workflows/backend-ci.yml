@@ -1,0 +1,40 @@
+name: Backend and Infrastructure CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - name: Build API container
+        working-directory: .
+        run: docker build -t irate-movie-api:ci backend
+      - name: Validate Compose definitions
+        working-directory: .
+        env:
+          POSTGRES_PASSWORD: ci-placeholder
+          API_IMAGE: irate-movie-api:ci
+          API_DOMAIN: api.example.com
+          ACME_EMAIL: admin@example.com
+        run: |
+          docker compose -f infra/docker/compose.yaml config --quiet
+          docker compose -f infra/docker/compose.production.yaml config --quiet
