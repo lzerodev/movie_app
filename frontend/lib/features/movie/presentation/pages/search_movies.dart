@@ -10,19 +10,23 @@ import '../bloc/movie_modern_bloc.dart';
 import '../widgets/search_results_list.dart';
 
 class SearchMoviesPage extends StatelessWidget {
-  const SearchMoviesPage({super.key});
+  final bool embedded;
+  final FocusNode? focusNode;
+  const SearchMoviesPage({super.key, this.embedded = false, this.focusNode});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MovieModernBloc>(
       create: context.createMovieModernBloc,
-      child: const _SearchMoviesView(),
+      child: _SearchMoviesView(embedded: embedded, focusNode: focusNode),
     );
   }
 }
 
 class _SearchMoviesView extends StatefulWidget {
-  const _SearchMoviesView();
+  final bool embedded;
+  final FocusNode? focusNode;
+  const _SearchMoviesView({required this.embedded, this.focusNode});
 
   @override
   State<_SearchMoviesView> createState() => _SearchMoviesViewState();
@@ -49,6 +53,10 @@ class _SearchMoviesViewState extends State<_SearchMoviesView>
 
   void _onSearchChanged() {
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    if (_searchController.text.trim().isEmpty) {
+      setState(() {});
+      return;
+    }
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
       if (_searchController.text.trim().isNotEmpty) {
         _searchMovies();
@@ -57,6 +65,7 @@ class _SearchMoviesViewState extends State<_SearchMoviesView>
   }
 
   void _searchMovies() {
+    _debounceTimer?.cancel();
     final query = _searchController.text.trim();
     if (query.isEmpty) return;
 
@@ -65,42 +74,52 @@ class _SearchMoviesViewState extends State<_SearchMoviesView>
 
   @override
   Widget build(BuildContext context) {
-    return AppPageLayout(
-      title: 'Buscar Filmes',
-      padding: defaultPadding,
-      body: Column(
-        children: [
-          AppSearchField(
-            controller: _searchController,
-            hintText: 'Digite o nome do filme...',
-            onSubmitted: (_) => _searchMovies(),
-            autofocus: true,
-          ),
-          verticalSpaceMd,
-          Expanded(
-            child: BlocBuilder<MovieModernBloc, MovieModernState>(
-              builder: (context, state) {
-                if (!state.isSearchMode) {
-                  return const _EmptySearchState();
-                }
+    final content = Column(
+      children: [
+        AppSearchField(
+          controller: _searchController,
+          hintText: 'Busque pelo nome do filme',
+          onSubmitted: (_) => _searchMovies(),
+          autofocus: !widget.embedded,
+          focusNode: widget.focusNode,
+        ),
+        verticalSpaceMd,
+        Expanded(
+          child: BlocBuilder<MovieModernBloc, MovieModernState>(
+            builder: (context, state) {
+              if (_searchController.text.trim().isEmpty ||
+                  !state.isSearchMode) {
+                return const _EmptySearchState();
+              }
 
-                return switch (state.status) {
-                  MovieModernStatus.loading when state.movies.isEmpty =>
-                    const AppLoading.large(message: 'Buscando filmes...'),
-                  MovieModernStatus.failure => _SearchErrorState(
-                    errorMessage: state.errorMessage ?? 'Erro desconhecido',
-                    onRetry: _searchMovies,
-                  ),
-                  MovieModernStatus.success when state.movies.isEmpty =>
-                    const _NoResultsState(),
-                  _ => SearchResultsList(movies: state.movies),
-                };
-              },
-            ),
+              return switch (state.status) {
+                MovieModernStatus.loading when state.movies.isEmpty =>
+                  const AppLoading.large(message: 'Buscando filmes...'),
+                MovieModernStatus.failure => _SearchErrorState(
+                  errorMessage: state.errorMessage ?? 'Erro desconhecido',
+                  onRetry: _searchMovies,
+                ),
+                MovieModernStatus.success when state.movies.isEmpty =>
+                  const _NoResultsState(),
+                _ => SearchResultsList(movies: state.movies),
+              };
+            },
           ),
-        ],
+        ),
+      ],
+    );
+    final body = Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 960),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+          child: content,
+        ),
       ),
     );
+    if (widget.embedded) return body;
+    return AppPageLayout(title: 'Buscar', body: body, appBarHeight: 64);
   }
 }
 
@@ -110,11 +129,10 @@ class _EmptySearchState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppEmptyPageLayout(
-      showAppBar: false,
-      emptyTitle: 'Encontre seus filmes favoritos',
-      emptyMessage: 'Digite o nome de um filme na barra de busca acima para começar a pesquisar.',
-      emptyIcon: Icons.movie_filter_outlined,
+    return const _SearchMessage(
+      title: 'Qual filme você procura?',
+      message: 'Busque um título para ver a sinopse e a nota do catálogo.',
+      icon: Icons.search_rounded,
     );
   }
 }
@@ -145,11 +163,69 @@ class _NoResultsState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppEmptyPageLayout(
-      showAppBar: false,
-      emptyTitle: 'Nenhum filme encontrado',
-      emptyMessage: 'Tente pesquisar com outras palavras-chave ou verifique a ortografia.',
-      emptyIcon: Icons.search_off,
+    return const _SearchMessage(
+      title: 'Nenhum filme encontrado',
+      message: 'Tente outro título ou confira como ele foi escrito.',
+      icon: Icons.search_off_rounded,
+    );
+  }
+}
+
+class _SearchMessage extends StatelessWidget {
+  final String title;
+  final String message;
+  final IconData icon;
+  const _SearchMessage({
+    required this.title,
+    required this.message,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Align(
+      alignment: Alignment.topCenter,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainer,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Icon(
+                  icon,
+                  size: 30,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  height: 1.6,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

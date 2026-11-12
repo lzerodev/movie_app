@@ -107,7 +107,8 @@ class AppPageLayout extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: backgroundColor ?? AppDesignSystem.backgroundColor,
+      backgroundColor:
+          backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
       appBar: showAppBar ? _buildAppBar(context) : null,
       body: pageBody,
       floatingActionButton: floatingActionButton,
@@ -121,111 +122,50 @@ class AppPageLayout extends StatelessWidget {
 
   PreferredSizeWidget? _buildAppBar(BuildContext context) {
     return AppBar(
-      title: titleWidget ?? (title != null ? _buildAppBarTitle() : null),
+      title: titleWidget ?? (title != null ? _buildAppBarTitle(context) : null),
       actions: actions,
       leading: leading,
       automaticallyImplyLeading: automaticallyImplyLeading,
       backgroundColor: transparentAppBar
           ? Colors.transparent
-          : AppDesignSystem.surfaceColor,
+          : Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       scrolledUnderElevation: 2,
-      shadowColor: AppDesignSystem.primaryColor.withValues(alpha: 0.3),
-      centerTitle: true,
+      shadowColor: Theme.of(context).colorScheme.surfaceContainer
+          .withValues(alpha: 0.3),
+      centerTitle: false,
+      titleSpacing: 20,
       toolbarHeight: appBarHeight ?? 64,
-      titleTextStyle: AppDesignSystem.headlineSmall.copyWith(
-        color: AppDesignSystem.textPrimaryColor,
+      titleTextStyle: Theme.of(context).textTheme.headlineSmall!.copyWith(
+        color: Theme.of(context).colorScheme.onSurface,
         fontWeight: FontWeight.bold,
         letterSpacing: 0.5,
       ),
-      iconTheme: const IconThemeData(
-        color: AppDesignSystem.iconPrimaryColor,
+      iconTheme: IconThemeData(
+        color: Theme.of(context).colorScheme.onSurface,
         size: 24,
       ),
-      actionsIconTheme: const IconThemeData(
-        color: AppDesignSystem.iconPrimaryColor,
+      actionsIconTheme: IconThemeData(
+        color: Theme.of(context).colorScheme.onSurface,
         size: 24,
       ),
-      shape: const Border(
-        bottom: BorderSide(color: AppDesignSystem.cardBorderColor, width: 0.5),
+      shape: Border(
+        bottom: BorderSide(
+          color: Theme.of(context).colorScheme.outlineVariant,
+          width: 0.5,
+        ),
       ),
     );
   }
 
-  Widget _buildAppBarTitle() {
-    return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 600),
-      tween: Tween<double>(begin: 0.0, end: 1.0),
-      curve: Curves.easeOutQuart, // Curva mais suave que não extrapola
-      builder: (context, value, child) {
-        // Múltiplas camadas de proteção para garantir valores válidos
-        final safeValue = value.isNaN ? 0.0 : value.clamp(0.0, 1.0);
-        final safeOpacity = safeValue.clamp(0.0, 1.0);
-        final safeScale = (0.85 + (0.15 * safeValue)).clamp(0.7, 1.0);
-
-        // Proteção adicional para opacidade das sombras
-        final shadowOpacity1 = (0.3 * safeOpacity).clamp(0.0, 1.0);
-        final shadowOpacity2 = (0.15 * safeOpacity).clamp(0.0, 1.0);
-
-        return Transform.scale(
-          scale: safeScale,
-          child: Opacity(
-            opacity: safeOpacity,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDesignSystem.spaceMd,
-                vertical: AppDesignSystem.spaceSm,
-              ),
-              decoration: BoxDecoration(
-                gradient: AppDesignSystem.accentGradient,
-                borderRadius: AppDesignSystem.borderRadiusMd,
-                boxShadow: safeOpacity > 0
-                    ? [
-                        BoxShadow(
-                          color: AppDesignSystem.accentColor.withValues(
-                            alpha: shadowOpacity1,
-                          ),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                        BoxShadow(
-                          color: AppDesignSystem.accentColor.withValues(
-                            alpha: shadowOpacity2,
-                          ),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
-                        ),
-                      ]
-                    : [],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.movie_creation_outlined,
-                    color: AppDesignSystem.textPrimaryColor,
-                    size: 24,
-                  ),
-                  const SizedBox(width: AppDesignSystem.spaceSm),
-                  Flexible(
-                    child: Text(
-                      title!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppDesignSystem.headlineSmall.copyWith(
-                        color: AppDesignSystem.textPrimaryColor,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+  Widget _buildAppBarTitle(BuildContext context) {
+    return Text(
+      title!,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: Theme.of(context).textTheme.titleLarge
+          ?.copyWith(fontWeight: FontWeight.w600),
     );
   }
 }
@@ -257,13 +197,15 @@ class AppLoadingPageLayout extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircularProgressIndicator(color: AppDesignSystem.accentColor),
+            CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
+            ),
             if (loadingMessage != null) ...[
               const SizedBox(height: AppDesignSystem.spaceLg),
               Text(
                 loadingMessage!,
-                style: AppDesignSystem.bodyLarge.copyWith(
-                  color: AppDesignSystem.textSecondaryColor,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -323,21 +265,20 @@ class AppErrorPageLayout extends StatelessWidget {
               Icon(
                 errorIcon ?? Icons.error_outline,
                 size: 64,
-                color: AppDesignSystem.errorColor,
+                color: Theme.of(context).colorScheme.error,
               ),
               const SizedBox(height: AppDesignSystem.spaceLg),
               Text(
                 errorTitle,
-                style: AppDesignSystem.headlineSmall.copyWith(
-                  color: AppDesignSystem.textPrimaryColor,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall!
+                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppDesignSystem.spaceMd),
               Text(
                 errorMessage,
-                style: AppDesignSystem.bodyLarge.copyWith(
-                  color: AppDesignSystem.textSecondaryColor,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -348,8 +289,8 @@ class AppErrorPageLayout extends StatelessWidget {
                   icon: const Icon(Icons.refresh),
                   label: Text(retryButtonText ?? 'Tentar novamente'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppDesignSystem.accentColor,
-                    foregroundColor: AppDesignSystem.textPrimaryColor,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppDesignSystem.spaceLg,
                       vertical: AppDesignSystem.spaceMd,
@@ -420,21 +361,20 @@ class AppEmptyPageLayout extends StatelessWidget {
                 Icon(
                   emptyIcon ?? Icons.movie_outlined,
                   size: 80,
-                  color: AppDesignSystem.iconSecondaryColor,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               const SizedBox(height: AppDesignSystem.spaceLg),
               Text(
                 emptyTitle,
-                style: AppDesignSystem.headlineSmall.copyWith(
-                  color: AppDesignSystem.textPrimaryColor,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall!
+                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppDesignSystem.spaceMd),
               Text(
                 emptyMessage,
-                style: AppDesignSystem.bodyLarge.copyWith(
-                  color: AppDesignSystem.textSecondaryColor,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -445,8 +385,8 @@ class AppEmptyPageLayout extends StatelessWidget {
                   icon: const Icon(Icons.add),
                   label: Text(actionButtonText ?? 'Começar'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppDesignSystem.accentColor,
-                    foregroundColor: AppDesignSystem.textPrimaryColor,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppDesignSystem.spaceLg,
                       vertical: AppDesignSystem.spaceMd,

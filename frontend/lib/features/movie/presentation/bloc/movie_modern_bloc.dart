@@ -77,7 +77,12 @@ class MovieModernBloc extends Bloc<MovieModernEvent, MovieModernState> {
       switch (result) {
         case Success(:final data):
           if (data.isEmpty) {
-            emit(state.copyWith(hasReachedMax: true));
+            emit(
+              state.copyWith(
+                status: MovieModernStatus.success,
+                hasReachedMax: true,
+              ),
+            );
           } else {
             emit(
               state.copyWith(

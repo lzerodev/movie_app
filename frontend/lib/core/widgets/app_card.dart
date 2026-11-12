@@ -209,7 +209,7 @@ class AppCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget cardWidget = Container(
       margin: margin,
-      decoration: _buildDecoration(),
+      decoration: _buildDecoration(context),
       child: _buildCardContent(),
     );
 
@@ -257,27 +257,27 @@ class AppCard extends StatelessWidget {
     );
   }
 
-  BoxDecoration _buildDecoration() {
+  BoxDecoration _buildDecoration(BuildContext context) {
     return BoxDecoration(
-      color: _getBackgroundColor(),
+      color: _getBackgroundColor(context),
       gradient: gradient,
       borderRadius: _getEffectiveBorderRadius(),
-      border: _getBorder(),
+      border: _getBorder(context),
       boxShadow: _getBoxShadow(),
     );
   }
 
-  Color _getBackgroundColor() {
+  Color _getBackgroundColor(BuildContext context) {
     if (backgroundColor != null) return backgroundColor!;
     if (gradient != null) return Colors.transparent;
 
     switch (variant) {
       case AppCardVariant.primary:
-        return AppDesignSystem.accentColor.withValues(alpha: 0.1);
+        return Theme.of(context).colorScheme.primary.withValues(alpha: 0.1);
       case AppCardVariant.secondary:
-        return AppDesignSystem.surfaceColor;
+        return Theme.of(context).colorScheme.surfaceContainer;
       case AppCardVariant.elevated:
-        return AppDesignSystem.cardColor;
+        return Theme.of(context).colorScheme.surfaceContainer;
       case AppCardVariant.outlined:
         return Colors.transparent;
       case AppCardVariant.minimal:
@@ -300,7 +300,7 @@ class AppCard extends StatelessWidget {
     }
   }
 
-  Border? _getBorder() {
+  Border? _getBorder(BuildContext context) {
     Color? effectiveBorderColor = borderColor;
     double effectiveBorderWidth = borderWidth ?? 1.0;
 
@@ -308,12 +308,11 @@ class AppCard extends StatelessWidget {
     if (borderColor == null) {
       switch (variant) {
         case AppCardVariant.outlined:
-          effectiveBorderColor = AppDesignSystem.borderColor;
+          effectiveBorderColor = Theme.of(context).colorScheme.outlineVariant;
           break;
         case AppCardVariant.primary:
-          effectiveBorderColor = AppDesignSystem.accentColor.withValues(
-            alpha: 0.3,
-          );
+          effectiveBorderColor = Theme.of(context).colorScheme.primary
+              .withValues(alpha: 0.3);
           break;
         default:
           return null;

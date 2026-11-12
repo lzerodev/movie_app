@@ -127,14 +127,15 @@ class _AppTextFieldState extends State<AppTextField> {
           RichText(
             text: TextSpan(
               text: widget.label!,
-              style: AppDesignSystem.labelLarge.copyWith(
-                color: AppDesignSystem.textPrimaryColor,
-              ),
+              style: Theme.of(context).textTheme.labelLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
               children: [
                 if (widget.required)
-                  const TextSpan(
+                  TextSpan(
                     text: ' *',
-                    style: TextStyle(color: AppDesignSystem.errorColor),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                   ),
               ],
             ),
@@ -158,68 +159,73 @@ class _AppTextFieldState extends State<AppTextField> {
           maxLength: widget.maxLength,
           focusNode: widget.focusNode,
           autofocus: widget.autofocus,
-          style: AppDesignSystem.bodyLarge.copyWith(
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
             color: widget.enabled
-                ? AppDesignSystem.textPrimaryColor
-                : AppDesignSystem.textSecondaryColor,
+                ? Theme.of(context).colorScheme.onSurface
+                : Theme.of(context).colorScheme.onSurfaceVariant,
           ),
           decoration: InputDecoration(
             hintText: widget.hintText,
-            hintStyle: AppDesignSystem.bodyLarge.copyWith(
-              color: AppDesignSystem.textSecondaryColor,
+            hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             helperText: widget.helperText,
-            helperStyle: AppDesignSystem.bodySmall.copyWith(
-              color: AppDesignSystem.textSecondaryColor,
+            helperStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             errorText: widget.errorText,
-            errorStyle: AppDesignSystem.bodySmall.copyWith(
-              color: AppDesignSystem.errorColor,
-            ),
+            errorStyle: Theme.of(context).textTheme.bodySmall!
+                .copyWith(color: Theme.of(context).colorScheme.error),
             prefixIcon: widget.icon != null
                 ? Icon(
                     widget.icon,
                     color: widget.enabled
-                        ? AppDesignSystem.iconPrimaryColor
-                        : AppDesignSystem.iconSecondaryColor,
+                        ? Theme.of(context).colorScheme.onSurface
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
                   )
                 : widget.prefixIcon,
             suffixIcon: _buildSuffixIcon(),
             filled: true,
             fillColor: widget.enabled
-                ? AppDesignSystem.inputBackgroundColor
-                : AppDesignSystem.inputDisabledColor,
+                ? Theme.of(context).colorScheme.surfaceContainer
+                : Theme.of(context).colorScheme.surfaceContainerLow,
             contentPadding: const EdgeInsets.all(AppDesignSystem.spaceMd),
-            border: const OutlineInputBorder(
-              borderRadius: AppDesignSystem.borderRadiusMd,
-              borderSide: BorderSide(color: AppDesignSystem.borderColor),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderRadius: AppDesignSystem.borderRadiusMd,
-              borderSide: BorderSide(color: AppDesignSystem.borderColor),
-            ),
-            focusedBorder: const OutlineInputBorder(
+            border: OutlineInputBorder(
               borderRadius: AppDesignSystem.borderRadiusMd,
               borderSide: BorderSide(
-                color: AppDesignSystem.accentColor,
+                color: Theme.of(context).colorScheme.outline,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: AppDesignSystem.borderRadiusMd,
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: AppDesignSystem.borderRadiusMd,
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.primary,
                 width: 2,
               ),
             ),
-            errorBorder: const OutlineInputBorder(
-              borderRadius: AppDesignSystem.borderRadiusMd,
-              borderSide: BorderSide(color: AppDesignSystem.errorColor),
-            ),
-            focusedErrorBorder: const OutlineInputBorder(
+            errorBorder: OutlineInputBorder(
               borderRadius: AppDesignSystem.borderRadiusMd,
               borderSide: BorderSide(
-                color: AppDesignSystem.errorColor,
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: AppDesignSystem.borderRadiusMd,
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.error,
                 width: 2,
               ),
             ),
-            disabledBorder: const OutlineInputBorder(
+            disabledBorder: OutlineInputBorder(
               borderRadius: AppDesignSystem.borderRadiusMd,
               borderSide: BorderSide(
-                color: AppDesignSystem.borderDisabledColor,
+                color: Theme.of(context).colorScheme.outlineVariant,
               ),
             ),
           ),
@@ -238,7 +244,7 @@ class _AppTextFieldState extends State<AppTextField> {
         },
         icon: Icon(
           _obscureText ? Icons.visibility : Icons.visibility_off,
-          color: AppDesignSystem.iconSecondaryColor,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
         ),
       );
     }
@@ -334,29 +340,27 @@ class _AppSearchFieldState extends State<AppSearchField> {
       onSubmitted: widget.onSubmitted,
       focusNode: widget.focusNode,
       autofocus: widget.autofocus,
-      style: AppDesignSystem.bodyLarge.copyWith(
-        color: AppDesignSystem.textPrimaryColor,
-      ),
+      style: Theme.of(context).textTheme.bodyLarge!
+          .copyWith(color: Theme.of(context).colorScheme.onSurface),
       decoration: InputDecoration(
         hintText: widget.hintText ?? 'Buscar...',
-        hintStyle: AppDesignSystem.bodyLarge.copyWith(
-          color: AppDesignSystem.textSecondaryColor,
-        ),
-        prefixIcon: const Icon(
+        hintStyle: Theme.of(context).textTheme.bodyLarge!
+            .copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+        prefixIcon: Icon(
           Icons.search,
-          color: AppDesignSystem.iconSecondaryColor,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
         ),
         suffixIcon: _showClearButton
             ? IconButton(
                 onPressed: _onClear,
-                icon: const Icon(
+                icon: Icon(
                   Icons.clear,
-                  color: AppDesignSystem.iconSecondaryColor,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               )
             : null,
         filled: true,
-        fillColor: AppDesignSystem.inputBackgroundColor,
+        fillColor: Theme.of(context).colorScheme.surfaceContainer,
         contentPadding: const EdgeInsets.all(AppDesignSystem.spaceMd),
         border: const OutlineInputBorder(
           borderRadius: AppDesignSystem.borderRadiusLg,
@@ -366,9 +370,12 @@ class _AppSearchFieldState extends State<AppSearchField> {
           borderRadius: AppDesignSystem.borderRadiusLg,
           borderSide: BorderSide.none,
         ),
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderRadius: AppDesignSystem.borderRadiusLg,
-          borderSide: BorderSide(color: AppDesignSystem.accentColor, width: 2),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+            width: 2,
+          ),
         ),
       ),
     );

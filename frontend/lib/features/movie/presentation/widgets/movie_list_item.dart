@@ -1,181 +1,216 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:intl/intl.dart';
 
-import '../../../../core/mixins/design_system_mixin.dart';
 import '../../../../core/navigation/navigation.dart';
-import '../../../../core/theme/app_design_system.dart';
-import '../../../../core/utils/app_constants.dart';
 import '../../data/models/movie.dart';
 
-class MovieListItem extends StatefulWidget with DesignSystemMixin {
+/// Card usado no catálogo e na busca, com a mesma tag Hero do detalhe.
+class MovieListItem extends StatefulWidget {
   final Movie movie;
+  final bool compact;
+  final bool featured;
 
-  const MovieListItem({super.key, required this.movie});
+  const MovieListItem({
+    super.key,
+    required this.movie,
+    this.compact = true,
+    this.featured = false,
+  });
 
   @override
   State<MovieListItem> createState() => _MovieListItemState();
 }
 
 class _MovieListItemState extends State<MovieListItem>
-    with TickerProviderStateMixin, DesignSystemMixin {
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 150),
-      vsync: this,
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.02).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
-    );
-  }
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 150),
+  );
+  late final Animation<double> _scale = Tween<double>(
+    begin: 1,
+    end: 1.02,
+  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _controller.dispose();
     super.dispose();
-  }
-
-  void _onTap() {
-    // Navigate to movie detail page with hero transition
-    context.goToMovieDetailWithHero(widget.movie);
-  }
-
-  void _onHover(bool isHovered) {
-    if (isHovered) {
-      _animationController.forward();
-    } else {
-      _animationController.reverse();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _scaleAnimation,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: _scaleAnimation.value,
-          child: Container(
-            margin: defaultPadding,
-            decoration: cardDecoration,
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: AppDesignSystem.borderRadiusMd,
-                onTap: _onTap,
-                onHover: _onHover,
-                child: Padding(
-                  padding: defaultPadding,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildPosterImage(),
-                      const SizedBox(width: AppDesignSystem.spaceMd),
-                      Expanded(child: _buildMovieInfo()),
-                    ],
+    final colors = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+    final info = Padding(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            widget.movie.title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: text.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Icon(Icons.star_rounded, color: colors.tertiary, size: 16),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  'TMDb ${widget.movie.voteAverage.toStringAsFixed(1)} / 10 · ${widget.movie.releaseDate.year}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: text.labelSmall?.copyWith(
+                    color: colors.onSurfaceVariant,
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        );
-      },
+        ],
+      ),
     );
-  }
-
-  Widget _buildPosterImage() {
-    final posterUrl = widget.movie.posterPath != null
-        ? '${AppConstants.tmdbImageBaseUrl}/${AppConstants.posterSize}${widget.movie.posterPath}'
-        : null;
-
-    return Hero(
+    final poster = Hero(
       tag: 'movie_${widget.movie.id}',
-      child: ClipRRect(
-        borderRadius: AppDesignSystem.borderRadiusSm,
-        child: SizedBox(
-          width: 80,
-          height: 120,
-          child: posterUrl != null
-              ? Image.network(
-                  posterUrl,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      color: AppDesignSystem.surfaceColor,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: AppDesignSystem.accentColor,
-                          strokeWidth: 2,
-                        ),
-                      ),
-                    );
-                  },
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    color: AppDesignSystem.surfaceColor,
-                    child: const Icon(
-                      Icons.movie,
-                      color: AppDesignSystem.textSecondaryColor,
-                      size: 32,
+      child: MoviePoster(movie: widget.movie),
+    );
+    Widget content;
+    if (widget.featured) {
+      content = SizedBox(
+        height: 310,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            poster,
+            const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Color(0xEE100F14)],
+                ),
+              ),
+            ),
+            Positioned(
+              left: 22,
+              right: 22,
+              bottom: 22,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'EM CARTAZ',
+                    style: TextStyle(
+                      color: Color(0xFFB8DFC8),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.4,
                     ),
                   ),
-                )
-              : Container(
-                  color: AppDesignSystem.surfaceColor,
-                  child: const Icon(
-                    Icons.movie,
-                    color: AppDesignSystem.textSecondaryColor,
-                    size: 32,
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.movie.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: text.headlineSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.star_rounded,
+                        color: Color(0xFFF3CB81),
+                        size: 17,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          'TMDb ${widget.movie.voteAverage.toStringAsFixed(1)} / 10',
+                          style: text.labelMedium?.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_rounded,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (widget.compact) {
+      content = Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(width: 90, height: 135, child: poster),
+          Expanded(child: info),
+        ],
+      );
+    } else {
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AspectRatio(aspectRatio: 2 / 3, child: poster),
+          info,
+        ],
+      );
+    }
+    return ScaleTransition(
+      scale: _scale,
+      child: Material(
+        color: colors.surfaceContainer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(widget.featured ? 24 : 18),
+          side: BorderSide(color: colors.outlineVariant),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => context.goToMovieDetailWithHero(widget.movie),
+          onHover: (hover) =>
+              hover ? _controller.forward() : _controller.reverse(),
+          child: content,
         ),
       ),
     );
   }
+}
 
-  Widget _buildMovieInfo() {
-    final voteAverage = widget.movie.voteAverage;
-    final releaseDate = DateFormat.yMMMd('pt_BR')
-        .format(widget.movie.releaseDate);
+class MoviePoster extends StatelessWidget {
+  final Movie movie;
+  const MoviePoster({super.key, required this.movie});
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          widget.movie.title,
-          style: sectionTitleStyle,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
+  @override
+  Widget build(BuildContext context) {
+    final placeholder = ColoredBox(
+      color: Theme.of(context).colorScheme.surfaceContainerHigh,
+      child: Center(
+        child: Icon(
+          Icons.movie_outlined,
+          size: 48,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
         ),
-        const SizedBox(height: AppDesignSystem.spaceSm),
-        Wrap(
-          spacing: AppDesignSystem.spaceMd,
-          runSpacing: AppDesignSystem.spaceXs,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.star, color: Colors.amber, size: 16),
-                const SizedBox(width: AppDesignSystem.spaceXs),
-                Text(voteAverage.toStringAsFixed(1), style: subtitleStyle),
-              ],
-            ),
-            Text(releaseDate, style: subtitleStyle),
-          ],
-        ),
-        const SizedBox(height: AppDesignSystem.spaceSm),
-        Text(
-          widget.movie.overview,
-          style: secondaryTextStyle,
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+      ),
+    );
+    if (movie.posterPath == null || movie.posterPath!.isEmpty) {
+      return placeholder;
+    }
+    return Image.network(
+      'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+      errorBuilder: (_, error, stack) => placeholder,
     );
   }
 }

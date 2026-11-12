@@ -1,11 +1,16 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/theme/theme_cubit.dart';
 
 import '../../../core/navigation/navigation_extensions.dart';
 import '../../../core/theme/app_design_system.dart';
 import '../../../core/utils/app_constants.dart';
 import '../../../core/utils/responsive_utils.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../core/widgets/rtm_logo.dart';
 import '../../movie/presentation/pages/now_playing_movies.dart';
+import '../../movie/presentation/pages/search_movies.dart';
 
 /// Dados para opções do perfil
 class _ProfileOptionData {
@@ -29,15 +34,94 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
+  final _searchFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return AppPageLayout(
       title: AppConstants.appShortName,
+      titleWidget: currentPageIndex == 0
+          ? _buildBrandTitle()
+          : Text(
+              const [
+                'Descobrir',
+                'Buscar',
+                'Favoritos',
+                'Perfil',
+              ][currentPageIndex],
+              style: Theme.of(context).textTheme.titleLarge
+                  ?.copyWith(fontWeight: FontWeight.w600),
+            ),
+      appBarHeight: 80,
       actions: _buildAppBarActions(),
       bottomNavigationBar: _buildBottomNavigationBar(),
-      floatingActionButton: _buildFloatingActionButton(),
       body: _buildBody(),
+    );
+  }
+
+  Widget _buildBrandTitle() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Semantics(
+          header: true,
+          label: AppConstants.appDisplayName,
+          excludeSemantics: true,
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary
+                      .withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Center(child: RtmLogo()),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppConstants.appShortName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontSize: 23,
+                        height: 1.1,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.4,
+                      ),
+                    ),
+                    if (constraints.maxWidth >= 200) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        AppConstants.appName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontSize: 11,
+                          height: 1.2,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -45,8 +129,12 @@ class HomePageState extends State<HomePage> {
     return IndexedStack(
       index: currentPageIndex,
       children: [
-        _buildHomePage(),
-        _buildNotificationsPage(),
+        HeroMode(enabled: currentPageIndex == 0, child: _buildHomePage()),
+        HeroMode(
+          enabled: currentPageIndex == 1,
+          child: SearchMoviesPage(embedded: true, focusNode: _searchFocusNode),
+        ),
+        _buildFavoritesPage(),
         _buildProfilePage(),
       ],
     );
@@ -59,69 +147,36 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildNotificationsPage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppDesignSystem.spaceMd),
-      child: Column(
-        children: [
-          _buildNotificationCard(
-            icon: Icons.new_releases,
-            title: 'Novos filmes hoje!',
-            subtitle: 'Descubra onde assistir seus filmes favoritos',
-            color: AppDesignSystem.accentColor,
-          ),
-          const SizedBox(height: AppDesignSystem.spaceMd),
-          _buildNotificationCard(
-            icon: Icons.local_fire_department,
-            title: 'Em alta agora',
-            subtitle: 'Veja os filmes mais populares da semana',
-            color: AppDesignSystem.warningColor,
-          ),
-          const SizedBox(height: AppDesignSystem.spaceMd),
-          _buildNotificationCard(
-            icon: Icons.star,
-            title: 'Recomendado para você',
-            subtitle: 'Baseado nos seus filmes favoritos',
-            color: AppDesignSystem.successColor,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNotificationCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Color color,
-  }) {
-    return AppCardLegacy(
-      child: ListTile(
-        leading: Container(
-          padding: const EdgeInsets.all(AppDesignSystem.spaceSm),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: AppDesignSystem.borderRadiusSm,
-          ),
-          child: Icon(icon, color: color, size: 24),
-        ),
-        title: Text(
-          title,
-          style: AppDesignSystem.titleMedium.copyWith(
-            color: AppDesignSystem.textPrimaryColor,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: AppDesignSystem.bodyMedium.copyWith(
-            color: AppDesignSystem.textSecondaryColor,
-          ),
-        ),
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          color: AppDesignSystem.iconSecondaryColor,
-          size: 16,
+  Widget _buildFavoritesPage() {
+    final theme = Theme.of(context);
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.favorite_border_rounded,
+              size: 40,
+              color: theme.colorScheme.primary,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Seus favoritos, em breve',
+              style: theme.textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 360),
+              child: Text(
+                'Você poderá guardar filmes e séries na sua conta.',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -178,14 +233,19 @@ class HomePageState extends State<HomePage> {
             Container(
               width: avatarSize,
               height: avatarSize,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: AppDesignSystem.accentGradient,
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.surfaceContainerHigh,
+                    Theme.of(context).colorScheme.surfaceContainer,
+                  ],
+                ),
               ),
               child: Icon(
                 Icons.person,
                 size: iconSize,
-                color: AppDesignSystem.textPrimaryColor,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             SizedBox(height: ResponsiveUtils.responsiveSpacing(context) * 0.75),
@@ -196,11 +256,11 @@ class HomePageState extends State<HomePage> {
               style:
                   ResponsiveUtils.responsive<TextStyle>(
                     context,
-                    mobile: AppDesignSystem.titleLarge,
-                    tablet: AppDesignSystem.headlineSmall,
-                    desktop: AppDesignSystem.headlineMedium,
+                    mobile: Theme.of(context).textTheme.titleLarge!,
+                    tablet: Theme.of(context).textTheme.headlineSmall!,
+                    desktop: Theme.of(context).textTheme.headlineMedium!,
                   ).copyWith(
-                    color: AppDesignSystem.textPrimaryColor,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -218,12 +278,15 @@ class HomePageState extends State<HomePage> {
               ),
               child: Text(
                 'Cinéfilo apaixonado por aventuras cinematográficas',
-                style: ResponsiveUtils.responsive<TextStyle>(
-                  context,
-                  mobile: AppDesignSystem.bodyMedium,
-                  tablet: AppDesignSystem.bodyLarge,
-                  desktop: AppDesignSystem.bodyLarge,
-                ).copyWith(color: AppDesignSystem.textSecondaryColor),
+                style:
+                    ResponsiveUtils.responsive<TextStyle>(
+                      context,
+                      mobile: Theme.of(context).textTheme.bodyMedium!,
+                      tablet: Theme.of(context).textTheme.bodyLarge!,
+                      desktop: Theme.of(context).textTheme.bodyLarge!,
+                    ).copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -339,7 +402,8 @@ class HomePageState extends State<HomePage> {
               width: iconSize + 8,
               height: iconSize + 8,
               decoration: BoxDecoration(
-                color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
+                color: Theme.of(context).colorScheme.primary
+                    .withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(
                   ResponsiveUtils.responsive<double>(
                     context,
@@ -351,7 +415,7 @@ class HomePageState extends State<HomePage> {
               ),
               child: Icon(
                 option.icon,
-                color: AppDesignSystem.accentColor,
+                color: Theme.of(context).colorScheme.primary,
                 size: iconSize,
               ),
             ),
@@ -369,11 +433,11 @@ class HomePageState extends State<HomePage> {
                       style:
                           ResponsiveUtils.responsive<TextStyle>(
                             context,
-                            mobile: AppDesignSystem.titleSmall,
-                            tablet: AppDesignSystem.titleMedium,
-                            desktop: AppDesignSystem.titleMedium,
+                            mobile: Theme.of(context).textTheme.titleSmall!,
+                            tablet: Theme.of(context).textTheme.titleMedium!,
+                            desktop: Theme.of(context).textTheme.titleMedium!,
                           ).copyWith(
-                            color: AppDesignSystem.textPrimaryColor,
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontWeight: FontWeight.w600,
                           ),
                       maxLines: 1,
@@ -392,12 +456,17 @@ class HomePageState extends State<HomePage> {
                     Flexible(
                       child: Text(
                         option.subtitle,
-                        style: ResponsiveUtils.responsive<TextStyle>(
-                          context,
-                          mobile: AppDesignSystem.bodySmall,
-                          tablet: AppDesignSystem.bodyMedium,
-                          desktop: AppDesignSystem.bodyMedium,
-                        ).copyWith(color: AppDesignSystem.textSecondaryColor),
+                        style:
+                            ResponsiveUtils.responsive<TextStyle>(
+                              context,
+                              mobile: Theme.of(context).textTheme.bodySmall!,
+                              tablet: Theme.of(context).textTheme.bodyMedium!,
+                              desktop: Theme.of(context).textTheme.bodyMedium!,
+                            ).copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
                         maxLines: deviceType == DeviceType.mobile ? 2 : 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -410,7 +479,7 @@ class HomePageState extends State<HomePage> {
             // Ícone de navegação
             Icon(
               Icons.arrow_forward_ios,
-              color: AppDesignSystem.iconSecondaryColor,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
               size: ResponsiveUtils.responsive<double>(
                 context,
                 mobile: 16,
@@ -430,101 +499,48 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomNavigationBar() {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          top: BorderSide(color: AppDesignSystem.cardBorderColor, width: 0.5),
-        ),
+    final colors = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: colors.outlineVariant)),
       ),
       child: NavigationBar(
         selectedIndex: currentPageIndex,
         onDestinationSelected: (index) {
-          setState(() {
-            currentPageIndex = index;
-          });
+          FocusManager.instance.primaryFocus?.unfocus();
+          setState(() => currentPageIndex = index);
+          if (index == 1) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted && currentPageIndex == 1) {
+                _searchFocusNode.requestFocus();
+              }
+            });
+          }
         },
-        backgroundColor: AppDesignSystem.surfaceColor,
-        indicatorColor: AppDesignSystem.accentColor.withValues(alpha: 0.15),
-        indicatorShape: const RoundedRectangleBorder(
-          borderRadius: AppDesignSystem.borderRadiusMd,
-        ),
-        elevation: 0,
-        height: 80,
-        destinations: [
+        backgroundColor: colors.surface,
+        indicatorColor: colors.primary.withValues(alpha: .14),
+        indicatorShape: const StadiumBorder(),
+        height: 76,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+        destinations: const [
           NavigationDestination(
-            icon: Icon(
-              Icons.home_outlined,
-              color: currentPageIndex == 0
-                  ? AppDesignSystem.accentColor
-                  : AppDesignSystem.iconSecondaryColor,
-            ),
-            selectedIcon: Container(
-              padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
-              decoration: BoxDecoration(
-                color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
-                borderRadius: AppDesignSystem.borderRadiusSm,
-              ),
-              child: const Icon(
-                Icons.home_rounded,
-                color: AppDesignSystem.accentColor,
-              ),
-            ),
-            label: 'Home',
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home_rounded),
+            label: 'Descobrir',
           ),
           NavigationDestination(
-            icon: Badge(
-              label: const Text(
-                '2',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-              backgroundColor: AppDesignSystem.accentColor,
-              textColor: AppDesignSystem.textPrimaryColor,
-              child: Icon(
-                Icons.notifications_outlined,
-                color: currentPageIndex == 1
-                    ? AppDesignSystem.accentColor
-                    : AppDesignSystem.iconSecondaryColor,
-              ),
-            ),
-            selectedIcon: Badge(
-              label: const Text(
-                '2',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-              backgroundColor: AppDesignSystem.accentColor,
-              textColor: AppDesignSystem.textPrimaryColor,
-              child: Container(
-                padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
-                decoration: BoxDecoration(
-                  color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
-                  borderRadius: AppDesignSystem.borderRadiusSm,
-                ),
-                child: const Icon(
-                  Icons.notifications_rounded,
-                  color: AppDesignSystem.accentColor,
-                ),
-              ),
-            ),
-            label: 'Notificações',
+            icon: Icon(Icons.search_rounded),
+            selectedIcon: Icon(Icons.search_rounded),
+            label: 'Buscar',
           ),
           NavigationDestination(
-            icon: Icon(
-              Icons.person_outline_rounded,
-              color: currentPageIndex == 2
-                  ? AppDesignSystem.accentColor
-                  : AppDesignSystem.iconSecondaryColor,
-            ),
-            selectedIcon: Container(
-              padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
-              decoration: BoxDecoration(
-                color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
-                borderRadius: AppDesignSystem.borderRadiusSm,
-              ),
-              child: const Icon(
-                Icons.person_rounded,
-                color: AppDesignSystem.accentColor,
-              ),
-            ),
+            icon: Icon(Icons.favorite_border_rounded),
+            selectedIcon: Icon(Icons.favorite_rounded),
+            label: 'Favoritos',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            selectedIcon: Icon(Icons.person_rounded),
             label: 'Perfil',
           ),
         ],
@@ -532,131 +548,82 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildFloatingActionButton() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: AppDesignSystem.accentGradient,
-        borderRadius: AppDesignSystem.borderRadiusLg,
-        boxShadow: [
-          BoxShadow(
-            color: AppDesignSystem.accentColor.withValues(alpha: 0.4),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+  List<Widget> _buildAppBarActions() {
+    return [
+      PopupMenuButton<ThemeMode>(
+        tooltip: 'Tema',
+        icon: const Icon(Icons.brightness_6_outlined),
+        initialValue: context.watch<ThemeCubit>().state,
+        onSelected: context.read<ThemeCubit>().select,
+        itemBuilder: (_) => [
+          CheckedPopupMenuItem(
+            value: ThemeMode.light,
+            checked: context.read<ThemeCubit>().state == ThemeMode.light,
+            child: const Text('Claro'),
           ),
-          BoxShadow(
-            color: AppDesignSystem.accentColor.withValues(alpha: 0.2),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
+          CheckedPopupMenuItem(
+            value: ThemeMode.dark,
+            checked: context.read<ThemeCubit>().state == ThemeMode.dark,
+            child: const Text('Escuro'),
+          ),
+          CheckedPopupMenuItem(
+            value: ThemeMode.system,
+            checked: context.read<ThemeCubit>().state == ThemeMode.system,
+            child: const Text('Sistema'),
           ),
         ],
       ),
-      child: FloatingActionButton.extended(
-        onPressed: _navigateToSearch,
-        backgroundColor: Colors.transparent,
-        foregroundColor: AppDesignSystem.textPrimaryColor,
-        elevation: 0,
-        highlightElevation: 0,
-        splashColor: AppDesignSystem.textPrimaryColor.withValues(alpha: 0.1),
-        shape: const RoundedRectangleBorder(
-          borderRadius: AppDesignSystem.borderRadiusLg,
-        ),
-        icon: const Icon(Icons.search_rounded, size: 24),
-        label: Text(
-          'Buscar',
-          style: AppDesignSystem.labelLarge.copyWith(
-            color: AppDesignSystem.textPrimaryColor,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _navigateToSearch() {
-    context.goToSearchMovies();
-  }
-
-  List<Widget> _buildAppBarActions() {
-    return [
-      // Botão de busca com badge
-      Container(
-        margin: const EdgeInsets.only(right: AppDesignSystem.spaceSm),
-        decoration: BoxDecoration(
-          color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
-          borderRadius: AppDesignSystem.borderRadiusSm,
-          border: Border.all(
-            color: AppDesignSystem.accentColor.withValues(alpha: 0.3),
-            width: 1,
-          ),
-        ),
-        child: IconButton(
-          onPressed: _navigateToSearch,
-          icon: const Icon(
-            Icons.search_rounded,
-            color: AppDesignSystem.accentColor,
-          ),
-          tooltip: 'Buscar filmes',
-          splashRadius: 20,
-        ),
-      ),
-      // Menu de opções
-      Container(
-        margin: const EdgeInsets.only(right: AppDesignSystem.spaceMd),
-        decoration: BoxDecoration(
-          color: AppDesignSystem.cardColor,
-          borderRadius: AppDesignSystem.borderRadiusSm,
-          border: Border.all(color: AppDesignSystem.cardBorderColor, width: 1),
-        ),
-        child: PopupMenuButton<String>(
-          onSelected: _handleMenuSelection,
-          icon: const Icon(
-            Icons.more_vert_rounded,
-            color: AppDesignSystem.iconPrimaryColor,
-          ),
-          tooltip: 'Mais opções',
-          shape: const RoundedRectangleBorder(
-            borderRadius: AppDesignSystem.borderRadiusMd,
-            side: BorderSide(color: AppDesignSystem.cardBorderColor),
-          ),
-          color: AppDesignSystem.cardColor,
-          elevation: 8,
-          shadowColor: AppDesignSystem.primaryColor.withValues(alpha: 0.3),
-          itemBuilder: (context) => [
-            PopupMenuItem<String>(
-              value: 'favorites',
-              child: _buildMenuItem(
-                icon: Icons.favorite_outline,
-                title: 'Favoritos',
-                subtitle: 'Meus filmes salvos',
+      Padding(
+        padding: const EdgeInsets.only(left: 8, right: 16),
+        child: SizedBox(
+          width: 48,
+          height: 48,
+          child: PopupMenuButton<String>(
+            onSelected: _handleMenuSelection,
+            icon: Icon(
+              Icons.more_horiz_rounded,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              size: 24,
+            ),
+            tooltip: 'Mais opções',
+            position: PopupMenuPosition.under,
+            offset: const Offset(0, 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: AppDesignSystem.borderRadiusMd,
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.outlineVariant,
               ),
             ),
-            PopupMenuItem<String>(
-              value: 'watchlist',
-              child: _buildMenuItem(
-                icon: Icons.bookmark_outline,
-                title: 'Lista para assistir',
-                subtitle: 'Filmes salvos para depois',
+            color: Theme.of(context).colorScheme.surface,
+            elevation: 8,
+            itemBuilder: (context) => [
+              PopupMenuItem<String>(
+                value: 'watchlist',
+                child: _buildMenuItem(
+                  icon: Icons.bookmark_outline,
+                  title: 'Lista para assistir',
+                  subtitle: 'Filmes salvos para depois',
+                ),
               ),
-            ),
-            const PopupMenuDivider(),
-            PopupMenuItem<String>(
-              value: 'settings',
-              child: _buildMenuItem(
-                icon: Icons.settings_outlined,
-                title: 'Configurações',
-                subtitle: 'Personalizar app',
+              const PopupMenuDivider(),
+              PopupMenuItem<String>(
+                value: 'settings',
+                child: _buildMenuItem(
+                  icon: Icons.settings_outlined,
+                  title: 'Configurações',
+                  subtitle: 'Personalizar app',
+                ),
               ),
-            ),
-            PopupMenuItem<String>(
-              value: 'about',
-              child: _buildMenuItem(
-                icon: Icons.info_outline,
-                title: 'Sobre',
-                subtitle: 'Informações do app',
+              PopupMenuItem<String>(
+                value: 'about',
+                child: _buildMenuItem(
+                  icon: Icons.info_outline,
+                  title: 'Sobre',
+                  subtitle: 'Informações do app',
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     ];
@@ -674,10 +641,15 @@ class HomePageState extends State<HomePage> {
           Container(
             padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
             decoration: BoxDecoration(
-              color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
+              color: Theme.of(context).colorScheme.primary
+                  .withValues(alpha: 0.1),
               borderRadius: AppDesignSystem.borderRadiusXs,
             ),
-            child: Icon(icon, color: AppDesignSystem.accentColor, size: 20),
+            child: Icon(
+              icon,
+              color: Theme.of(context).colorScheme.primary,
+              size: 20,
+            ),
           ),
           const SizedBox(width: AppDesignSystem.spaceMd),
           Expanded(
@@ -687,15 +659,15 @@ class HomePageState extends State<HomePage> {
               children: [
                 Text(
                   title,
-                  style: AppDesignSystem.titleSmall.copyWith(
-                    color: AppDesignSystem.textPrimaryColor,
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   subtitle,
-                  style: AppDesignSystem.bodySmall.copyWith(
-                    color: AppDesignSystem.textSecondaryColor,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -728,27 +700,26 @@ class HomePageState extends State<HomePage> {
       SnackBar(
         content: Row(
           children: [
-            const Icon(
+            Icon(
               Icons.info_outline,
-              color: AppDesignSystem.textPrimaryColor,
+              color: Theme.of(context).colorScheme.onSurface,
               size: 20,
             ),
             const SizedBox(width: AppDesignSystem.spaceMd),
             Expanded(
               child: Text(
                 message,
-                style: AppDesignSystem.bodyMedium.copyWith(
-                  color: AppDesignSystem.textPrimaryColor,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium!
+                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
               ),
             ),
           ],
         ),
-        backgroundColor: AppDesignSystem.cardColor,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
         behavior: SnackBarBehavior.floating,
-        shape: const RoundedRectangleBorder(
+        shape: RoundedRectangleBorder(
           borderRadius: AppDesignSystem.borderRadiusMd,
-          side: BorderSide(color: AppDesignSystem.cardBorderColor),
+          side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
         ),
         margin: const EdgeInsets.all(AppDesignSystem.spaceMd),
         duration: const Duration(seconds: 2),
@@ -760,30 +731,31 @@ class HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppDesignSystem.cardColor,
-        shape: const RoundedRectangleBorder(
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+        shape: RoundedRectangleBorder(
           borderRadius: AppDesignSystem.borderRadiusLg,
-          side: BorderSide(color: AppDesignSystem.cardBorderColor),
+          side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
         ),
         title: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(AppDesignSystem.spaceSm),
-              decoration: const BoxDecoration(
-                gradient: AppDesignSystem.accentGradient,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.surfaceContainerHigh,
+                    Theme.of(context).colorScheme.surfaceContainer,
+                  ],
+                ),
                 borderRadius: AppDesignSystem.borderRadiusSm,
               ),
-              child: const Icon(
-                Icons.movie_outlined,
-                color: AppDesignSystem.textPrimaryColor,
-                size: 24,
-              ),
+              child: const RtmLogo(),
             ),
             const SizedBox(width: AppDesignSystem.spaceMd),
             Text(
               AppConstants.appShortName,
-              style: AppDesignSystem.headlineSmall.copyWith(
-                color: AppDesignSystem.textPrimaryColor,
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -795,17 +767,19 @@ class HomePageState extends State<HomePage> {
           children: [
             Text(
               AppConstants.appName,
-              style: AppDesignSystem.bodyLarge.copyWith(
-                color: AppDesignSystem.textSecondaryColor,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: AppDesignSystem.spaceMd),
             Container(
               padding: const EdgeInsets.all(AppDesignSystem.spaceMd),
               decoration: BoxDecoration(
-                color: AppDesignSystem.backgroundColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: AppDesignSystem.borderRadiusMd,
-                border: Border.all(color: AppDesignSystem.cardBorderColor),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
               ),
               child: Column(
                 children: [
@@ -823,17 +797,16 @@ class HomePageState extends State<HomePage> {
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             style: TextButton.styleFrom(
-              backgroundColor: AppDesignSystem.accentColor.withValues(
-                alpha: 0.1,
-              ),
+              backgroundColor: Theme.of(context).colorScheme.primary
+                  .withValues(alpha: 0.1),
               shape: const RoundedRectangleBorder(
                 borderRadius: AppDesignSystem.borderRadiusSm,
               ),
             ),
             child: Text(
               'Fechar',
-              style: AppDesignSystem.labelLarge.copyWith(
-                color: AppDesignSystem.accentColor,
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -850,8 +823,8 @@ class HomePageState extends State<HomePage> {
         Expanded(
           child: Text(
             label,
-            style: AppDesignSystem.bodyMedium.copyWith(
-              color: AppDesignSystem.textSecondaryColor,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
         ),
@@ -860,8 +833,8 @@ class HomePageState extends State<HomePage> {
           child: Text(
             value,
             textAlign: TextAlign.end,
-            style: AppDesignSystem.bodyMedium.copyWith(
-              color: AppDesignSystem.textPrimaryColor,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
               fontWeight: FontWeight.w500,
             ),
           ),

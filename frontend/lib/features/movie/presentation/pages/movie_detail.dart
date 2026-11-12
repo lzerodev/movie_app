@@ -1,26 +1,21 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/mixins/design_system_mixin.dart';
-import '../../../../core/theme/app_design_system.dart';
-import '../../../../core/widgets/widgets.dart';
 import '../../data/models/movie.dart';
+import '../widgets/movie_list_item.dart';
 
 class MovieDetailPage extends StatefulWidget {
   final Movie movie;
-
   const MovieDetailPage({super.key, required this.movie});
-
   @override
   State<MovieDetailPage> createState() => _MovieDetailPageState();
 }
 
 class _MovieDetailPageState extends State<MovieDetailPage>
-    with SingleTickerProviderStateMixin, DesignSystemMixin {
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
-  bool _isFavorite = false;
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<double> _fadeAnimation;
+  late final Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
@@ -29,22 +24,19 @@ class _MovieDetailPageState extends State<MovieDetailPage>
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+        curve: const Interval(0, .6, curve: Curves.easeOut),
       ),
     );
-
     _slideAnimation =
-        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+        Tween<Offset>(begin: const Offset(0, .3), end: Offset.zero).animate(
           CurvedAnimation(
             parent: _animationController,
-            curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
+            curve: const Interval(.2, 1, curve: Curves.easeOutCubic),
           ),
         );
-
     _animationController.forward();
   }
 
@@ -54,374 +46,206 @@ class _MovieDetailPageState extends State<MovieDetailPage>
     super.dispose();
   }
 
-  Widget _buildDecoratedButton({
-    required Widget icon,
-    required VoidCallback onPressed,
-  }) {
-    return Container(
-      margin: compactPadding,
-      decoration: cardDecoration.copyWith(
-        color: AppDesignSystem.cardColor.withValues(alpha: 0.9),
-      ),
-      child: IconButton(icon: icon, onPressed: onPressed),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final releaseDate = DateFormat.yMMMd('pt_BR')
-        .format(widget.movie.releaseDate);
-
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundColor,
       body: CustomScrollView(
         slivers: [
-          _buildSliverAppBar(),
+          SliverAppBar(
+            expandedHeight:
+                MediaQuery.sizeOf(context).height.clamp(480, 900) * .45,
+            pinned: true,
+            leading: Padding(
+              padding: const EdgeInsets.all(4),
+              child: IconButton.filledTonal(
+                tooltip: 'Voltar',
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.arrow_back_rounded),
+              ),
+            ),
+            actions: [
+              Tooltip(
+                message: 'Compartilhamento em breve',
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: IconButton.filledTonal(
+                    style: IconButton.styleFrom(
+                      backgroundColor: colors.surfaceContainer,
+                    ),
+                    onPressed: null,
+                    icon: const Icon(Icons.share_outlined),
+                  ),
+                ),
+              ),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Hero(
+                    tag: 'movie_${widget.movie.id}',
+                    child: MoviePoster(movie: widget.movie),
+                  ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: const [0, .5, 1],
+                        colors: [
+                          Colors.black26,
+                          Colors.transparent,
+                          theme.scaffoldBackgroundColor,
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           SliverToBoxAdapter(
             child: FadeTransition(
               opacity: _fadeAnimation,
               child: SlideTransition(
                 position: _slideAnimation,
-                child: Column(
-                  children: [
-                    _buildMovieHeader(releaseDate),
-                    _buildMovieStats(),
-                    _buildMovieOverview(),
-                    _buildActionButtons(),
-                    const SizedBox(height: AppDesignSystem.spaceXl),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSliverAppBar() {
-    return SliverAppBar(
-      expandedHeight: 400,
-      pinned: true,
-      backgroundColor: AppDesignSystem.backgroundColor,
-      foregroundColor: AppDesignSystem.textPrimaryColor,
-      leading: _buildDecoratedButton(
-        icon: const Icon(
-          Icons.arrow_back_ios_new,
-          color: AppDesignSystem.textPrimaryColor,
-        ),
-        onPressed: () => Navigator.pop(context),
-      ),
-      actions: [
-        _buildDecoratedButton(
-          icon: Icon(
-            _isFavorite ? Icons.favorite : Icons.favorite_border,
-            color: _isFavorite
-                ? AppDesignSystem.accentColor
-                : AppDesignSystem.textPrimaryColor,
-          ),
-          onPressed: () {
-            setState(() {
-              _isFavorite = !_isFavorite;
-            });
-          },
-        ),
-      ],
-      flexibleSpace: FlexibleSpaceBar(
-        background: Stack(
-          fit: StackFit.expand,
-          children: [
-            Hero(
-              tag: 'movie_${widget.movie.id}',
-              child: Image.network(
-                'https://image.tmdb.org/t/p/w500${widget.movie.posterPath}',
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: AppDesignSystem.surfaceColor,
-                    child: const Icon(
-                      Icons.movie,
-                      color: AppDesignSystem.iconSecondaryColor,
-                      size: 80,
-                    ),
-                  );
-                },
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.transparent,
-                    AppDesignSystem.backgroundColor.withValues(alpha: 0.3),
-                    AppDesignSystem.backgroundColor.withValues(alpha: 0.8),
-                    AppDesignSystem.backgroundColor,
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMovieHeader(String releaseDate) {
-    return Padding(
-      padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.movie.title,
-            style: AppDesignSystem.headlineLarge.copyWith(
-              color: AppDesignSystem.textPrimaryColor,
-              fontWeight: FontWeight.bold,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: AppDesignSystem.spaceMd),
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  gradient: AppDesignSystem.accentGradient,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppDesignSystem.accentColor.withValues(alpha: 0.3),
-                      blurRadius: 6,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.star_rounded,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      widget.movie.voteAverage.toStringAsFixed(1),
-                      style: AppDesignSystem.titleSmall.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'FILME · ${widget.movie.releaseDate.year}',
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: colors.onSurfaceVariant,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            widget.movie.title,
+                            style: theme.textTheme.headlineLarge?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -1,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Lançamento: ${DateFormat.yMMMd('pt_BR').format(widget.movie.releaseDate)}',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: colors.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          Card(
+                            margin: EdgeInsets.zero,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Wrap(
+                                spacing: 16,
+                                runSpacing: 8,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.star_rounded,
+                                    color: colors.tertiary,
+                                    size: 30,
+                                  ),
+                                  Text(
+                                    '${widget.movie.voteAverage.toStringAsFixed(1)} / 10',
+                                    style: theme.textTheme.titleLarge?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Nota do catálogo TMDb',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: colors.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: FilledButton.icon(
+                                  onPressed: null,
+                                  icon: const Icon(Icons.star_outline_rounded),
+                                  label: const Text('Avaliar · em breve'),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Tooltip(
+                                message: 'Favoritos com conta em breve',
+                                child: IconButton.filledTonal(
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: colors.surfaceContainer,
+                                  ),
+                                  onPressed: null,
+                                  icon: const Icon(
+                                    Icons.favorite_border_rounded,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 26),
+                          Text(
+                            'Sinopse',
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            widget.movie.overview.isEmpty
+                                ? 'Sinopse indisponível.'
+                                : widget.movie.overview,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: colors.onSurfaceVariant,
+                              height: 1.8,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          OutlinedButton.icon(
+                            onPressed: null,
+                            icon: const Icon(Icons.play_circle_outline_rounded),
+                            label: const Text('Trailer · em breve'),
+                          ),
+                          const SizedBox(height: 28),
+                          const Divider(),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Reviews e comentários',
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'As avaliações e conversas da comunidade chegam em uma próxima etapa.',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: colors.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: AppDesignSystem.spaceMd),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppDesignSystem.cardColor,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: AppDesignSystem.cardBorderColor,
-                    width: 1,
                   ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.calendar_today_rounded,
-                      color: AppDesignSystem.iconSecondaryColor,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      releaseDate,
-                      style: AppDesignSystem.bodyMedium.copyWith(
-                        color: AppDesignSystem.textSecondaryColor,
-                      ),
-                    ),
-                  ],
-                ),
               ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMovieStats() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDesignSystem.spaceLg),
-      child: AppCardLegacy(
-        child: Padding(
-          padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildStatItem(
-                icon: Icons.star_rounded,
-                label: 'Avaliação',
-                value: widget.movie.voteAverage.toStringAsFixed(1),
-                color: AppDesignSystem.accentColor,
-              ),
-              _buildStatDivider(),
-              _buildStatItem(
-                icon: Icons.people_rounded,
-                label: 'Votos',
-                value: '${(widget.movie.voteAverage * 100).toInt()}',
-                color: AppDesignSystem.infoColor,
-              ),
-              _buildStatDivider(),
-              _buildStatItem(
-                icon: Icons.category_rounded,
-                label: 'Categoria',
-                value: _getScoreLabel(widget.movie.voteAverage),
-                color: AppDesignSystem.successColor,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatItem({
-    required IconData icon,
-    required String label,
-    required String value,
-    required Color color,
-  }) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(AppDesignSystem.spaceSm),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: AppDesignSystem.borderRadiusMd,
-          ),
-          child: Icon(icon, color: color, size: 24),
-        ),
-        const SizedBox(height: AppDesignSystem.spaceSm),
-        Text(
-          value,
-          style: AppDesignSystem.titleMedium.copyWith(
-            color: AppDesignSystem.textPrimaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          label,
-          style: AppDesignSystem.bodySmall.copyWith(
-            color: AppDesignSystem.textSecondaryColor,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatDivider() {
-    return Container(
-      width: 1,
-      height: 40,
-      color: AppDesignSystem.cardBorderColor,
-    );
-  }
-
-  Widget _buildMovieOverview() {
-    if (widget.movie.overview.isEmpty) return const SizedBox.shrink();
-
-    return Padding(
-      padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
-      child: AppCardLegacy(
-        child: Padding(
-          padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: compactPadding,
-                    decoration: const BoxDecoration(
-                      gradient: AppDesignSystem.primaryGradient,
-                      borderRadius: AppDesignSystem.borderRadiusSm,
-                    ),
-                    child: const Icon(
-                      Icons.description_rounded,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: AppDesignSystem.spaceMd),
-                  Text(
-                    'Sinopse',
-                    style: AppDesignSystem.titleLarge.copyWith(
-                      color: AppDesignSystem.textPrimaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppDesignSystem.spaceMd),
-              Text(
-                widget.movie.overview,
-                style: AppDesignSystem.bodyLarge.copyWith(
-                  color: AppDesignSystem.textSecondaryColor,
-                  height: 1.6,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButtons() {
-    return Padding(
-      padding: const EdgeInsets.all(AppDesignSystem.spaceLg),
-      child: Row(
-        children: [
-          Expanded(
-            child: AppButton(
-              text: 'Assistir Trailer',
-              icon: Icons.play_circle_rounded,
-              onPressed: () {
-                // TODO: Implementar reprodução do trailer
-              },
-              variant: AppButtonVariant.primary,
             ),
           ),
-          const SizedBox(width: AppDesignSystem.spaceMd),
-          AppButton(
-            text: '',
-            icon: Icons.share_rounded,
-            onPressed: () {
-              // TODO: Implementar compartilhamento
-            },
-            variant: AppButtonVariant.secondary,
-          ),
         ],
       ),
     );
-  }
-
-  String _getScoreLabel(double score) {
-    if (score >= 8.0) return 'Excelente';
-    if (score >= 7.0) return 'Muito Bom';
-    if (score >= 6.0) return 'Bom';
-    if (score >= 5.0) return 'Regular';
-    return 'Ruim';
   }
 }

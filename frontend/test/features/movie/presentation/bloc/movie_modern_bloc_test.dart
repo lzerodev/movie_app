@@ -44,6 +44,22 @@ void main() {
   });
 
   group('MovieModernBloc - Testes Simples', () {
+    blocTest<MovieModernBloc, MovieModernState>(
+      'resposta vazia encerra o loading e permite mostrar o estado vazio',
+      build: () {
+        when(() => mockGetNowPlayingMoviesUseCase(any()))
+            .thenAnswer((_) async => const Success(<Movie>[]));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(const MovieModernNowPlayingFetched()),
+      expect: () => [
+        const MovieModernState(status: MovieModernStatus.loading),
+        const MovieModernState(
+          status: MovieModernStatus.success,
+          hasReachedMax: true,
+        ),
+      ],
+    );
     final movieList = [
       Movie(
         id: 1,

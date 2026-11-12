@@ -91,7 +91,8 @@ class AppCardLegacy extends StatelessWidget {
     return Container(
       margin: margin,
       child: Card(
-        color: backgroundColor ?? AppDesignSystem.cardColor,
+        color:
+            backgroundColor ?? Theme.of(context).colorScheme.surfaceContainer,
         elevation: borderColor != null
             ? 0
             : (elevation ?? 2), // Remove elevação se há borda custom
