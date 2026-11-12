@@ -1,11 +1,11 @@
 {
-    "name": "movie_app",
-    "short_name": "movie_app",
+    "name": "RTM (Rate That Movie)",
+    "short_name": "RTM",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Rate That Movie — descubra filmes e organize suas avaliações.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

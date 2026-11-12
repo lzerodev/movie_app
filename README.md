@@ -1,4 +1,4 @@
-# I Rate That Movie
+# RTM (Rate That Movie)
 
 Monorepositório do aplicativo de filmes: Flutter no frontend, API TypeScript/NestJS e infraestrutura Docker com destino inicial AWS Lightsail.
 

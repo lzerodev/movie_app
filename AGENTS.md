@@ -1,4 +1,4 @@
-# I Rate That Movie
+# RTM (Rate That Movie)
 
 ## Estrutura e ferramentas
 

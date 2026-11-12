@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../core/navigation/navigation_extensions.dart';
 import '../../../core/theme/app_design_system.dart';
+import '../../../core/utils/app_constants.dart';
 import '../../../core/utils/responsive_utils.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../movie/presentation/pages/now_playing_movies.dart';
@@ -32,7 +33,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return AppPageLayout(
-      title: 'Testflix',
+      title: AppConstants.appShortName,
       actions: _buildAppBarActions(),
       bottomNavigationBar: _buildBottomNavigationBar(),
       floatingActionButton: _buildFloatingActionButton(),
@@ -780,7 +781,7 @@ class HomePageState extends State<HomePage> {
             ),
             const SizedBox(width: AppDesignSystem.spaceMd),
             Text(
-              'Testflix',
+              AppConstants.appShortName,
               style: AppDesignSystem.headlineSmall.copyWith(
                 color: AppDesignSystem.textPrimaryColor,
                 fontWeight: FontWeight.bold,
@@ -793,7 +794,7 @@ class HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Seu app de filmes favorito',
+              AppConstants.appName,
               style: AppDesignSystem.bodyLarge.copyWith(
                 color: AppDesignSystem.textSecondaryColor,
               ),
@@ -846,17 +847,23 @@ class HomePageState extends State<HomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: AppDesignSystem.bodyMedium.copyWith(
-            color: AppDesignSystem.textSecondaryColor,
+        Expanded(
+          child: Text(
+            label,
+            style: AppDesignSystem.bodyMedium.copyWith(
+              color: AppDesignSystem.textSecondaryColor,
+            ),
           ),
         ),
-        Text(
-          value,
-          style: AppDesignSystem.bodyMedium.copyWith(
-            color: AppDesignSystem.textPrimaryColor,
-            fontWeight: FontWeight.w500,
+        const SizedBox(width: AppDesignSystem.spaceMd),
+        Flexible(
+          child: Text(
+            value,
+            textAlign: TextAlign.end,
+            style: AppDesignSystem.bodyMedium.copyWith(
+              color: AppDesignSystem.textPrimaryColor,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ],

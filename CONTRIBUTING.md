@@ -1,4 +1,4 @@
-# Guia de contribuição — I Rate That Movie
+# Guia de contribuição — RTM (Rate That Movie)
 
 Gitflow e Conventional Commits são as convenções deste monorepositório: Flutter em `frontend/`, API NestJS em `backend/` e infraestrutura em `infra/`. Consultar [AGENTS.md](AGENTS.md), [arquitetura](docs/ARCHITECTURE.md), [toolchain](docs/BUILD_TOOLCHAIN.md), [roadmap](docs/ROADMAP.md) e [revisão atual](docs/PROJECT_STATUS.md).
 

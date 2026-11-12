@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-/// Sistema de Design unificado para o Movie App
+/// Sistema de Design unificado para o RTM (Rate That Movie)
 ///
 /// Centraliza cores, tipografia, espaçamentos e outros elementos
 /// de design para manter consistência visual em toda a aplicação.

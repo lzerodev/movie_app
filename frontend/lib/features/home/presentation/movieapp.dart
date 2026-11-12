@@ -6,6 +6,7 @@ import 'package:cupertino_ui/cupertino_ui.dart'
 
 import '../../../core/navigation/navigation.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/app_constants.dart';
 
 class MovieApp extends StatelessWidget {
   const MovieApp({super.key});
@@ -22,7 +23,7 @@ class MovieApp extends StatelessWidget {
       supportedLocales: const [Locale('pt', 'BR')],
 
       // === CONFIGURAÇÕES BÁSICAS ===
-      title: 'Movies App',
+      title: AppConstants.appDisplayName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
 

@@ -2,7 +2,7 @@
 
 > Este é o guia do aplicativo Flutter. Execute os comandos desta página dentro de `frontend/`. Para a arquitetura completa, consulte o [README do repositório](../README.md). As alegações históricas de testes e funcionalidades abaixo não substituem a validação atual.
 
-# 🎬 Movie App - Flutter
+# 🎬 RTM (Rate That Movie) - Flutter
 
 Um aplicativo de filmes desenvolvido em Flutter seguindo **Clean Architecture** com padrão **BLoC** para gerenciamento de estado e **Result Pattern** para tratamento de erros.
 

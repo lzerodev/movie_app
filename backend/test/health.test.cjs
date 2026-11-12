@@ -15,7 +15,7 @@ test('API responde na rota versionada e não expõe funcionalidades ainda penden
     assert.equal(response.status, 200);
     assert.equal(response.headers.get('x-powered-by'), null);
     assert.deepEqual(await response.json(), {
-      status: 'ok', service: 'i-rate-that-movie-api',
+      status: 'ok', service: 'rtm-api',
     });
     for (const path of ['/health', '/api/v1/favorites', '/api/v1/auth']) {
       assert.equal((await fetch(`${baseUrl}${path}`)).status, 404);

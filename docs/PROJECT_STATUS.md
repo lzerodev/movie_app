@@ -79,3 +79,15 @@ O exemplo `frontend/lib/core/utils/secrets.dart.example` tinha um valor sensíve
 Foram removidos espaços ao final de linhas do script PowerShell de screenshots e do exemplo sanitizado; a sintaxe do script foi validada sem executá-lo. Quebras Markdown históricas do README do frontend foram preservadas na movimentação. Nenhuma configuração do VS Code foi incluída: atalhos e caminhos específicos da máquina permanecem locais.
 
 Não houve push, PR, merge, tag, deploy ou publicação. Esta organização de commits não comprova execução de containers, CI remoto ou disponibilidade em produção.
+
+## Marca RTM — 12/11/2026
+
+Nome curto: **RTM**. Nome completo: **RTM (Rate That Movie)**. A marca foi centralizada em `AppConstants` e aplicada à Home, ao título Flutter e ao diálogo Sobre. Os metadados visíveis de Android, iOS, macOS, Windows, Linux e web foram atualizados; o produto macOS inclui referências do bundle e do host de testes coerentes com `RTM.app`.
+
+A API usa o nome de pacote e identificador de serviço `rtm-api`; o teste HTTP acompanha essa mudança. O pacote Dart `movie_app`, IDs de aplicação/bundle, caminho do repositório e namespaces de infraestrutura são identificadores técnicos preservados. Nomes em documentação histórica continuam representando sua época.
+
+- Hot restart aplicado com sucesso ao app Windows conectado ao MCP; o usuário confirmou a marca RTM na captura posterior. O título nativo da janela exige recompilar e executar novamente.
+- Testes direcionados da Home: 13 aprovados, incluindo título RTM e diálogo Sobre. A abertura do diálogo expôs overflow em suas linhas de informações; rótulo e valor agora respeitam a largura disponível.
+- Backend: checagem de tipos, build e 1 teste HTTP aprovados após a mudança.
+- JSON, XML, plist e scheme alterados foram validados localmente. Nenhuma execução em Android/iOS/macOS/Linux foi afirmada.
+- Redesign do cabeçalho e remoção da busca duplicada são uma entrega separada, solicitada em seguida.

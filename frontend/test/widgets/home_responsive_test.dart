@@ -90,6 +90,11 @@ void main() {
       expect(ResponsiveUtils.isDesktop(context), isFalse);
       expect(find.byType(NavigationBar), findsOneWidget);
       expect(find.byType(FloatingActionButton), findsOneWidget);
+      expect(
+        tester.widget<MaterialApp>(find.byType(MaterialApp)).title,
+        'RTM (Rate That Movie)',
+      );
+      expect(find.text('RTM'), findsOneWidget);
       expect(find.text('Home'), findsOneWidget);
       expect(find.text('Notificações'), findsOneWidget);
       expect(find.text('Perfil'), findsOneWidget);
@@ -183,7 +188,9 @@ void main() {
         verifyNoMoreInteractions(nowPlaying);
       });
 
-      testWidgets('deve abrir menu de opções no AppBar', (tester) async {
+      testWidgets('deve abrir menu e identificar o app no Sobre', (
+        tester,
+      ) async {
         await pumpHome(tester);
         final menuButton = find.byIcon(Icons.more_vert_rounded);
         expect(menuButton, findsOneWidget);
@@ -193,6 +200,18 @@ void main() {
         expect(find.text('Lista para assistir'), findsOneWidget);
         expect(find.text('Configurações'), findsOneWidget);
         expect(find.text('Sobre'), findsOneWidget);
+        await tester.tap(find.text('Sobre'));
+        await tester.pumpAndSettle();
+        final dialog = find.byType(AlertDialog);
+        expect(dialog, findsOneWidget);
+        expect(
+          find.descendant(of: dialog, matching: find.text('RTM')),
+          findsOneWidget,
+        );
+        expect(find.text('Rate That Movie'), findsOneWidget);
+        await tester.tap(find.text('Fechar'));
+        await tester.pumpAndSettle();
+        expect(dialog, findsNothing);
       });
 
       testWidgets('deve mostrar snackbar ao tocar nas opções do perfil', (

@@ -1,4 +1,4 @@
-# Arquitetura — I Rate That Movie
+# Arquitetura — RTM (Rate That Movie)
 
 ## Separação de responsabilidades
 

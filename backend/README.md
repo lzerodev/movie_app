@@ -1,4 +1,4 @@
-# API — I Rate That Movie
+# API — RTM (Rate That Movie)
 
 API NestJS com Node.js 24 e TypeScript. Esta primeira entrega estabelece compilação, teste HTTP e empacotamento Docker.
 

@@ -3,6 +3,10 @@
 /// Centraliza todas as constantes usadas em toda a aplicação,
 /// incluindo URLs, chaves, configurações e valores padrão.
 class AppConstants {
+  static const String appShortName = 'RTM';
+  static const String appName = 'Rate That Movie';
+  static const String appDisplayName = 'RTM (Rate That Movie)';
+
   // URLs e Endpoints
   static const String tmdbBaseUrl = 'https://api.themoviedb.org/3';
   static const String tmdbImageBaseUrl = 'https://image.tmdb.org/t/p';
