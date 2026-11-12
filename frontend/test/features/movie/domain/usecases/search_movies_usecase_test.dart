@@ -44,39 +44,54 @@ void main() {
       ),
     ];
 
-    test('deve retornar lista de filmes quando a busca for bem-sucedida', () async {
-      // Arrange
-      when(() => mockRepository.searchMovies(query: query, page: page))
-          .thenAnswer((_) async => Success(movieList));
+    test(
+      'deve retornar lista de filmes quando a busca for bem-sucedida',
+      () async {
+        // Arrange
+        when(() => mockRepository.searchMovies(query: query, page: page))
+            .thenAnswer((_) async => Success(movieList));
 
-      // Act
-      final result = await useCase(params);
+        // Act
+        final result = await useCase(params);
 
-      // Assert
-      expect(result, isA<Success<List<Movie>>>());
-      final success = result as Success<List<Movie>>;
-      expect(success.data, equals(movieList));
-      expect(success.data.length, equals(2));
-      expect(success.data.first.title, equals('Inception'));
-      
-      verify(() => mockRepository.searchMovies(query: query, page: page)).called(1);
-    });
+        // Assert
+        expect(result, isA<Success<List<Movie>>>());
+        final success = result as Success<List<Movie>>;
+        expect(success.data, equals(movieList));
+        expect(success.data.length, equals(2));
+        expect(success.data.first.title, equals('Inception'));
 
-    test('deve retornar ValidationFailure quando query estiver vazia', () async {
-      // Arrange
-      const emptyParams = SearchMoviesParams(query: '', page: page);
+        verify(() => mockRepository.searchMovies(query: query, page: page))
+            .called(1);
+      },
+    );
 
-      // Act
-      final result = await useCase(emptyParams);
+    test(
+      'deve retornar ValidationFailure quando query estiver vazia',
+      () async {
+        // Arrange
+        const emptyParams = SearchMoviesParams(query: '', page: page);
 
-      // Assert
-      expect(result, isA<Error<List<Movie>>>());
-      final error = result as Error<List<Movie>>;
-      expect(error.failure, isA<ValidationFailure>());
-      expect(error.failure.message, contains('Query de pesquisa não pode estar vazia'));
-      
-      verifyNever(() => mockRepository.searchMovies(query: any(named: 'query'), page: any(named: 'page')));
-    });
+        // Act
+        final result = await useCase(emptyParams);
+
+        // Assert
+        expect(result, isA<Error<List<Movie>>>());
+        final error = result as Error<List<Movie>>;
+        expect(error.failure, isA<ValidationFailure>());
+        expect(
+          error.failure.message,
+          contains('Query de pesquisa não pode estar vazia'),
+        );
+
+        verifyNever(
+          () => mockRepository.searchMovies(
+            query: any(named: 'query'),
+            page: any(named: 'page'),
+          ),
+        );
+      },
+    );
 
     test('deve retornar ValidationFailure quando query tiver menos de 2 caracteres', () async {
       // Arrange
@@ -89,44 +104,64 @@ void main() {
       expect(result, isA<Error<List<Movie>>>());
       final error = result as Error<List<Movie>>;
       expect(error.failure, isA<ValidationFailure>());
-      expect(error.failure.message, contains('deve ter pelo menos 2 caracteres'));
-      
-      verifyNever(() => mockRepository.searchMovies(query: any(named: 'query'), page: any(named: 'page')));
+      expect(
+        error.failure.message,
+        contains('deve ter pelo menos 2 caracteres'),
+      );
+
+      verifyNever(
+        () => mockRepository.searchMovies(
+          query: any(named: 'query'),
+          page: any(named: 'page'),
+        ),
+      );
     });
 
-    test('deve retornar ValidationFailure quando page for menor que 1', () async {
-      // Arrange
-      const invalidPageParams = SearchMoviesParams(query: query, page: 0);
+    test(
+      'deve retornar ValidationFailure quando page for menor que 1',
+      () async {
+        // Arrange
+        const invalidPageParams = SearchMoviesParams(query: query, page: 0);
 
-      // Act
-      final result = await useCase(invalidPageParams);
+        // Act
+        final result = await useCase(invalidPageParams);
 
-      // Assert
-      expect(result, isA<Error<List<Movie>>>());
-      final error = result as Error<List<Movie>>;
-      expect(error.failure, isA<ValidationFailure>());
-      expect(error.failure.message, contains('Página deve ser maior que 0'));
-      
-      verifyNever(() => mockRepository.searchMovies(query: any(named: 'query'), page: any(named: 'page')));
-    });
+        // Assert
+        expect(result, isA<Error<List<Movie>>>());
+        final error = result as Error<List<Movie>>;
+        expect(error.failure, isA<ValidationFailure>());
+        expect(error.failure.message, contains('Página deve ser maior que 0'));
 
-    test('deve retornar NetworkFailure quando repositório falhar com erro de rede', () async {
-      // Arrange
-      const networkFailure = NetworkFailure(message: 'Erro de conexão');
-      when(() => mockRepository.searchMovies(query: query, page: page))
-          .thenAnswer((_) async => const Error(networkFailure));
+        verifyNever(
+          () => mockRepository.searchMovies(
+            query: any(named: 'query'),
+            page: any(named: 'page'),
+          ),
+        );
+      },
+    );
 
-      // Act
-      final result = await useCase(params);
+    test(
+      'deve retornar NetworkFailure quando repositório falhar com erro de rede',
+      () async {
+        // Arrange
+        const networkFailure = NetworkFailure(message: 'Erro de conexão');
+        when(() => mockRepository.searchMovies(query: query, page: page))
+            .thenAnswer((_) async => const Error(networkFailure));
 
-      // Assert
-      expect(result, isA<Error<List<Movie>>>());
-      final error = result as Error<List<Movie>>;
-      expect(error.failure, isA<NetworkFailure>());
-      expect(error.failure.message, equals('Erro de conexão'));
-      
-      verify(() => mockRepository.searchMovies(query: query, page: page)).called(1);
-    });
+        // Act
+        final result = await useCase(params);
+
+        // Assert
+        expect(result, isA<Error<List<Movie>>>());
+        final error = result as Error<List<Movie>>;
+        expect(error.failure, isA<NetworkFailure>());
+        expect(error.failure.message, equals('Erro de conexão'));
+
+        verify(() => mockRepository.searchMovies(query: query, page: page))
+            .called(1);
+      },
+    );
 
     test('deve retornar ServerFailure quando repositório falhar com erro do servidor', () async {
       // Arrange
@@ -142,8 +177,9 @@ void main() {
       final error = result as Error<List<Movie>>;
       expect(error.failure, isA<ServerFailure>());
       expect(error.failure.message, equals('Erro interno do servidor'));
-      
-      verify(() => mockRepository.searchMovies(query: query, page: page)).called(1);
+
+      verify(() => mockRepository.searchMovies(query: query, page: page))
+          .called(1);
     });
 
     test('deve retornar lista vazia quando não houver resultados', () async {
@@ -158,8 +194,9 @@ void main() {
       expect(result, isA<Success<List<Movie>>>());
       final success = result as Success<List<Movie>>;
       expect(success.data, isEmpty);
-      
-      verify(() => mockRepository.searchMovies(query: query, page: page)).called(1);
+
+      verify(() => mockRepository.searchMovies(query: query, page: page))
+          .called(1);
     });
   });
 

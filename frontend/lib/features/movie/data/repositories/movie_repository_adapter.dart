@@ -8,7 +8,7 @@ import '../../domain/repositories/i_movie_repository.dart';
 import '../models/movie.dart';
 
 /// Implementação moderna do repositório de filmes usando Result Pattern.
-/// 
+///
 /// Esta classe implementa IMovieRepository e faz requisições diretas à API
 /// seguindo os princípios da Clean Architecture.
 class MovieRepositoryAdapter implements IMovieRepository {
@@ -33,12 +33,20 @@ class MovieRepositoryAdapter implements IMovieRepository {
         final movies = results.map((movie) => Movie.fromJson(movie)).toList();
         return Success(movies);
       } else {
-        return Error(ServerFailure(message: 'Falha ao buscar filmes em cartaz: ${response.statusCode}'));
+        return Error(
+          ServerFailure(
+            message: 'Falha ao buscar filmes em cartaz: ${response.statusCode}',
+          ),
+        );
       }
     } on DioException catch (e) {
       return Error(_mapDioExceptionToFailure(e));
     } catch (e) {
-      return Error(ServerFailure(message: 'Erro inesperado ao buscar filmes em cartaz: $e'));
+      return Error(
+        ServerFailure(
+          message: 'Erro inesperado ao buscar filmes em cartaz: $e',
+        ),
+      );
     }
   }
 
@@ -63,19 +71,27 @@ class MovieRepositoryAdapter implements IMovieRepository {
         final movies = results.map((json) => Movie.fromJson(json)).toList();
         return Success(movies);
       } else {
-        return Error(ServerFailure(message: 'Falha ao pesquisar filmes: ${response.statusCode}'));
+        return Error(
+          ServerFailure(
+            message: 'Falha ao pesquisar filmes: ${response.statusCode}',
+          ),
+        );
       }
     } on DioException catch (e) {
       return Error(_mapDioExceptionToFailure(e));
     } catch (e) {
-      return Error(ServerFailure(message: 'Erro inesperado ao pesquisar filmes: $e'));
+      return Error(
+        ServerFailure(message: 'Erro inesperado ao pesquisar filmes: $e'),
+      );
     }
   }
 
   @override
   Future<Result<Movie>> getMovieDetails(int movieId) async {
     // TODO: Implementar quando o método existir no repositório legado
-    return const Error(ServerFailure(message: 'Método getMovieDetails não implementado ainda'));
+    return const Error(
+      ServerFailure(message: 'Método getMovieDetails não implementado ainda'),
+    );
   }
 
   /// Mapeia DioException para Failure apropriado.
@@ -89,11 +105,15 @@ class MovieRepositoryAdapter implements IMovieRepository {
         final statusCode = dioError.response?.statusCode;
         switch (statusCode) {
           case 401:
-            return const ServerFailure(message: 'Erro de autenticação - verifique a API key');
+            return const ServerFailure(
+              message: 'Erro de autenticação - verifique a API key',
+            );
           case 404:
             return const ServerFailure(message: 'Endpoint não encontrado');
           case 429:
-            return const ServerFailure(message: 'Muitas requisições - rate limit atingido');
+            return const ServerFailure(
+              message: 'Muitas requisições - rate limit atingido',
+            );
           default:
             return ServerFailure(message: 'Erro do servidor: $statusCode');
         }
@@ -102,7 +122,9 @@ class MovieRepositoryAdapter implements IMovieRepository {
       case DioExceptionType.connectionError:
         return const NetworkFailure(message: 'Erro de conexão com a internet');
       default:
-        return ServerFailure(message: 'Erro de rede desconhecido: ${dioError.message}');
+        return ServerFailure(
+          message: 'Erro de rede desconhecido: ${dioError.message}',
+        );
     }
   }
 }

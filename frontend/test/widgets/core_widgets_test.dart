@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movie_app/core/widgets/app_card.dart';
 import 'package:movie_app/core/widgets/app_button.dart';
@@ -6,18 +6,18 @@ import 'package:movie_app/core/widgets/app_text_field.dart';
 import 'package:movie_app/core/widgets/app_loading_indicator.dart';
 import 'package:movie_app/core/widgets/app_empty_state.dart';
 import 'package:movie_app/core/theme/app_design_system.dart';
+
 import '../test_helpers/test_helpers.dart';
 
 void main() {
   group('Core Widgets - Design System Tests', () {
-    
     group('AppCard Widget Tests', () {
-      testWidgets('deve renderizar AppCard básico corretamente', (WidgetTester tester) async {
+      testWidgets('deve renderizar AppCard básico corretamente', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
-            child: const AppCard(
-              child: Text('Test Content'),
-            ),
+            child: const AppCard(child: Text('Test Content')),
           ),
         );
 
@@ -25,7 +25,9 @@ void main() {
         expect(find.byType(AppCard), findsOneWidget);
       });
 
-      testWidgets('deve aplicar tamanhos diferentes corretamente', (WidgetTester tester) async {
+      testWidgets('deve aplicar tamanhos diferentes corretamente', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const Column(
@@ -43,9 +45,11 @@ void main() {
         expect(find.text('Large Card'), findsOneWidget);
       });
 
-      testWidgets('deve responder a toque quando onTap é fornecido', (WidgetTester tester) async {
+      testWidgets('deve responder a toque quando onTap é fornecido', (
+        WidgetTester tester,
+      ) async {
         bool tapped = false;
-        
+
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: AppCard(
@@ -59,7 +63,9 @@ void main() {
         expect(tapped, isTrue);
       });
 
-      testWidgets('deve aplicar variantes visuais corretamente', (WidgetTester tester) async {
+      testWidgets('deve aplicar variantes visuais corretamente', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const Column(
@@ -81,9 +87,11 @@ void main() {
     });
 
     group('AppButton Widget Tests', () {
-      testWidgets('deve renderizar botão primário corretamente', (WidgetTester tester) async {
+      testWidgets('deve renderizar botão primário corretamente', (
+        WidgetTester tester,
+      ) async {
         bool pressed = false;
-        
+
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: AppButton(
@@ -94,12 +102,14 @@ void main() {
         );
 
         expect(find.text('Primary Button'), findsOneWidget);
-        
+
         await tester.tap(find.byType(AppButton));
         expect(pressed, isTrue);
       });
 
-      testWidgets('deve mostrar loading state corretamente', (WidgetTester tester) async {
+      testWidgets('deve mostrar loading state corretamente', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const AppButton(
@@ -114,7 +124,9 @@ void main() {
         expect(find.text('Loading Button'), findsOneWidget);
       });
 
-      testWidgets('deve aplicar diferentes variantes', (WidgetTester tester) async {
+      testWidgets('deve aplicar diferentes variantes', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const Column(
@@ -144,7 +156,9 @@ void main() {
         expect(find.text('Text'), findsOneWidget);
       });
 
-      testWidgets('deve aplicar diferentes tamanhos', (WidgetTester tester) async {
+      testWidgets('deve aplicar diferentes tamanhos', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const Column(
@@ -174,7 +188,9 @@ void main() {
         expect(find.text('Large'), findsOneWidget);
       });
 
-      testWidgets('deve mostrar ícone quando fornecido', (WidgetTester tester) async {
+      testWidgets('deve mostrar ícone quando fornecido', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const AppButton(
@@ -191,12 +207,12 @@ void main() {
     });
 
     group('AppTextField Widget Tests', () {
-      testWidgets('deve renderizar campo de texto básico', (WidgetTester tester) async {
+      testWidgets('deve renderizar campo de texto básico', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
-            child: const AppTextField(
-              hintText: 'Enter text',
-            ),
+            child: const AppTextField(hintText: 'Enter text'),
           ),
         );
 
@@ -204,9 +220,11 @@ void main() {
         expect(find.text('Enter text'), findsOneWidget);
       });
 
-      testWidgets('deve chamar callback ao alterar texto', (WidgetTester tester) async {
+      testWidgets('deve chamar callback ao alterar texto', (
+        WidgetTester tester,
+      ) async {
         String? changedText;
-        
+
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: AppTextField(
@@ -220,7 +238,9 @@ void main() {
         expect(changedText, equals('Test text'));
       });
 
-      testWidgets('deve mostrar erro quando fornecido', (WidgetTester tester) async {
+      testWidgets('deve mostrar erro quando fornecido', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const AppTextField(
@@ -233,12 +253,12 @@ void main() {
         expect(find.text('Field is required'), findsOneWidget);
       });
 
-      testWidgets('deve mostrar botão de limpar quando habilitado', (WidgetTester tester) async {
+      testWidgets('deve mostrar botão de limpar quando habilitado', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
-            child: const AppTextField(
-              hintText: 'Test input',
-            ),
+            child: const AppTextField(hintText: 'Test input'),
           ),
         );
 
@@ -252,17 +272,19 @@ void main() {
     });
 
     group('AppLoadingIndicator Widget Tests', () {
-      testWidgets('deve mostrar loading indicator básico', (WidgetTester tester) async {
+      testWidgets('deve mostrar loading indicator básico', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
-          TestHelpers.createTestWidget(
-            child: const AppLoadingIndicator(),
-          ),
+          TestHelpers.createTestWidget(child: const AppLoadingIndicator()),
         );
 
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
       });
 
-      testWidgets('deve mostrar mensagem quando fornecida', (WidgetTester tester) async {
+      testWidgets('deve mostrar mensagem quando fornecida', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const AppLoadingIndicator(
@@ -276,7 +298,9 @@ void main() {
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
       });
 
-      testWidgets('deve aplicar diferentes tamanhos', (WidgetTester tester) async {
+      testWidgets('deve aplicar diferentes tamanhos', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const Column(
@@ -294,7 +318,9 @@ void main() {
     });
 
     group('AppEmptyState Widget Tests', () {
-      testWidgets('deve mostrar estado vazio básico', (WidgetTester tester) async {
+      testWidgets('deve mostrar estado vazio básico', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const AppEmptyState(
@@ -309,7 +335,9 @@ void main() {
         expect(find.text('Tente buscar por outro termo'), findsOneWidget);
       });
 
-      testWidgets('deve mostrar ícone quando fornecido', (WidgetTester tester) async {
+      testWidgets('deve mostrar ícone quando fornecido', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const AppEmptyState(
@@ -324,9 +352,11 @@ void main() {
         expect(find.text('Sem filmes'), findsOneWidget);
       });
 
-      testWidgets('deve executar ação quando botão é pressionado', (WidgetTester tester) async {
+      testWidgets('deve executar ação quando botão é pressionado', (
+        WidgetTester tester,
+      ) async {
         bool actionCalled = false;
-        
+
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: AppEmptyState(
@@ -345,14 +375,13 @@ void main() {
     });
 
     group('Design System Consistency Tests', () {
-      testWidgets('deve usar cores do design system', (WidgetTester tester) async {
+      testWidgets('deve usar cores do design system', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const AppCard(
-              child: AppButton(
-                text: 'Test Button',
-                onPressed: null,
-              ),
+              child: AppButton(text: 'Test Button', onPressed: null),
             ),
           ),
         );
@@ -362,7 +391,9 @@ void main() {
         expect(find.byType(AppButton), findsOneWidget);
       });
 
-      testWidgets('deve manter espaçamentos consistentes', (WidgetTester tester) async {
+      testWidgets('deve manter espaçamentos consistentes', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const Column(
@@ -381,23 +412,16 @@ void main() {
         expect(find.byType(AppCard), findsNWidgets(3));
       });
 
-      testWidgets('deve aplicar tipografia consistente', (WidgetTester tester) async {
+      testWidgets('deve aplicar tipografia consistente', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: const Column(
               children: [
-                Text(
-                  'Título',
-                  style: AppDesignSystem.headlineSmall,
-                ),
-                Text(
-                  'Subtítulo',
-                  style: AppDesignSystem.titleMedium,
-                ),
-                Text(
-                  'Corpo do texto',
-                  style: AppDesignSystem.bodyMedium,
-                ),
+                Text('Título', style: AppDesignSystem.headlineSmall),
+                Text('Subtítulo', style: AppDesignSystem.titleMedium),
+                Text('Corpo do texto', style: AppDesignSystem.bodyMedium),
               ],
             ),
           ),

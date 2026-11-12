@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+
 import '../../features/home/presentation/movieapp.dart';
 import '../../features/movie/presentation/pages/search_movies.dart';
 import '../../features/movie/presentation/pages/now_playing_movies.dart';
 
 /// Sistema de roteamento centralizado da aplicação.
-/// 
+///
 /// Define todas as rotas disponíveis e gerencia a navegação
 /// entre as diferentes telas da aplicação.
 class AppRouter {
@@ -18,15 +19,18 @@ class AppRouter {
     switch (settings.name) {
       case home:
         return _createRoute(const MovieApp(), settings);
-      
+
       case search:
         return _createRoute(const SearchMoviesPage(), settings);
-      
+
       case nowPlaying:
         return _createRoute(const NowPlayingMoviesPage(), settings);
-      
+
       default:
-        return _createErrorRoute('Rota não encontrada: ${settings.name}', settings);
+        return _createErrorRoute(
+          'Rota não encontrada: ${settings.name}',
+          settings,
+        );
     }
   }
 
@@ -40,21 +44,22 @@ class AppRouter {
         const end = Offset.zero;
         const curve = Curves.easeInOut;
 
-        var tween = Tween(begin: begin, end: end).chain(
-          CurveTween(curve: curve),
-        );
+        var tween = Tween(
+          begin: begin,
+          end: end,
+        ).chain(CurveTween(curve: curve));
 
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
+        return SlideTransition(position: animation.drive(tween), child: child);
       },
       transitionDuration: const Duration(milliseconds: 300),
     );
   }
 
   /// Cria uma rota de erro.
-  static PageRoute<dynamic> _createErrorRoute(String message, RouteSettings settings) {
+  static PageRoute<dynamic> _createErrorRoute(
+    String message,
+    RouteSettings settings,
+  ) {
     return MaterialPageRoute(
       settings: settings,
       builder: (context) => Scaffold(
@@ -63,11 +68,7 @@ class AppRouter {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.error_outline,
-                size: 64,
-                color: Colors.red,
-              ),
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
               Text(
                 message,
@@ -116,11 +117,9 @@ extension NavigationExtension on BuildContext {
     bool Function(Route<dynamic>) predicate, {
     Object? arguments,
   }) {
-    return Navigator.of(this).pushNamedAndRemoveUntil<T>(
-      newRouteName,
-      predicate,
-      arguments: arguments,
-    );
+    return Navigator.of(
+      this,
+    ).pushNamedAndRemoveUntil<T>(newRouteName, predicate, arguments: arguments);
   }
 
   /// Volta para a tela anterior.

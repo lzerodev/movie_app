@@ -43,61 +43,76 @@ void main() {
       ),
     ];
 
-    test('deve retornar lista de filmes em cartaz quando a busca for bem-sucedida', () async {
-      // Arrange
-      when(() => mockRepository.getNowPlayingMovies(page: page))
-          .thenAnswer((_) async => Success(movieList));
+    test(
+      'deve retornar lista de filmes em cartaz quando a busca for bem-sucedida',
+      () async {
+        // Arrange
+        when(() => mockRepository.getNowPlayingMovies(page: page))
+            .thenAnswer((_) async => Success(movieList));
 
-      // Act
-      final result = await useCase(params);
+        // Act
+        final result = await useCase(params);
 
-      // Assert
-      expect(result, isA<Success<List<Movie>>>());
-      final success = result as Success<List<Movie>>;
-      expect(success.data, equals(movieList));
-      expect(success.data.length, equals(2));
-      expect(success.data.first.title, equals('Now Playing Movie 1'));
-      
-      verify(() => mockRepository.getNowPlayingMovies(page: page)).called(1);
-    });
+        // Assert
+        expect(result, isA<Success<List<Movie>>>());
+        final success = result as Success<List<Movie>>;
+        expect(success.data, equals(movieList));
+        expect(success.data.length, equals(2));
+        expect(success.data.first.title, equals('Now Playing Movie 1'));
 
-    test('deve retornar ValidationFailure quando page for menor que 1', () async {
-      // Arrange
-      const invalidParams = GetNowPlayingMoviesParams(page: 0);
+        verify(() => mockRepository.getNowPlayingMovies(page: page)).called(1);
+      },
+    );
 
-      // Act
-      final result = await useCase(invalidParams);
+    test(
+      'deve retornar ValidationFailure quando page for menor que 1',
+      () async {
+        // Arrange
+        const invalidParams = GetNowPlayingMoviesParams(page: 0);
 
-      // Assert
-      expect(result, isA<Error<List<Movie>>>());
-      final error = result as Error<List<Movie>>;
-      expect(error.failure, isA<ValidationFailure>());
-      expect(error.failure.message, contains('Página deve ser maior que 0'));
-      
-      verifyNever(() => mockRepository.getNowPlayingMovies(page: any(named: 'page')));
-    });
+        // Act
+        final result = await useCase(invalidParams);
 
-    test('deve retornar NetworkFailure quando repositório falhar com erro de rede', () async {
-      // Arrange
-      const networkFailure = NetworkFailure(message: 'Falha de conectividade');
-      when(() => mockRepository.getNowPlayingMovies(page: page))
-          .thenAnswer((_) async => const Error(networkFailure));
+        // Assert
+        expect(result, isA<Error<List<Movie>>>());
+        final error = result as Error<List<Movie>>;
+        expect(error.failure, isA<ValidationFailure>());
+        expect(error.failure.message, contains('Página deve ser maior que 0'));
 
-      // Act
-      final result = await useCase(params);
+        verifyNever(
+          () => mockRepository.getNowPlayingMovies(page: any(named: 'page')),
+        );
+      },
+    );
 
-      // Assert
-      expect(result, isA<Error<List<Movie>>>());
-      final error = result as Error<List<Movie>>;
-      expect(error.failure, isA<NetworkFailure>());
-      expect(error.failure.message, equals('Falha de conectividade'));
-      
-      verify(() => mockRepository.getNowPlayingMovies(page: page)).called(1);
-    });
+    test(
+      'deve retornar NetworkFailure quando repositório falhar com erro de rede',
+      () async {
+        // Arrange
+        const networkFailure = NetworkFailure(
+          message: 'Falha de conectividade',
+        );
+        when(() => mockRepository.getNowPlayingMovies(page: page))
+            .thenAnswer((_) async => const Error(networkFailure));
+
+        // Act
+        final result = await useCase(params);
+
+        // Assert
+        expect(result, isA<Error<List<Movie>>>());
+        final error = result as Error<List<Movie>>;
+        expect(error.failure, isA<NetworkFailure>());
+        expect(error.failure.message, equals('Falha de conectividade'));
+
+        verify(() => mockRepository.getNowPlayingMovies(page: page)).called(1);
+      },
+    );
 
     test('deve retornar ServerFailure quando repositório falhar com erro do servidor', () async {
       // Arrange
-      const serverFailure = ServerFailure(message: 'Erro 500 - Servidor indisponível');
+      const serverFailure = ServerFailure(
+        message: 'Erro 500 - Servidor indisponível',
+      );
       when(() => mockRepository.getNowPlayingMovies(page: page))
           .thenAnswer((_) async => const Error(serverFailure));
 
@@ -109,39 +124,45 @@ void main() {
       final error = result as Error<List<Movie>>;
       expect(error.failure, isA<ServerFailure>());
       expect(error.failure.message, equals('Erro 500 - Servidor indisponível'));
-      
+
       verify(() => mockRepository.getNowPlayingMovies(page: page)).called(1);
     });
 
-    test('deve retornar lista vazia quando não houver filmes em cartaz', () async {
-      // Arrange
-      when(() => mockRepository.getNowPlayingMovies(page: page))
-          .thenAnswer((_) async => const Success(<Movie>[]));
+    test(
+      'deve retornar lista vazia quando não houver filmes em cartaz',
+      () async {
+        // Arrange
+        when(() => mockRepository.getNowPlayingMovies(page: page))
+            .thenAnswer((_) async => const Success(<Movie>[]));
 
-      // Act
-      final result = await useCase(params);
+        // Act
+        final result = await useCase(params);
 
-      // Assert
-      expect(result, isA<Success<List<Movie>>>());
-      final success = result as Success<List<Movie>>;
-      expect(success.data, isEmpty);
-      
-      verify(() => mockRepository.getNowPlayingMovies(page: page)).called(1);
-    });
+        // Assert
+        expect(result, isA<Success<List<Movie>>>());
+        final success = result as Success<List<Movie>>;
+        expect(success.data, isEmpty);
 
-    test('deve usar page 1 como valor padrão quando não especificado', () async {
-      // Arrange
-      const defaultParams = GetNowPlayingMoviesParams();
-      when(() => mockRepository.getNowPlayingMovies(page: 1))
-          .thenAnswer((_) async => Success(movieList));
+        verify(() => mockRepository.getNowPlayingMovies(page: page)).called(1);
+      },
+    );
 
-      // Act
-      final result = await useCase(defaultParams);
+    test(
+      'deve usar page 1 como valor padrão quando não especificado',
+      () async {
+        // Arrange
+        const defaultParams = GetNowPlayingMoviesParams();
+        when(() => mockRepository.getNowPlayingMovies(page: 1))
+            .thenAnswer((_) async => Success(movieList));
 
-      // Assert
-      expect(result, isA<Success<List<Movie>>>());
-      verify(() => mockRepository.getNowPlayingMovies(page: 1)).called(1);
-    });
+        // Act
+        final result = await useCase(defaultParams);
+
+        // Assert
+        expect(result, isA<Success<List<Movie>>>());
+        verify(() => mockRepository.getNowPlayingMovies(page: 1)).called(1);
+      },
+    );
   });
 
   group('GetNowPlayingMoviesParams', () {

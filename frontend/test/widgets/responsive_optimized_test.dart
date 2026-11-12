@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movie_app/core/utils/responsive_utils.dart';
 
@@ -26,7 +26,9 @@ void main() {
     }
 
     group('ResponsiveUtils Core', () {
-      testWidgets('deve detectar dispositivo móvel corretamente', (WidgetTester tester) async {
+      testWidgets('deve detectar dispositivo móvel corretamente', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createResponsiveTestWidget(
             screenSize: mobileSize,
@@ -49,7 +51,9 @@ void main() {
         expect(find.text('isDesktop: false'), findsOneWidget);
       });
 
-      testWidgets('deve detectar tablet corretamente', (WidgetTester tester) async {
+      testWidgets('deve detectar tablet corretamente', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createResponsiveTestWidget(
             screenSize: tabletSize,
@@ -72,7 +76,9 @@ void main() {
         expect(find.text('isDesktop: false'), findsOneWidget);
       });
 
-      testWidgets('deve detectar desktop corretamente', (WidgetTester tester) async {
+      testWidgets('deve detectar desktop corretamente', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createResponsiveTestWidget(
             screenSize: desktopSize,
@@ -97,7 +103,9 @@ void main() {
     });
 
     group('Layout Responsivo', () {
-      testWidgets('deve aplicar colunas corretas por dispositivo', (WidgetTester tester) async {
+      testWidgets('deve aplicar colunas corretas por dispositivo', (
+        WidgetTester tester,
+      ) async {
         for (final testCase in [
           {'size': mobileSize, 'expectedCols': 1},
           {'size': tabletSize, 'expectedCols': 2},
@@ -110,18 +118,19 @@ void main() {
               child: Builder(
                 builder: (context) {
                   final columns = ResponsiveUtils.getGridColumns(context);
-                  
+
                   return Column(
                     children: [
                       Text('Columns: $columns'),
                       Text('Expected: ${testCase['expectedCols']}'),
                       Expanded(
                         child: GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: columns,
-                            crossAxisSpacing: 8.0,
-                            mainAxisSpacing: 8.0,
-                          ),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: columns,
+                                crossAxisSpacing: 8.0,
+                                mainAxisSpacing: 8.0,
+                              ),
                           itemCount: 4,
                           itemBuilder: (context, index) => Container(
                             key: Key('grid-item-$index'),
@@ -140,13 +149,18 @@ void main() {
           await tester.pump();
 
           // Verifica se o número de colunas está correto
-          expect(find.text('Columns: ${testCase['expectedCols']}'), findsOneWidget);
+          expect(
+            find.text('Columns: ${testCase['expectedCols']}'),
+            findsOneWidget,
+          );
           // Verifica se pelo menos um item é renderizado
           expect(find.text('Item 0'), findsOneWidget);
         }
       });
 
-      testWidgets('deve adaptar valores com responsive', (WidgetTester tester) async {
+      testWidgets('deve adaptar valores com responsive', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createResponsiveTestWidget(
             screenSize: mobileSize,
@@ -158,7 +172,7 @@ void main() {
                   tablet: 24.0,
                   desktop: 32.0,
                 );
-                
+
                 return Padding(
                   padding: EdgeInsets.all(padding),
                   child: Container(
@@ -178,18 +192,12 @@ void main() {
     });
 
     group('Breakpoints e Media Queries', () {
-      testWidgets('deve aplicar estilos corretos por breakpoint', (WidgetTester tester) async {
+      testWidgets('deve aplicar estilos corretos por breakpoint', (
+        WidgetTester tester,
+      ) async {
         final breakpointTests = [
-          {
-            'size': mobileSize,
-            'name': 'Mobile',
-            'expectedColor': Colors.red,
-          },
-          {
-            'size': tabletSize,
-            'name': 'Tablet',
-            'expectedColor': Colors.green,
-          },
+          {'size': mobileSize, 'name': 'Mobile', 'expectedColor': Colors.red},
+          {'size': tabletSize, 'name': 'Tablet', 'expectedColor': Colors.green},
           {
             'size': desktopSize,
             'name': 'Desktop',
@@ -204,7 +212,7 @@ void main() {
               child: Builder(
                 builder: (context) {
                   Color containerColor;
-                  
+
                   if (ResponsiveUtils.isMobile(context)) {
                     containerColor = Colors.red;
                   } else if (ResponsiveUtils.isTablet(context)) {
@@ -212,7 +220,7 @@ void main() {
                   } else {
                     containerColor = Colors.blue;
                   }
-                  
+
                   return Container(
                     key: Key('responsive-container-${test['name']}'),
                     width: 100,
@@ -225,12 +233,17 @@ void main() {
             ),
           );
 
-          expect(find.byKey(Key('responsive-container-${test['name']}')), findsOneWidget);
+          expect(
+            find.byKey(Key('responsive-container-${test['name']}')),
+            findsOneWidget,
+          );
           expect(find.text(test['name'] as String), findsOneWidget);
         }
       });
 
-      testWidgets('deve detectar device type corretamente', (WidgetTester tester) async {
+      testWidgets('deve detectar device type corretamente', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createResponsiveTestWidget(
             screenSize: tabletSize,
@@ -248,7 +261,9 @@ void main() {
     });
 
     group('Edge Cases e Performance', () {
-      testWidgets('deve lidar com telas muito pequenas', (WidgetTester tester) async {
+      testWidgets('deve lidar com telas muito pequenas', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createResponsiveTestWidget(
             screenSize: const Size(200, 300),
@@ -272,7 +287,9 @@ void main() {
         expect(find.text('Is Mobile: true'), findsOneWidget);
       });
 
-      testWidgets('deve lidar com telas muito grandes', (WidgetTester tester) async {
+      testWidgets('deve lidar com telas muito grandes', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createResponsiveTestWidget(
             screenSize: const Size(3840, 2160), // 4K
@@ -284,7 +301,9 @@ void main() {
                     Text('Width: ${mediaQuery.size.width}'),
                     Text('Height: ${mediaQuery.size.height}'),
                     Text('Is Desktop: ${ResponsiveUtils.isDesktop(context)}'),
-                    Text('Is Large Desktop: ${ResponsiveUtils.isLargeDesktop(context)}'),
+                    Text(
+                      'Is Large Desktop: ${ResponsiveUtils.isLargeDesktop(context)}',
+                    ),
                   ],
                 );
               },
@@ -298,7 +317,9 @@ void main() {
         expect(find.text('Is Large Desktop: true'), findsOneWidget);
       });
 
-      testWidgets('deve funcionar com responsive helper', (WidgetTester tester) async {
+      testWidgets('deve funcionar com responsive helper', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createResponsiveTestWidget(
             screenSize: tabletSize,
@@ -310,7 +331,7 @@ void main() {
                   tablet: 'Tablet Value',
                   desktop: 'Desktop Value',
                 );
-                
+
                 return Text('Result: $value');
               },
             ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MySearchBar extends StatefulWidget {
   final TextEditingController controller;
@@ -39,16 +39,17 @@ class _MySearchBarState extends State<MySearchBar> {
         controller: widget.controller,
         decoration: InputDecoration(
           hintText: 'Digite o nome do filme...',
-          hintStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            color: Colors.grey,
+          hintStyle: const TextStyle(fontFamily: 'Poppins', color: Colors.grey),
+          prefixIcon: const Icon(
+            Icons.search,
+            color: Color.fromARGB(255, 142, 139, 139),
           ),
-          prefixIcon: const Icon(Icons.search,
-              color: Color.fromARGB(255, 142, 139, 139)),
           suffixIcon: widget.controller.text.isNotEmpty
               ? IconButton(
-                  icon: const Icon(Icons.clear,
-                      color: Color.fromARGB(255, 142, 139, 139)),
+                  icon: const Icon(
+                    Icons.clear,
+                    color: Color.fromARGB(255, 142, 139, 139),
+                  ),
                   onPressed: () {
                     widget.controller.clear();
                   },
@@ -60,21 +61,20 @@ class _MySearchBarState extends State<MySearchBar> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30.0),
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 142, 139, 139)),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(255, 142, 139, 139),
+            ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30.0),
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 142, 139, 139)),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(255, 142, 139, 139),
+            ),
           ),
           filled: true,
           fillColor: Colors.white,
         ),
-        style: const TextStyle(
-          fontFamily: 'Poppins',
-          color: Colors.black,
-        ),
+        style: const TextStyle(fontFamily: 'Poppins', color: Colors.black),
         cursorColor: Colors.black,
         textInputAction: TextInputAction.search,
         onSubmitted: (_) => widget.onSubmitted(),

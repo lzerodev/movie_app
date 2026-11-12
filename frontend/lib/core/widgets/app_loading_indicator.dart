@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../theme/app_design_system.dart';
 
@@ -56,10 +56,10 @@ class AppLoadingIndicator extends StatelessWidget {
     this.color,
     this.message,
     this.messageStyle,
-  })  : size = AppLoadingSize.small,
-        variant = AppLoadingVariant.inline,
-        strokeWidth = null,
-        showMessage = true;
+  }) : size = AppLoadingSize.small,
+       variant = AppLoadingVariant.inline,
+       strokeWidth = null,
+       showMessage = true;
 
   /// Factory para loading de página inteira
   const AppLoadingIndicator.page({
@@ -67,10 +67,10 @@ class AppLoadingIndicator extends StatelessWidget {
     this.color,
     this.message,
     this.messageStyle,
-  })  : size = AppLoadingSize.large,
-        variant = AppLoadingVariant.page,
-        strokeWidth = null,
-        showMessage = true;
+  }) : size = AppLoadingSize.large,
+       variant = AppLoadingVariant.page,
+       strokeWidth = null,
+       showMessage = true;
 
   /// Factory para loading de card personalizado
   const AppLoadingIndicator.card({
@@ -78,11 +78,11 @@ class AppLoadingIndicator extends StatelessWidget {
     String? message,
     this.color,
     this.messageStyle,
-  })  : size = AppLoadingSize.medium,
-        variant = AppLoadingVariant.card,
-        strokeWidth = null,
-        showMessage = true,
-        message = message ?? 'Carregando...';
+  }) : size = AppLoadingSize.medium,
+       variant = AppLoadingVariant.card,
+       strokeWidth = null,
+       showMessage = true,
+       message = message ?? 'Carregando...';
 
   @override
   Widget build(BuildContext context) {
@@ -146,9 +146,7 @@ class AppLoadingIndicator extends StatelessWidget {
 
   Widget _buildInline() {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: AppDesignSystem.spaceXl,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: AppDesignSystem.spaceXl),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -181,7 +179,7 @@ class AppLoadingIndicator extends StatelessWidget {
               borderRadius: AppDesignSystem.borderRadiusLg,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -222,13 +220,13 @@ class AppLoadingIndicator extends StatelessWidget {
               end: Alignment.bottomRight,
               colors: [
                 AppDesignSystem.cardColor,
-                AppDesignSystem.cardColor.withOpacity(0.8),
+                AppDesignSystem.cardColor.withValues(alpha: 0.8),
               ],
             ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withValues(alpha: 0.2),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -244,7 +242,9 @@ class AppLoadingIndicator extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       color ?? AppDesignSystem.accentColor,
-                      (color ?? AppDesignSystem.accentColor).withOpacity(0.7),
+                      (color ?? AppDesignSystem.accentColor).withValues(
+                        alpha: 0.7,
+                      ),
                     ],
                   ),
                   shape: BoxShape.circle,
@@ -265,7 +265,8 @@ class AppLoadingIndicator extends StatelessWidget {
   }
 
   Widget _buildMessage() {
-    final effectiveStyle = messageStyle ??
+    final effectiveStyle =
+        messageStyle ??
         AppDesignSystem.bodyMedium.copyWith(
           color: AppDesignSystem.textSecondaryColor,
           fontWeight: FontWeight.w500,
@@ -302,11 +303,7 @@ class AppLoadingIndicator extends StatelessWidget {
 }
 
 /// Tamanhos disponíveis para o loading
-enum AppLoadingSize {
-  small,
-  medium,
-  large,
-}
+enum AppLoadingSize { small, medium, large }
 
 /// Variantes visuais do loading
 enum AppLoadingVariant {

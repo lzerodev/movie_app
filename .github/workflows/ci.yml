@@ -1,4 +1,4 @@
-name: Flutter CI/CD Pipeline
+name: Frontend Flutter CI
 
 on:
   push:
@@ -10,18 +10,32 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '26'
+
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.2'
+        flutter-version: '3.50.0'
         channel: 'stable'
         cache: true
         
+    - name: Prepare CI configuration
+      run: |
+        cp .env.example .env
+        printf "class AppSecrets { static const String tmdbApiKey = 'ci-placeholder'; }\n" > lib/core/utils/secrets.dart
+
     - name: Get dependencies
       run: flutter pub get
       
@@ -35,28 +49,42 @@ jobs:
       run: flutter test --coverage --reporter expanded
       
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       with:
-        file: coverage/lcov.info
+        files: frontend/coverage/lcov.info
         flags: unittests
         name: codecov-umbrella
         
   performance:
     name: Performance Tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
     needs: test
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '26'
+
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.2'
+        flutter-version: '3.50.0'
         channel: 'stable'
         cache: true
         
+    - name: Prepare CI configuration
+      run: |
+        cp .env.example .env
+        printf "class AppSecrets { static const String tmdbApiKey = 'ci-placeholder'; }\n" > lib/core/utils/secrets.dart
+
     - name: Get dependencies
       run: flutter pub get
       
@@ -69,6 +97,9 @@ jobs:
   build:
     name: Build APK
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
     needs: test
     if: github.ref == 'refs/heads/main'
     
@@ -76,13 +107,24 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '26'
+
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.2'
+        flutter-version: '3.50.0'
         channel: 'stable'
         cache: true
         
+    - name: Prepare CI configuration
+      run: |
+        cp .env.example .env
+        printf "class AppSecrets { static const String tmdbApiKey = 'ci-placeholder'; }\n" > lib/core/utils/secrets.dart
+
     - name: Get dependencies
       run: flutter pub get
       
@@ -90,26 +132,40 @@ jobs:
       run: flutter build apk --release
       
     - name: Upload APK artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: release-apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+        path: frontend/build/app/outputs/flutter-apk/app-release.apk
         
   security:
     name: Security Scan
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '26'
+
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.2'
+        flutter-version: '3.50.0'
         channel: 'stable'
         cache: true
         
+    - name: Prepare CI configuration
+      run: |
+        cp .env.example .env
+        printf "class AppSecrets { static const String tmdbApiKey = 'ci-placeholder'; }\n" > lib/core/utils/secrets.dart
+
     - name: Get dependencies
       run: flutter pub get
       
@@ -124,18 +180,32 @@ jobs:
   quality:
     name: Code Quality
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '26'
+
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.2'
+        flutter-version: '3.50.0'
         channel: 'stable'
         cache: true
         
+    - name: Prepare CI configuration
+      run: |
+        cp .env.example .env
+        printf "class AppSecrets { static const String tmdbApiKey = 'ci-placeholder'; }\n" > lib/core/utils/secrets.dart
+
     - name: Get dependencies
       run: flutter pub get
       
@@ -156,19 +226,33 @@ jobs:
   responsive:
     name: Responsive Tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
     needs: test
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '26'
+
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.2'
+        flutter-version: '3.50.0'
         channel: 'stable'
         cache: true
         
+    - name: Prepare CI configuration
+      run: |
+        cp .env.example .env
+        printf "class AppSecrets { static const String tmdbApiKey = 'ci-placeholder'; }\n" > lib/core/utils/secrets.dart
+
     - name: Get dependencies
       run: flutter pub get
       

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
@@ -11,10 +11,14 @@ import 'package:movie_app/features/movie/domain/usecases/search_movies_usecase.d
 
 // Mocks
 class MockSearchMoviesUseCase extends Mock implements SearchMoviesUseCase {}
-class MockGetNowPlayingMoviesUseCase extends Mock implements GetNowPlayingMoviesUseCase {}
+
+class MockGetNowPlayingMoviesUseCase extends Mock
+    implements GetNowPlayingMoviesUseCase {}
 
 // Fakes para registerFallbackValue
-class FakeGetNowPlayingMoviesParams extends Fake implements GetNowPlayingMoviesParams {}
+class FakeGetNowPlayingMoviesParams extends Fake
+    implements GetNowPlayingMoviesParams {}
+
 class FakeSearchMoviesParams extends Fake implements SearchMoviesParams {}
 
 void main() {
@@ -26,7 +30,7 @@ void main() {
     setUp(() {
       registerFallbackValue(FakeGetNowPlayingMoviesParams());
       registerFallbackValue(FakeSearchMoviesParams());
-      
+
       mockSearchUseCase = MockSearchMoviesUseCase();
       mockNowPlayingUseCase = MockGetNowPlayingMoviesUseCase();
       bloc = MovieModernBloc(
@@ -40,39 +44,41 @@ void main() {
     });
 
     group('BLoC Logic Tests', () {
-      test('deve emitir estado de loading e sucesso ao buscar filmes', () async {
-        // Arrange
-        final testMovies = [
-          Movie(
-            id: 1,
-            title: 'Test Movie 1',
-            posterPath: '/poster1.jpg',
-            backdropPath: '/backdrop1.jpg',
-            releaseDate: DateTime(2024, 1, 1),
-            overview: 'Test movie overview 1',
-            voteAverage: 7.5,
-          ),
-        ];
-
-        when(() => mockNowPlayingUseCase(any())).thenAnswer(
-          (_) async => Success(testMovies),
-        );
-
-        // Act & Assert
-        expectLater(
-          bloc.stream,
-          emitsInOrder([
-            const MovieModernState(status: MovieModernStatus.loading),
-            MovieModernState(
-              status: MovieModernStatus.success,
-              movies: testMovies,
-              hasReachedMax: true,
+      test(
+        'deve emitir estado de loading e sucesso ao buscar filmes',
+        () async {
+          // Arrange
+          final testMovies = [
+            Movie(
+              id: 1,
+              title: 'Test Movie 1',
+              posterPath: '/poster1.jpg',
+              backdropPath: '/backdrop1.jpg',
+              releaseDate: DateTime(2024, 1, 1),
+              overview: 'Test movie overview 1',
+              voteAverage: 7.5,
             ),
-          ]),
-        );
+          ];
 
-        bloc.add(const MovieModernNowPlayingFetched());
-      });
+          when(() => mockNowPlayingUseCase(any()))
+              .thenAnswer((_) async => Success(testMovies));
+
+          // Act & Assert
+          expectLater(
+            bloc.stream,
+            emitsInOrder([
+              const MovieModernState(status: MovieModernStatus.loading),
+              MovieModernState(
+                status: MovieModernStatus.success,
+                movies: testMovies,
+                hasReachedMax: true,
+              ),
+            ]),
+          );
+
+          bloc.add(const MovieModernNowPlayingFetched());
+        },
+      );
 
       test('deve emitir estado de erro quando usecase falha', () async {
         // Arrange
@@ -97,7 +103,9 @@ void main() {
     });
 
     group('Widget Tests', () {
-      testWidgets('deve renderizar básico sem crashes', (WidgetTester tester) async {
+      testWidgets('deve renderizar básico sem crashes', (
+        WidgetTester tester,
+      ) async {
         // Arrange
         final testMovies = [
           Movie(
@@ -111,9 +119,8 @@ void main() {
           ),
         ];
 
-        when(() => mockNowPlayingUseCase(any())).thenAnswer(
-          (_) async => Success(testMovies),
-        );
+        when(() => mockNowPlayingUseCase(any()))
+            .thenAnswer((_) async => Success(testMovies));
 
         // Act
         await tester.pumpWidget(

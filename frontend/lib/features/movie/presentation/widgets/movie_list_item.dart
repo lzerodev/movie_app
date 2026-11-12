@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/mixins/design_system_mixin.dart';
@@ -10,10 +10,7 @@ import '../../data/models/movie.dart';
 class MovieListItem extends StatefulWidget with DesignSystemMixin {
   final Movie movie;
 
-  const MovieListItem({
-    super.key,
-    required this.movie,
-  });
+  const MovieListItem({super.key, required this.movie});
 
   @override
   State<MovieListItem> createState() => _MovieListItemState();
@@ -31,13 +28,9 @@ class _MovieListItemState extends State<MovieListItem>
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.02,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.02).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -146,8 +139,8 @@ class _MovieListItemState extends State<MovieListItem>
 
   Widget _buildMovieInfo() {
     final voteAverage = widget.movie.voteAverage;
-    final releaseDate =
-        DateFormat.yMMMd('pt_BR').format(widget.movie.releaseDate);
+    final releaseDate = DateFormat.yMMMd('pt_BR')
+        .format(widget.movie.releaseDate);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,23 +152,20 @@ class _MovieListItemState extends State<MovieListItem>
           overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: AppDesignSystem.spaceSm),
-        Row(
+        Wrap(
+          spacing: AppDesignSystem.spaceMd,
+          runSpacing: AppDesignSystem.spaceXs,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            const Icon(
-              Icons.star,
-              color: Colors.amber,
-              size: 16,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.star, color: Colors.amber, size: 16),
+                const SizedBox(width: AppDesignSystem.spaceXs),
+                Text(voteAverage.toStringAsFixed(1), style: subtitleStyle),
+              ],
             ),
-            const SizedBox(width: AppDesignSystem.spaceXs),
-            Text(
-              voteAverage.toStringAsFixed(1),
-              style: subtitleStyle,
-            ),
-            const SizedBox(width: AppDesignSystem.spaceMd),
-            Text(
-              releaseDate,
-              style: subtitleStyle,
-            ),
+            Text(releaseDate, style: subtitleStyle),
           ],
         ),
         const SizedBox(height: AppDesignSystem.spaceSm),

@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+
 import '../theme/app_design_system.dart';
 
 /// Configuração de tema da aplicação usando o Design System.
-/// 
+///
 /// Define o tema principal da aplicação com cores, tipografia,
 /// componentes e outros elementos visuais consistentes.
 class AppTheme {
@@ -12,7 +13,7 @@ class AppTheme {
       // === CONFIGURAÇÕES BÁSICAS ===
       useMaterial3: true,
       fontFamily: AppDesignSystem.fontFamily,
-      
+
       // === CORES ===
       colorScheme: const ColorScheme.dark(
         primary: AppDesignSystem.accentColor,
@@ -24,10 +25,10 @@ class AppTheme {
         error: AppDesignSystem.errorColor,
         onError: AppDesignSystem.textPrimaryColor,
       ),
-      
+
       // === SCAFFOLD ===
       scaffoldBackgroundColor: const Color.fromARGB(124, 2, 2, 39),
-      
+
       // === APP BAR ===
       appBarTheme: const AppBarTheme(
         elevation: 0,
@@ -44,17 +45,17 @@ class AppTheme {
           size: 24,
         ),
       ),
-      
+
       // === CARDS ===
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppDesignSystem.cardColor,
         elevation: 4,
         shape: const RoundedRectangleBorder(
           borderRadius: AppDesignSystem.borderRadiusMd,
         ),
-        shadowColor: Colors.black.withOpacity(0.3),
+        shadowColor: Colors.black.withValues(alpha: 0.3),
       ),
-      
+
       // === ELEVATED BUTTON ===
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -71,7 +72,7 @@ class AppTheme {
           elevation: 2,
         ),
       ),
-      
+
       // === TEXT BUTTON ===
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
@@ -83,7 +84,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // === OUTLINED BUTTON ===
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
@@ -99,7 +100,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // === INPUT DECORATION ===
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -114,24 +115,15 @@ class AppTheme {
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: AppDesignSystem.borderRadiusMd,
-          borderSide: BorderSide(
-            color: AppDesignSystem.accentColor,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: AppDesignSystem.accentColor, width: 2),
         ),
         errorBorder: const OutlineInputBorder(
           borderRadius: AppDesignSystem.borderRadiusMd,
-          borderSide: BorderSide(
-            color: AppDesignSystem.errorColor,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: AppDesignSystem.errorColor, width: 2),
         ),
         focusedErrorBorder: const OutlineInputBorder(
           borderRadius: AppDesignSystem.borderRadiusMd,
-          borderSide: BorderSide(
-            color: AppDesignSystem.errorColor,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: AppDesignSystem.errorColor, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: AppDesignSystem.spaceMd,
@@ -142,7 +134,7 @@ class AppTheme {
         ),
         labelStyle: AppDesignSystem.bodyMedium,
       ),
-      
+
       // === BOTTOM NAVIGATION BAR ===
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppDesignSystem.primaryColor,
@@ -153,7 +145,7 @@ class AppTheme {
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
-      
+
       // === CHIP ===
       chipTheme: const ChipThemeData(
         backgroundColor: AppDesignSystem.surfaceColor,
@@ -169,9 +161,9 @@ class AppTheme {
           borderRadius: AppDesignSystem.borderRadiusSm,
         ),
       ),
-      
+
       // === DIALOG ===
-      dialogTheme: const DialogTheme(
+      dialogTheme: const DialogThemeData(
         backgroundColor: AppDesignSystem.surfaceColor,
         titleTextStyle: AppDesignSystem.headlineSmall,
         contentTextStyle: AppDesignSystem.bodyMedium,
@@ -179,14 +171,14 @@ class AppTheme {
           borderRadius: AppDesignSystem.borderRadiusLg,
         ),
       ),
-      
+
       // === DIVIDER ===
       dividerTheme: const DividerThemeData(
         color: AppDesignSystem.textTertiaryColor,
         thickness: 1,
         space: AppDesignSystem.spaceMd,
       ),
-      
+
       // === FLOATING ACTION BUTTON ===
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: AppDesignSystem.accentColor,
@@ -194,13 +186,13 @@ class AppTheme {
         elevation: 4,
         shape: CircleBorder(),
       ),
-      
+
       // === ICON ===
       iconTheme: const IconThemeData(
         color: AppDesignSystem.textSecondaryColor,
         size: 24,
       ),
-      
+
       // === LIST TILE ===
       listTileTheme: const ListTileThemeData(
         textColor: AppDesignSystem.textPrimaryColor,
@@ -211,14 +203,14 @@ class AppTheme {
           vertical: AppDesignSystem.spaceSm,
         ),
       ),
-      
+
       // === PROGRESS INDICATOR ===
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: AppDesignSystem.accentColor,
         linearTrackColor: AppDesignSystem.textTertiaryColor,
         circularTrackColor: AppDesignSystem.textTertiaryColor,
       ),
-      
+
       // === SNACK BAR ===
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: AppDesignSystem.surfaceColor,
@@ -229,7 +221,7 @@ class AppTheme {
         behavior: SnackBarBehavior.floating,
         elevation: 4,
       ),
-      
+
       // === TEXT THEME ===
       textTheme: const TextTheme(
         displayLarge: AppDesignSystem.headlineLarge,
@@ -248,7 +240,7 @@ class AppTheme {
         labelMedium: AppDesignSystem.labelMedium,
         labelSmall: AppDesignSystem.labelSmall,
       ),
-      
+
       // === TOOLTIP ===
       tooltipTheme: const TooltipThemeData(
         decoration: BoxDecoration(

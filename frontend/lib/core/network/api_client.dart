@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+
 import '../utils/app_constants.dart';
 import '../utils/secure_config.dart';
 
 /// Cliente HTTP centralizado para toda a aplicação.
-/// 
+///
 /// Fornece uma instância configurada do Dio com interceptors,
 /// configurações de timeout e tratamento de erros padronizado.
 class ApiClient {

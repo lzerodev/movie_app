@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/core/theme/app_design_system.dart';
 import 'package:movie_app/core/widgets/widgets.dart';
@@ -22,9 +22,7 @@ class _MovieListViewState extends State<MovieListView> {
 
     // Dispara o evento para carregar filmes em cartaz
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<MovieModernBloc>().add(
-            const MovieModernNowPlayingFetched(),
-          );
+      context.read<MovieModernBloc>().add(const MovieModernNowPlayingFetched());
     });
   }
 
@@ -37,17 +35,25 @@ class _MovieListViewState extends State<MovieListView> {
             // Lista principal
             switch (state.status) {
               MovieModernStatus.initial => const Center(
-                  child: CircularProgressIndicator(color: Colors.black)),
+                child: CircularProgressIndicator(color: Colors.black),
+              ),
               MovieModernStatus.loading when state.movies.isEmpty =>
                 const Center(
-                    child: CircularProgressIndicator(color: Colors.black)),
+                  child: CircularProgressIndicator(color: Colors.black),
+                ),
               MovieModernStatus.failure => Center(
-                  child: Text(
-                      'Erro: ${state.errorMessage ?? "Erro desconhecido"}')),
-              MovieModernStatus.success =>
-                _buildMovieList(state.movies, state.hasReachedMax),
+                child: Text(
+                  'Erro: ${state.errorMessage ?? "Erro desconhecido"}',
+                ),
+              ),
+              MovieModernStatus.success => _buildMovieList(
+                state.movies,
+                state.hasReachedMax,
+              ),
               MovieModernStatus.loading => _buildMovieList(
-                  state.movies, false), // Mostra loading no fim da lista
+                state.movies,
+                false,
+              ), // Mostra loading no fim da lista
             },
           ],
         );
@@ -67,8 +73,8 @@ class _MovieListViewState extends State<MovieListView> {
           end: Alignment.bottomCenter,
           colors: [
             AppDesignSystem.backgroundColor,
-            AppDesignSystem.backgroundColor.withOpacity(0.95),
-            AppDesignSystem.primaryColor.withOpacity(0.1),
+            AppDesignSystem.backgroundColor.withValues(alpha: 0.95),
+            AppDesignSystem.primaryColor.withValues(alpha: 0.1),
           ],
         ),
       ),
@@ -100,15 +106,14 @@ class _MovieListViewState extends State<MovieListView> {
           addAutomaticKeepAlives: true, // Mantém widgets na memória
           addRepaintBoundaries: true, // Otimiza repaint
           addSemanticIndexes: true, // Para acessibilidade
-
           // === CONFIGURAÇÕES DE CACHE ===
-          cacheExtent: 500.0, // Cache extra para scroll suave
-
+          scrollCacheExtent: const ScrollCacheExtent.pixels(
+            500.0,
+          ), // Cache extra para scroll suave
           // === CONFIGURAÇÕES EXISTENTES ===
           itemCount: hasReachedMax ? movies.length : movies.length + 1,
-          separatorBuilder: (context, index) => const SizedBox(
-            height: AppDesignSystem.spaceSm,
-          ),
+          separatorBuilder: (context, index) =>
+              const SizedBox(height: AppDesignSystem.spaceSm),
           itemBuilder: (BuildContext context, int index) {
             if (index >= movies.length) {
               return const AppLoadingIndicator.card(
@@ -129,9 +134,7 @@ class _MovieListViewState extends State<MovieListView> {
 
   Future<void> _handleRefresh() async {
     // Reset da paginação e recarregamento
-    context.read<MovieModernBloc>().add(
-          const MovieModernNowPlayingFetched(),
-        );
+    context.read<MovieModernBloc>().add(const MovieModernNowPlayingFetched());
 
     // Simula um delay mínimo para UX
     await Future.delayed(const Duration(milliseconds: 500));
@@ -153,13 +156,13 @@ class _MovieListViewState extends State<MovieListView> {
       // Se está em modo de busca, carrega mais resultados da busca
       if (state.isSearchMode && state.searchQuery != null) {
         context.read<MovieModernBloc>().add(
-              MovieModernSearchRequested(state.searchQuery!),
-            );
+          MovieModernSearchRequested(state.searchQuery!),
+        );
       } else {
         // Senão, carrega mais filmes em cartaz
         context.read<MovieModernBloc>().add(
-              const MovieModernNowPlayingFetched(),
-            );
+          const MovieModernNowPlayingFetched(),
+        );
       }
     }
   }

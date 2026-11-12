@@ -10,7 +10,7 @@ import '../../features/movie/domain/usecases/search_movies_usecase.dart';
 import '../../features/movie/domain/usecases/get_now_playing_movies_usecase.dart';
 
 /// Configuração central de injeção de dependências.
-/// 
+///
 /// Sistema simples de DI para gerenciar as principais
 /// dependências da aplicação.
 class DependencyInjection {
@@ -35,7 +35,9 @@ class DependencyInjection {
 
     // Movie - Domain Layer (UseCases)
     _instances[SearchMoviesUseCase] = SearchMoviesUseCase(movieRepository);
-    _instances[GetNowPlayingMoviesUseCase] = GetNowPlayingMoviesUseCase(movieRepository);
+    _instances[GetNowPlayingMoviesUseCase] = GetNowPlayingMoviesUseCase(
+      movieRepository,
+    );
 
     _isInitialized = true;
   }
@@ -43,13 +45,19 @@ class DependencyInjection {
   /// Resolve uma dependência.
   static T get<T extends Object>() {
     if (!_isInitialized) {
-      debugPrint('❌ DependencyInjection não foi inicializado. Dependências registradas: ${_instances.keys}');
-      throw StateError('DependencyInjection não foi inicializado. Chame setup() primeiro.');
+      debugPrint(
+        '❌ DependencyInjection não foi inicializado. Dependências registradas: ${_instances.keys}',
+      );
+      throw StateError(
+        'DependencyInjection não foi inicializado. Chame setup() primeiro.',
+      );
     }
 
     final instance = _instances[T];
     if (instance == null) {
-      debugPrint('❌ Dependência de tipo $T não foi registrada. Dependências disponíveis: ${_instances.keys}');
+      debugPrint(
+        '❌ Dependência de tipo $T não foi registrada. Dependências disponíveis: ${_instances.keys}',
+      );
       throw StateError('Dependência de tipo $T não foi registrada.');
     }
 
@@ -75,7 +83,7 @@ class DependencyInjection {
     try {
       final searchUseCase = get<SearchMoviesUseCase>();
       final nowPlayingUseCase = get<GetNowPlayingMoviesUseCase>();
-      
+
       return MovieModernBloc(
         searchMoviesUseCase: searchUseCase,
         getNowPlayingMoviesUseCase: nowPlayingUseCase,

@@ -1,23 +1,24 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+
 import '../theme/app_design_system.dart';
 
 /// Widget de loading personalizado que segue o Design System da aplicação.
 class AppLoading extends StatelessWidget {
   /// Tamanho do indicador de loading
   final double? size;
-  
+
   /// Cor do indicador de loading
   final Color? color;
-  
+
   /// Espessura da linha do indicador
   final double? strokeWidth;
-  
+
   /// Mensagem a ser exibida abaixo do loading (opcional)
   final String? message;
-  
+
   /// Se deve mostrar um overlay semi-transparente
   final bool overlay;
-  
+
   const AppLoading({
     super.key,
     this.size,
@@ -26,7 +27,7 @@ class AppLoading extends StatelessWidget {
     this.message,
     this.overlay = false,
   });
-  
+
   /// Factory para criar um loading pequeno
   const AppLoading.small({
     super.key,
@@ -35,7 +36,7 @@ class AppLoading extends StatelessWidget {
     this.message,
     this.overlay = false,
   }) : size = 16;
-  
+
   /// Factory para criar um loading médio (padrão)
   const AppLoading.medium({
     super.key,
@@ -44,7 +45,7 @@ class AppLoading extends StatelessWidget {
     this.message,
     this.overlay = false,
   }) : size = 24;
-  
+
   /// Factory para criar um loading grande
   const AppLoading.large({
     super.key,
@@ -53,7 +54,7 @@ class AppLoading extends StatelessWidget {
     this.message,
     this.overlay = false,
   }) : size = 48;
-  
+
   /// Factory para criar um loading com overlay
   const AppLoading.overlay({
     super.key,
@@ -62,7 +63,7 @@ class AppLoading extends StatelessWidget {
     this.strokeWidth,
     this.message,
   }) : overlay = true;
-  
+
   @override
   Widget build(BuildContext context) {
     final loadingWidget = Column(
@@ -88,14 +89,14 @@ class AppLoading extends StatelessWidget {
         ],
       ],
     );
-    
+
     if (overlay) {
       return Container(
-        color: AppDesignSystem.backgroundColor.withOpacity(0.8),
+        color: AppDesignSystem.backgroundColor.withValues(alpha: 0.8),
         child: Center(child: loadingWidget),
       );
     }
-    
+
     return loadingWidget;
   }
 }
@@ -104,16 +105,16 @@ class AppLoading extends StatelessWidget {
 class AppShimmer extends StatefulWidget {
   /// Widget filho que terá o efeito shimmer
   final Widget child;
-  
+
   /// Cor base do shimmer
   final Color? baseColor;
-  
+
   /// Cor de destaque do shimmer
   final Color? highlightColor;
-  
+
   /// Se o efeito está ativo
   final bool enabled;
-  
+
   const AppShimmer({
     super.key,
     required this.child,
@@ -121,7 +122,7 @@ class AppShimmer extends StatefulWidget {
     this.highlightColor,
     this.enabled = true,
   });
-  
+
   @override
   State<AppShimmer> createState() => _AppShimmerState();
 }
@@ -130,7 +131,7 @@ class _AppShimmerState extends State<AppShimmer>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-  
+
   @override
   void initState() {
     super.initState();
@@ -138,15 +139,16 @@ class _AppShimmerState extends State<AppShimmer>
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    _animation = Tween<double>(begin: -1.0, end: 2.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-    
+    _animation = Tween<double>(
+      begin: -1.0,
+      end: 2.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
     if (widget.enabled) {
       _controller.repeat();
     }
   }
-  
+
   @override
   void didUpdateWidget(AppShimmer oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -158,19 +160,19 @@ class _AppShimmerState extends State<AppShimmer>
       }
     }
   }
-  
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     if (!widget.enabled) {
       return widget.child;
     }
-    
+
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
@@ -202,20 +204,20 @@ class _AppShimmerState extends State<AppShimmer>
 class AppShimmerBox extends StatelessWidget {
   /// Largura do box
   final double? width;
-  
+
   /// Altura do box
   final double height;
-  
+
   /// Raio da borda
   final BorderRadius? borderRadius;
-  
+
   const AppShimmerBox({
     super.key,
     this.width,
     required this.height,
     this.borderRadius,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return AppShimmer(

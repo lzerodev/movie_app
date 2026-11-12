@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../core/mixins/design_system_mixin.dart';
 import '../../../../core/theme/app_design_system.dart';
@@ -64,10 +64,7 @@ class MovieCard extends StatelessWidget with DesignSystemMixin {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min, // Evita espaçamentos extras
-            children: [
-              _buildPosterSection(),
-              _buildInfoSection(),
-            ],
+            children: [_buildPosterSection(), _buildInfoSection()],
           ),
         ),
       ),
@@ -133,7 +130,7 @@ class MovieCard extends StatelessWidget with DesignSystemMixin {
         vertical: 4,
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.9),
+        color: color.withValues(alpha: 0.9),
         borderRadius: AppDesignSystem.borderRadiusSm,
         boxShadow: AppDesignSystem.shadowSm,
       ),
@@ -261,7 +258,7 @@ class MovieCard extends StatelessWidget with DesignSystemMixin {
       'Set',
       'Out',
       'Nov',
-      'Dez'
+      'Dez',
     ];
 
     return '${date.day} ${months[date.month]} ${date.year}';
@@ -269,11 +266,7 @@ class MovieCard extends StatelessWidget with DesignSystemMixin {
 }
 
 /// Tamanhos disponíveis para o MovieCard
-enum MovieCardSize {
-  small,
-  medium,
-  large,
-}
+enum MovieCardSize { small, medium, large }
 
 /// Lista de filmes com shimmer loading
 class MovieGridView extends StatelessWidget {

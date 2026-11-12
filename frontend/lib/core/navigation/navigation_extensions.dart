@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../features/movie/data/models/movie.dart';
 import 'app_router.dart';
@@ -55,9 +55,8 @@ extension NavigationExtensions on BuildContext {
 
   /// Navega para detalhes do filme com transição hero
   Future<void> goToMovieDetailWithHero(Movie movie) {
-    return Navigator.of(this).push(
-      AppRoutes.movieDetailRoute(movie).heroTransitionRoute,
-    );
+    return Navigator.of(this)
+        .push(AppRoutes.movieDetailRoute(movie).heroTransitionRoute);
   }
 
   // === UTILIDADES ===
@@ -96,9 +95,7 @@ extension NavigationExtensions on BuildContext {
 
   /// Mostra snackbar simples
   void showMessage(String message) {
-    AppRouter.showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    AppRouter.showSnackBar(SnackBar(content: Text(message)));
   }
 
   /// Mostra snackbar de sucesso

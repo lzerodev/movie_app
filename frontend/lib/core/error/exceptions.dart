@@ -1,5 +1,5 @@
 /// Exceções base da aplicação.
-/// 
+///
 /// Define todas as exceções personalizadas que podem ocorrer
 /// durante a execução da aplicação.
 library exceptions;
@@ -9,10 +9,7 @@ class ServerException implements Exception {
   final String message;
   final int? statusCode;
 
-  const ServerException({
-    this.message = 'Erro no servidor',
-    this.statusCode,
-  });
+  const ServerException({this.message = 'Erro no servidor', this.statusCode});
 
   @override
   String toString() => 'ServerException: $message (Code: $statusCode)';
@@ -22,9 +19,7 @@ class ServerException implements Exception {
 class CacheException implements Exception {
   final String message;
 
-  const CacheException({
-    this.message = 'Erro de cache',
-  });
+  const CacheException({this.message = 'Erro de cache'});
 
   @override
   String toString() => 'CacheException: $message';
@@ -34,9 +29,7 @@ class CacheException implements Exception {
 class NetworkException implements Exception {
   final String message;
 
-  const NetworkException({
-    this.message = 'Sem conexão com a internet',
-  });
+  const NetworkException({this.message = 'Sem conexão com a internet'});
 
   @override
   String toString() => 'NetworkException: $message';
@@ -47,10 +40,7 @@ class ValidationException implements Exception {
   final String message;
   final Map<String, dynamic>? details;
 
-  const ValidationException({
-    this.message = 'Dados inválidos',
-    this.details,
-  });
+  const ValidationException({this.message = 'Dados inválidos', this.details});
 
   @override
   String toString() => 'ValidationException: $message';
@@ -60,9 +50,7 @@ class ValidationException implements Exception {
 class NotFoundException implements Exception {
   final String message;
 
-  const NotFoundException({
-    this.message = 'Recurso não encontrado',
-  });
+  const NotFoundException({this.message = 'Recurso não encontrado'});
 
   @override
   String toString() => 'NotFoundException: $message';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/di_extensions.dart';
@@ -60,9 +60,7 @@ class _SearchMoviesViewState extends State<_SearchMoviesView>
     final query = _searchController.text.trim();
     if (query.isEmpty) return;
 
-    context.read<MovieModernBloc>().add(
-          MovieModernSearchRequested(query),
-        );
+    context.read<MovieModernBloc>().add(MovieModernSearchRequested(query));
   }
 
   @override
@@ -88,13 +86,11 @@ class _SearchMoviesViewState extends State<_SearchMoviesView>
 
                 return switch (state.status) {
                   MovieModernStatus.loading when state.movies.isEmpty =>
-                    const AppLoading.large(
-                      message: 'Buscando filmes...',
-                    ),
+                    const AppLoading.large(message: 'Buscando filmes...'),
                   MovieModernStatus.failure => _SearchErrorState(
-                      errorMessage: state.errorMessage ?? 'Erro desconhecido',
-                      onRetry: _searchMovies,
-                    ),
+                    errorMessage: state.errorMessage ?? 'Erro desconhecido',
+                    onRetry: _searchMovies,
+                  ),
                   MovieModernStatus.success when state.movies.isEmpty =>
                     const _NoResultsState(),
                   _ => SearchResultsList(movies: state.movies),
@@ -117,8 +113,7 @@ class _EmptySearchState extends StatelessWidget {
     return const AppEmptyPageLayout(
       showAppBar: false,
       emptyTitle: 'Encontre seus filmes favoritos',
-      emptyMessage:
-          'Digite o nome de um filme na barra de busca acima para começar a pesquisar.',
+      emptyMessage: 'Digite o nome de um filme na barra de busca acima para começar a pesquisar.',
       emptyIcon: Icons.movie_filter_outlined,
     );
   }
@@ -129,10 +124,7 @@ class _SearchErrorState extends StatelessWidget {
   final String errorMessage;
   final VoidCallback onRetry;
 
-  const _SearchErrorState({
-    required this.errorMessage,
-    required this.onRetry,
-  });
+  const _SearchErrorState({required this.errorMessage, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -156,8 +148,7 @@ class _NoResultsState extends StatelessWidget {
     return const AppEmptyPageLayout(
       showAppBar: false,
       emptyTitle: 'Nenhum filme encontrado',
-      emptyMessage:
-          'Tente pesquisar com outras palavras-chave ou verifique a ortografia.',
+      emptyMessage: 'Tente pesquisar com outras palavras-chave ou verifique a ortografia.',
       emptyIcon: Icons.search_off,
     );
   }

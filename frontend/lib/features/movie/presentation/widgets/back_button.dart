@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomBackButton extends StatelessWidget {
@@ -11,10 +11,7 @@ class CustomBackButton extends StatelessWidget {
     return IconButton(
       icon: SvgPicture.asset(
         'assets/icons/Arrow - Left 2.svg',
-        colorFilter: const ColorFilter.mode(
-          Colors.white,
-          BlendMode.srcIn,
-        ),
+        colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
       ),
       onPressed: onPressed,
     );

@@ -1,12 +1,12 @@
 # 📷 Script de Captura de Screenshots - Movie App (Windows PowerShell)
-# 
+#
 # Este script automatiza a captura de screenshots das principais telas do app
 # Certifique-se de ter o app rodando antes de executar
 
 Write-Host "🎬 Iniciando captura de screenshots do Movie App..." -ForegroundColor Green
 
 # Diretório de screenshots
-$ScreenshotsDir = "screenshots"
+$ScreenshotsDir = Join-Path $PSScriptRoot "screenshots"
 if (!(Test-Path $ScreenshotsDir)) {
     New-Item -ItemType Directory -Path $ScreenshotsDir | Out-Null
 }
@@ -17,14 +17,14 @@ function Get-AndroidScreenshot {
         [string]$Filename,
         [string]$Description
     )
-    
+
     Write-Host "📱 Capturando: $Description" -ForegroundColor Yellow
-    
+
     # Capturar screenshot
     adb shell screencap -p "/sdcard/$Filename"
     adb pull "/sdcard/$Filename" "$ScreenshotsDir/$Filename"
     adb shell rm "/sdcard/$Filename"
-    
+
     Write-Host "✅ Salvo: $ScreenshotsDir/$Filename" -ForegroundColor Green
 }
 
@@ -34,7 +34,7 @@ function Show-WebInstructions {
         [string]$Filename,
         [string]$Description
     )
-    
+
     Write-Host "🌐 $Description" -ForegroundColor Cyan
     Write-Host "   💡 Salve como: $ScreenshotsDir/$Filename" -ForegroundColor Gray
 }
@@ -48,41 +48,41 @@ $AndroidDevices = adb devices 2>$null | Select-String "device$"
 if ($AndroidDevices) {
     Write-Host "📱 Android detectado - Iniciando capturas..." -ForegroundColor Green
     Write-Host "⏳ Pressione Enter para capturar cada tela quando estiver pronta..." -ForegroundColor Yellow
-    
+
     Write-Host "`n1️⃣ Navegue para a tela principal (Home)"
     Read-Host "Pressione Enter quando estiver pronto"
     Get-AndroidScreenshot "home_screen.png" "Tela Principal com navegação"
-    
+
     Write-Host "`n2️⃣ Navegue para a lista de filmes"
     Read-Host "Pressione Enter quando estiver pronto"
     Get-AndroidScreenshot "movie_list.png" "Lista de filmes com design moderno"
-    
+
     Write-Host "`n3️⃣ Abra a pesquisa e digite algo"
     Read-Host "Pressione Enter quando estiver pronto"
     Get-AndroidScreenshot "search_screen.png" "Interface de pesquisa"
-    
+
     Write-Host "`n4️⃣ Abra os detalhes de um filme"
     Read-Host "Pressione Enter quando estiver pronto"
     Get-AndroidScreenshot "movie_detail.png" "Tela de detalhes com SliverAppBar"
-    
+
     Write-Host "`n5️⃣ Navegue para o perfil"
     Read-Host "Pressione Enter quando estiver pronto"
     Get-AndroidScreenshot "profile_screen.png" "Seção de perfil do usuário"
-    
+
     Write-Host "`n6️⃣ Navegue para notificações"
     Read-Host "Pressione Enter quando estiver pronto"
     Get-AndroidScreenshot "notifications_screen.png" "Centro de notificações"
-    
+
 } else {
     Write-Host "🌐 Nenhum dispositivo Android detectado - Instruções para Web:" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "1. Execute: flutter run -d chrome --release" -ForegroundColor White
+    Write-Host "1. Na pasta frontend, execute: flutter run -d chrome --release" -ForegroundColor White
     Write-Host "2. Abra DevTools (F12)" -ForegroundColor White
     Write-Host "3. Ative Device Mode (Ctrl+Shift+M)" -ForegroundColor White
     Write-Host "4. Selecione 'iPhone 12 Pro' ou similar" -ForegroundColor White
     Write-Host "5. Para cada tela, use Ctrl+Shift+P > 'Capture screenshot'" -ForegroundColor White
     Write-Host ""
-    
+
     Show-WebInstructions "home_screen.png" "Tela Principal"
     Show-WebInstructions "movie_list.png" "Lista de filmes"
     Show-WebInstructions "search_screen.png" "Interface de pesquisa"

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../theme/app_design_system.dart';
 
@@ -93,24 +93,17 @@ class AppPageLayout extends StatelessWidget {
 
     // Aplica padding se especificado
     if (padding != null) {
-      pageBody = Padding(
-        padding: padding!,
-        child: pageBody,
-      );
+      pageBody = Padding(padding: padding!, child: pageBody);
     }
 
     // Aplica scroll se especificado
     if (scrollable) {
-      pageBody = SingleChildScrollView(
-        child: pageBody,
-      );
+      pageBody = SingleChildScrollView(child: pageBody);
     }
 
     // Aplica SafeArea se especificado
     if (useSafeArea) {
-      pageBody = SafeArea(
-        child: pageBody,
-      );
+      pageBody = SafeArea(child: pageBody);
     }
 
     return Scaffold(
@@ -132,12 +125,13 @@ class AppPageLayout extends StatelessWidget {
       actions: actions,
       leading: leading,
       automaticallyImplyLeading: automaticallyImplyLeading,
-      backgroundColor:
-          transparentAppBar ? Colors.transparent : AppDesignSystem.surfaceColor,
+      backgroundColor: transparentAppBar
+          ? Colors.transparent
+          : AppDesignSystem.surfaceColor,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       scrolledUnderElevation: 2,
-      shadowColor: AppDesignSystem.primaryColor.withOpacity(0.3),
+      shadowColor: AppDesignSystem.primaryColor.withValues(alpha: 0.3),
       centerTitle: true,
       toolbarHeight: appBarHeight ?? 64,
       titleTextStyle: AppDesignSystem.headlineSmall.copyWith(
@@ -154,10 +148,7 @@ class AppPageLayout extends StatelessWidget {
         size: 24,
       ),
       shape: const Border(
-        bottom: BorderSide(
-          color: AppDesignSystem.cardBorderColor,
-          width: 0.5,
-        ),
+        bottom: BorderSide(color: AppDesignSystem.cardBorderColor, width: 0.5),
       ),
     );
   }
@@ -192,14 +183,16 @@ class AppPageLayout extends StatelessWidget {
                 boxShadow: safeOpacity > 0
                     ? [
                         BoxShadow(
-                          color: AppDesignSystem.accentColor
-                              .withOpacity(shadowOpacity1),
+                          color: AppDesignSystem.accentColor.withValues(
+                            alpha: shadowOpacity1,
+                          ),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
                         BoxShadow(
-                          color: AppDesignSystem.accentColor
-                              .withOpacity(shadowOpacity2),
+                          color: AppDesignSystem.accentColor.withValues(
+                            alpha: shadowOpacity2,
+                          ),
                           blurRadius: 16,
                           offset: const Offset(0, 4),
                         ),
@@ -215,12 +208,16 @@ class AppPageLayout extends StatelessWidget {
                     size: 24,
                   ),
                   const SizedBox(width: AppDesignSystem.spaceSm),
-                  Text(
-                    title!,
-                    style: AppDesignSystem.headlineSmall.copyWith(
-                      color: AppDesignSystem.textPrimaryColor,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.0,
+                  Flexible(
+                    child: Text(
+                      title!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppDesignSystem.headlineSmall.copyWith(
+                        color: AppDesignSystem.textPrimaryColor,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.0,
+                      ),
                     ),
                   ),
                 ],
@@ -260,9 +257,7 @@ class AppLoadingPageLayout extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircularProgressIndicator(
-              color: AppDesignSystem.accentColor,
-            ),
+            const CircularProgressIndicator(color: AppDesignSystem.accentColor),
             if (loadingMessage != null) ...[
               const SizedBox(height: AppDesignSystem.spaceLg),
               Text(

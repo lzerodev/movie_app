@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Coleção de transições customizadas para navegação
 class AppTransitions {
@@ -15,14 +15,9 @@ class AppTransitions {
     const end = Offset.zero;
     const curve = Curves.easeInOut;
 
-    var tween = Tween(begin: begin, end: end).chain(
-      CurveTween(curve: curve),
-    );
+    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-    return SlideTransition(
-      position: animation.drive(tween),
-      child: child,
-    );
+    return SlideTransition(position: animation.drive(tween), child: child);
   }
 
   /// Transição de slide da esquerda para direita
@@ -36,14 +31,9 @@ class AppTransitions {
     const end = Offset.zero;
     const curve = Curves.easeInOut;
 
-    var tween = Tween(begin: begin, end: end).chain(
-      CurveTween(curve: curve),
-    );
+    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-    return SlideTransition(
-      position: animation.drive(tween),
-      child: child,
-    );
+    return SlideTransition(position: animation.drive(tween), child: child);
   }
 
   /// Transição de slide de baixo para cima
@@ -57,14 +47,9 @@ class AppTransitions {
     const end = Offset.zero;
     const curve = Curves.easeOutCubic;
 
-    var tween = Tween(begin: begin, end: end).chain(
-      CurveTween(curve: curve),
-    );
+    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-    return SlideTransition(
-      position: animation.drive(tween),
-      child: child,
-    );
+    return SlideTransition(position: animation.drive(tween), child: child);
   }
 
   /// Transição de slide de cima para baixo
@@ -78,14 +63,9 @@ class AppTransitions {
     const end = Offset.zero;
     const curve = Curves.easeOutCubic;
 
-    var tween = Tween(begin: begin, end: end).chain(
-      CurveTween(curve: curve),
-    );
+    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-    return SlideTransition(
-      position: animation.drive(tween),
-      child: child,
-    );
+    return SlideTransition(position: animation.drive(tween), child: child);
   }
 
   // === TRANSIÇÕES DE FADE ===
@@ -97,10 +77,7 @@ class AppTransitions {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    return FadeTransition(
-      opacity: animation,
-      child: child,
-    );
+    return FadeTransition(opacity: animation, child: child);
   }
 
   /// Transição de fade com scale
@@ -131,9 +108,10 @@ class AppTransitions {
     Widget child,
   ) {
     return ScaleTransition(
-      scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: animation, curve: Curves.elasticOut),
-      ),
+      scale: Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).animate(CurvedAnimation(parent: animation, curve: Curves.elasticOut)),
       child: child,
     );
   }
@@ -146,13 +124,11 @@ class AppTransitions {
     Widget child,
   ) {
     return RotationTransition(
-      turns: Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: animation, curve: Curves.easeInOut),
-      ),
-      child: FadeTransition(
-        opacity: animation,
-        child: child,
-      ),
+      turns: Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
+      child: FadeTransition(opacity: animation, child: child),
     );
   }
 
@@ -164,16 +140,14 @@ class AppTransitions {
     Widget child, {
     Offset begin = const Offset(1.0, 0.0),
   }) {
-    var slideTween = Tween(begin: begin, end: Offset.zero).chain(
-      CurveTween(curve: Curves.easeOut),
-    );
+    var slideTween = Tween(
+      begin: begin,
+      end: Offset.zero,
+    ).chain(CurveTween(curve: Curves.easeOut));
 
     return SlideTransition(
       position: animation.drive(slideTween),
-      child: FadeTransition(
-        opacity: animation,
-        child: child,
-      ),
+      child: FadeTransition(opacity: animation, child: child),
     );
   }
 
@@ -190,9 +164,7 @@ class AppTransitions {
     const end = Offset.zero;
     const curve = Curves.easeOutCubic;
 
-    var tween = Tween(begin: begin, end: end).chain(
-      CurveTween(curve: curve),
-    );
+    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
     return SlideTransition(
       position: animation.drive(tween),
@@ -201,7 +173,7 @@ class AppTransitions {
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -221,18 +193,15 @@ class AppTransitions {
     Widget child,
   ) {
     // Combina slide suave com fade
-    var slideTween =
-        Tween(begin: const Offset(0.1, 0.0), end: Offset.zero).chain(
-      CurveTween(curve: Curves.easeOutQuart),
-    );
+    var slideTween = Tween(
+      begin: const Offset(0.1, 0.0),
+      end: Offset.zero,
+    ).chain(CurveTween(curve: Curves.easeOutQuart));
 
     return SlideTransition(
       position: animation.drive(slideTween),
       child: FadeTransition(
-        opacity: CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOut,
-        ),
+        opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
         child: child,
       ),
     );
@@ -246,23 +215,26 @@ class AppTransitions {
     Widget child,
   ) {
     return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(1.0, 0.0),
-        end: Offset.zero,
-      ).animate(CurvedAnimation(
-        parent: animation,
-        curve: Curves.linearToEaseOut,
-        reverseCurve: Curves.easeInToLinear,
-      )),
+      position: Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+          .animate(
+            CurvedAnimation(
+              parent: animation,
+              curve: Curves.linearToEaseOut,
+              reverseCurve: Curves.easeInToLinear,
+            ),
+          ),
       child: SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset.zero,
-          end: const Offset(-0.3, 0.0),
-        ).animate(CurvedAnimation(
-          parent: secondaryAnimation,
-          curve: Curves.linearToEaseOut,
-          reverseCurve: Curves.easeInToLinear,
-        )),
+        position:
+            Tween<Offset>(
+              begin: Offset.zero,
+              end: const Offset(-0.3, 0.0),
+            ).animate(
+              CurvedAnimation(
+                parent: secondaryAnimation,
+                curve: Curves.linearToEaseOut,
+                reverseCurve: Curves.easeInToLinear,
+              ),
+            ),
         child: child,
       ),
     );

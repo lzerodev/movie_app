@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../theme/app_design_system.dart';
 
@@ -79,13 +79,13 @@ class AppEmptyState extends StatelessWidget {
     this.iconSize = 64.0,
     this.padding,
     this.illustration,
-  })  : icon = Icons.inbox_outlined,
-        title = title ?? 'Nenhum item encontrado',
-        subtitle = subtitle ?? 'Não há itens para exibir no momento.',
-        iconColor = null,
-        titleStyle = null,
-        subtitleStyle = null,
-        variant = AppEmptyStateVariant.list;
+  }) : icon = Icons.inbox_outlined,
+       title = title ?? 'Nenhum item encontrado',
+       subtitle = subtitle ?? 'Não há itens para exibir no momento.',
+       iconColor = null,
+       titleStyle = null,
+       subtitleStyle = null,
+       variant = AppEmptyStateVariant.list;
 
   /// Factory para estado de busca vazia
   const AppEmptyState.search({
@@ -99,13 +99,13 @@ class AppEmptyState extends StatelessWidget {
     this.iconSize = 64.0,
     this.padding,
     this.illustration,
-  })  : icon = Icons.search_off_outlined,
-        title = title ?? 'Nenhum resultado encontrado',
-        subtitle = subtitle ?? 'Tente ajustar sua busca ou filtros.',
-        iconColor = null,
-        titleStyle = null,
-        subtitleStyle = null,
-        variant = AppEmptyStateVariant.search;
+  }) : icon = Icons.search_off_outlined,
+       title = title ?? 'Nenhum resultado encontrado',
+       subtitle = subtitle ?? 'Tente ajustar sua busca ou filtros.',
+       iconColor = null,
+       titleStyle = null,
+       subtitleStyle = null,
+       variant = AppEmptyStateVariant.search;
 
   /// Factory para estado de filmes vazios
   const AppEmptyState.movies({
@@ -119,13 +119,13 @@ class AppEmptyState extends StatelessWidget {
     this.iconSize = 64.0,
     this.padding,
     this.illustration,
-  })  : icon = Icons.movie_outlined,
-        title = title ?? 'Nenhum filme encontrado',
-        subtitle = subtitle ?? 'Não encontramos filmes para exibir.',
-        iconColor = null,
-        titleStyle = null,
-        subtitleStyle = null,
-        variant = AppEmptyStateVariant.movies;
+  }) : icon = Icons.movie_outlined,
+       title = title ?? 'Nenhum filme encontrado',
+       subtitle = subtitle ?? 'Não encontramos filmes para exibir.',
+       iconColor = null,
+       titleStyle = null,
+       subtitleStyle = null,
+       variant = AppEmptyStateVariant.movies;
 
   /// Factory para estado de favoritos vazios
   const AppEmptyState.favorites({
@@ -139,13 +139,13 @@ class AppEmptyState extends StatelessWidget {
     this.iconSize = 64.0,
     this.padding,
     this.illustration,
-  })  : icon = Icons.favorite_border_outlined,
-        title = title ?? 'Nenhum favorito ainda',
-        subtitle = subtitle ?? 'Adicione filmes aos seus favoritos.',
-        iconColor = null,
-        titleStyle = null,
-        subtitleStyle = null,
-        variant = AppEmptyStateVariant.favorites;
+  }) : icon = Icons.favorite_border_outlined,
+       title = title ?? 'Nenhum favorito ainda',
+       subtitle = subtitle ?? 'Adicione filmes aos seus favoritos.',
+       iconColor = null,
+       titleStyle = null,
+       subtitleStyle = null,
+       variant = AppEmptyStateVariant.favorites;
 
   /// Factory para estado de erro de conexão
   const AppEmptyState.connection({
@@ -159,17 +159,18 @@ class AppEmptyState extends StatelessWidget {
     this.iconSize = 64.0,
     this.padding,
     this.illustration,
-  })  : icon = Icons.wifi_off_outlined,
-        title = title ?? 'Sem conexão',
-        subtitle = subtitle ?? 'Verifique sua conexão com a internet.',
-        iconColor = null,
-        titleStyle = null,
-        subtitleStyle = null,
-        variant = AppEmptyStateVariant.connection;
+  }) : icon = Icons.wifi_off_outlined,
+       title = title ?? 'Sem conexão',
+       subtitle = subtitle ?? 'Verifique sua conexão com a internet.',
+       iconColor = null,
+       titleStyle = null,
+       subtitleStyle = null,
+       variant = AppEmptyStateVariant.connection;
 
   @override
   Widget build(BuildContext context) {
-    final effectivePadding = padding ??
+    final effectivePadding =
+        padding ??
         const EdgeInsets.symmetric(horizontal: AppDesignSystem.spaceLg);
 
     return Center(
@@ -208,39 +209,29 @@ class AppEmptyState extends StatelessWidget {
         color: _getIconBackgroundColor(),
         shape: BoxShape.circle,
       ),
-      child: Icon(
-        icon,
-        size: iconSize,
-        color: iconColor ?? _getIconColor(),
-      ),
+      child: Icon(icon, size: iconSize, color: iconColor ?? _getIconColor()),
     );
   }
 
   Widget _buildTitle() {
-    final effectiveStyle = titleStyle ??
+    final effectiveStyle =
+        titleStyle ??
         AppDesignSystem.titleMedium.copyWith(
           color: AppDesignSystem.textPrimaryColor,
           fontWeight: FontWeight.w600,
         );
 
-    return Text(
-      title,
-      style: effectiveStyle,
-      textAlign: TextAlign.center,
-    );
+    return Text(title, style: effectiveStyle, textAlign: TextAlign.center);
   }
 
   Widget _buildSubtitle() {
-    final effectiveStyle = subtitleStyle ??
+    final effectiveStyle =
+        subtitleStyle ??
         AppDesignSystem.bodyMedium.copyWith(
           color: AppDesignSystem.textSecondaryColor,
         );
 
-    return Text(
-      subtitle!,
-      style: effectiveStyle,
-      textAlign: TextAlign.center,
-    );
+    return Text(subtitle!, style: effectiveStyle, textAlign: TextAlign.center);
   }
 
   Widget _buildActions() {
@@ -308,15 +299,15 @@ class AppEmptyState extends StatelessWidget {
     switch (variant) {
       case AppEmptyStateVariant.default_:
       case AppEmptyStateVariant.list:
-        return AppDesignSystem.textSecondaryColor.withOpacity(0.1);
+        return AppDesignSystem.textSecondaryColor.withValues(alpha: 0.1);
       case AppEmptyStateVariant.search:
-        return AppDesignSystem.warningColor.withOpacity(0.1);
+        return AppDesignSystem.warningColor.withValues(alpha: 0.1);
       case AppEmptyStateVariant.movies:
-        return AppDesignSystem.accentColor.withOpacity(0.1);
+        return AppDesignSystem.accentColor.withValues(alpha: 0.1);
       case AppEmptyStateVariant.favorites:
-        return AppDesignSystem.errorColor.withOpacity(0.1);
+        return AppDesignSystem.errorColor.withValues(alpha: 0.1);
       case AppEmptyStateVariant.connection:
-        return AppDesignSystem.infoColor.withOpacity(0.1);
+        return AppDesignSystem.infoColor.withValues(alpha: 0.1);
     }
   }
 }

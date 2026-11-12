@@ -1,12 +1,7 @@
 part of 'movie_modern_bloc.dart';
 
 /// Status possíveis para o MovieModernBloc
-enum MovieModernStatus {
-  initial,
-  loading,
-  success,
-  failure,
-}
+enum MovieModernStatus { initial, loading, success, failure }
 
 /// Estado do MovieModernBloc
 class MovieModernState extends Equatable {
@@ -47,11 +42,11 @@ class MovieModernState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        movies,
-        hasReachedMax,
-        errorMessage,
-        isSearchMode,
-        searchQuery,
-      ];
+    status,
+    movies,
+    hasReachedMax,
+    errorMessage,
+    isSearchMode,
+    searchQuery,
+  ];
 }

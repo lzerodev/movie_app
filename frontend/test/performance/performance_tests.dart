@@ -1,36 +1,38 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movie_app/core/widgets/app_card.dart';
 import 'package:movie_app/core/widgets/app_button.dart';
 import 'package:movie_app/features/home/widgets/home.dart';
+
 import '../test_helpers/test_helpers.dart';
 
 void main() {
   group('Performance Tests', () {
-    
     group('Widget Performance Tests', () {
-      testWidgets('HomePage should build efficiently', (WidgetTester tester) async {
+      testWidgets('HomePage should build efficiently', (
+        WidgetTester tester,
+      ) async {
         // Measure build time
         final stopwatch = Stopwatch()..start();
-        
+
         await tester.pumpWidget(
-          TestHelpers.createTestWidget(
-            child: const HomePage(),
-          ),
+          TestHelpers.createTestWidget(child: const HomePage()),
         );
-        
+
         stopwatch.stop();
-        
+
         // Build should complete within reasonable time (100ms)
         expect(stopwatch.elapsedMilliseconds, lessThan(100));
-        
+
         // Verify no exceptions
         expect(tester.takeException(), isNull);
       });
 
-      testWidgets('Multiple AppCard widgets should render efficiently', (WidgetTester tester) async {
+      testWidgets('Multiple AppCard widgets should render efficiently', (
+        WidgetTester tester,
+      ) async {
         final stopwatch = Stopwatch()..start();
-        
+
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: ListView.builder(
@@ -44,16 +46,18 @@ void main() {
             ),
           ),
         );
-        
+
         await tester.pumpAndSettle();
         stopwatch.stop();
-        
+
         // Should handle 100 cards efficiently
         expect(stopwatch.elapsedMilliseconds, lessThan(200));
         expect(find.byType(AppCard), findsWidgets);
       });
 
-      testWidgets('Responsive layout should not cause performance issues', (WidgetTester tester) async {
+      testWidgets('Responsive layout should not cause performance issues', (
+        WidgetTester tester,
+      ) async {
         final sizes = [
           TestHelpers.mobileSize,
           TestHelpers.tabletSize,
@@ -63,55 +67,60 @@ void main() {
 
         for (final size in sizes) {
           final stopwatch = Stopwatch()..start();
-          
+
           await tester.pumpWidget(
             TestHelpers.createTestWidget(
               screenSize: size,
               child: const HomePage(),
             ),
           );
-          
+
           await tester.pumpAndSettle();
           stopwatch.stop();
-          
+
           // Each layout should build quickly
-          expect(stopwatch.elapsedMilliseconds, lessThan(100), 
-                 reason: 'Layout for ${size.width}x${size.height} took too long');
+          expect(
+            stopwatch.elapsedMilliseconds,
+            lessThan(100),
+            reason: 'Layout for ${size.width}x${size.height} took too long',
+          );
         }
       });
     });
 
     group('Memory Tests', () {
-      testWidgets('Widget tree should not grow excessively', (WidgetTester tester) async {
+      testWidgets('Widget tree should not grow excessively', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
-          TestHelpers.createTestWidget(
-            child: const HomePage(),
-          ),
+          TestHelpers.createTestWidget(child: const HomePage()),
         );
 
         final initialElementCount = tester.allElements.length;
-        
+
         // Navigate between tabs multiple times
         for (int i = 0; i < 5; i++) {
           await tester.tap(find.text('Notificações'));
           await tester.pumpAndSettle();
-          
+
           await tester.tap(find.text('Perfil'));
           await tester.pumpAndSettle();
-          
+
           await tester.tap(find.text('Home'));
           await tester.pumpAndSettle();
         }
 
         final finalElementCount = tester.allElements.length;
-        
+
         // Element count should not grow significantly
         expect(finalElementCount, lessThanOrEqualTo(initialElementCount * 1.2));
       });
     });
 
     group('Scroll Performance Tests', () {
-      testWidgets('Scrolling should be smooth without frame drops', (WidgetTester tester) async {
+      testWidgets('Scrolling should be smooth without frame drops', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: ListView.builder(
@@ -122,7 +131,10 @@ void main() {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Title $index', style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        'Title $index',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       const SizedBox(height: 8),
                       Text('Description for item $index'),
                     ],
@@ -136,7 +148,7 @@ void main() {
         // Perform scroll operations
         await tester.fling(find.byType(ListView), const Offset(0, -500), 1000);
         await tester.pumpAndSettle();
-        
+
         await tester.fling(find.byType(ListView), const Offset(0, 500), 1000);
         await tester.pumpAndSettle();
 
@@ -146,9 +158,11 @@ void main() {
     });
 
     group('Animation Performance Tests', () {
-      testWidgets('Button animations should complete efficiently', (WidgetTester tester) async {
+      testWidgets('Button animations should complete efficiently', (
+        WidgetTester tester,
+      ) async {
         bool buttonPressed = false;
-        
+
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: AppButton(
@@ -159,20 +173,22 @@ void main() {
         );
 
         final stopwatch = Stopwatch()..start();
-        
+
         // Trigger button press animation
         await tester.tap(find.byType(AppButton));
         await tester.pumpAndSettle();
-        
+
         stopwatch.stop();
-        
+
         expect(buttonPressed, isTrue);
         expect(stopwatch.elapsedMilliseconds, lessThan(500));
       });
 
-      testWidgets('Card hover animations should be performant', (WidgetTester tester) async {
+      testWidgets('Card hover animations should be performant', (
+        WidgetTester tester,
+      ) async {
         bool cardTapped = false;
-        
+
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: AppCard(
@@ -186,50 +202,52 @@ void main() {
         );
 
         final stopwatch = Stopwatch()..start();
-        
+
         await tester.tap(find.byType(AppCard));
         await tester.pumpAndSettle();
-        
+
         stopwatch.stop();
-        
+
         expect(cardTapped, isTrue);
         expect(stopwatch.elapsedMilliseconds, lessThan(300));
       });
     });
 
     group('Load Testing', () {
-      testWidgets('Should handle rapid state changes', (WidgetTester tester) async {
+      testWidgets('Should handle rapid state changes', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
-          TestHelpers.createTestWidget(
-            child: const HomePage(),
-          ),
+          TestHelpers.createTestWidget(child: const HomePage()),
         );
 
         final stopwatch = Stopwatch()..start();
-        
+
         // Rapidly switch between tabs
         for (int i = 0; i < 20; i++) {
           await tester.tap(find.text('Notificações'));
           await tester.pump();
-          
+
           await tester.tap(find.text('Perfil'));
           await tester.pump();
-          
+
           await tester.tap(find.text('Home'));
           await tester.pump();
         }
-        
+
         await tester.pumpAndSettle();
         stopwatch.stop();
-        
+
         // Should handle rapid changes efficiently
         expect(stopwatch.elapsedMilliseconds, lessThan(1000));
         expect(tester.takeException(), isNull);
       });
 
-      testWidgets('Should handle many simultaneous widgets', (WidgetTester tester) async {
+      testWidgets('Should handle many simultaneous widgets', (
+        WidgetTester tester,
+      ) async {
         final stopwatch = Stopwatch()..start();
-        
+
         await tester.pumpWidget(
           TestHelpers.createTestWidget(
             child: GridView.builder(
@@ -257,10 +275,10 @@ void main() {
             ),
           ),
         );
-        
+
         await tester.pumpAndSettle();
         stopwatch.stop();
-        
+
         // Should render 150 complex widgets efficiently
         expect(stopwatch.elapsedMilliseconds, lessThan(500));
         expect(find.byType(AppCard), findsWidgets);
@@ -269,34 +287,37 @@ void main() {
     });
 
     group('Stress Tests', () {
-      testWidgets('Should recover from repeated widget rebuilds', (WidgetTester tester) async {
+      testWidgets('Should recover from repeated widget rebuilds', (
+        WidgetTester tester,
+      ) async {
         Widget currentWidget = const HomePage();
-        
+
         await tester.pumpWidget(
           TestHelpers.createTestWidget(child: currentWidget),
         );
 
         final stopwatch = Stopwatch()..start();
-        
+
         // Force multiple rebuilds
         for (int i = 0; i < 10; i++) {
           currentWidget = MaterialApp(
             home: Scaffold(
               body: Column(
-                children: List.generate(10, (index) => AppCard(
-                  child: Text('Rebuild $i - Item $index'),
-                )),
+                children: List.generate(
+                  10,
+                  (index) => AppCard(child: Text('Rebuild $i - Item $index')),
+                ),
               ),
             ),
           );
-          
+
           await tester.pumpWidget(currentWidget);
           await tester.pump();
         }
-        
+
         await tester.pumpAndSettle();
         stopwatch.stop();
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(1000));
         expect(tester.takeException(), isNull);
       });

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Sistema de Design unificado para o Movie App
 ///
@@ -45,10 +45,12 @@ class AppDesignSystem {
   static const Color borderDisabledColor = Color(0xFF1A1A2E);
 
   /// Cores de borda para cards
-  static const Color cardBorderColor =
-      Color(0xFF3A3A4E); // Nova cor de borda para cards
-  static const Color cardBorderHoverColor =
-      Color(0xFF4A4A5E); // Borda quando hover
+  static const Color cardBorderColor = Color(
+    0xFF3A3A4E,
+  ); // Nova cor de borda para cards
+  static const Color cardBorderHoverColor = Color(
+    0xFF4A4A5E,
+  ); // Borda quando hover
 
   /// Para remover bordas completamente, use Colors.transparent
   static const Color noBorderColor = Colors.transparent;
@@ -195,52 +197,42 @@ class AppDesignSystem {
   static const double radius2xl = 24.0;
 
   /// BorderRadius padronizados
-  static const BorderRadius borderRadiusXs =
-      BorderRadius.all(Radius.circular(radiusXs));
-  static const BorderRadius borderRadiusSm =
-      BorderRadius.all(Radius.circular(radiusSm));
-  static const BorderRadius borderRadiusMd =
-      BorderRadius.all(Radius.circular(radiusMd));
-  static const BorderRadius borderRadiusLg =
-      BorderRadius.all(Radius.circular(radiusLg));
-  static const BorderRadius borderRadiusXl =
-      BorderRadius.all(Radius.circular(radiusXl));
-  static const BorderRadius borderRadius2xl =
-      BorderRadius.all(Radius.circular(radius2xl));
+  static const BorderRadius borderRadiusXs = BorderRadius.all(
+    Radius.circular(radiusXs),
+  );
+  static const BorderRadius borderRadiusSm = BorderRadius.all(
+    Radius.circular(radiusSm),
+  );
+  static const BorderRadius borderRadiusMd = BorderRadius.all(
+    Radius.circular(radiusMd),
+  );
+  static const BorderRadius borderRadiusLg = BorderRadius.all(
+    Radius.circular(radiusLg),
+  );
+  static const BorderRadius borderRadiusXl = BorderRadius.all(
+    Radius.circular(radiusXl),
+  );
+  static const BorderRadius borderRadius2xl = BorderRadius.all(
+    Radius.circular(radius2xl),
+  );
 
   // === SOMBRAS ===
 
   /// Elevações padronizadas
   static const List<BoxShadow> shadowSm = [
-    BoxShadow(
-      color: Color(0x1A000000),
-      blurRadius: 4,
-      offset: Offset(0, 2),
-    ),
+    BoxShadow(color: Color(0x1A000000), blurRadius: 4, offset: Offset(0, 2)),
   ];
 
   static const List<BoxShadow> shadowMd = [
-    BoxShadow(
-      color: Color(0x26000000),
-      blurRadius: 8,
-      offset: Offset(0, 4),
-    ),
+    BoxShadow(color: Color(0x26000000), blurRadius: 8, offset: Offset(0, 4)),
   ];
 
   static const List<BoxShadow> shadowLg = [
-    BoxShadow(
-      color: Color(0x33000000),
-      blurRadius: 16,
-      offset: Offset(0, 8),
-    ),
+    BoxShadow(color: Color(0x33000000), blurRadius: 16, offset: Offset(0, 8)),
   ];
 
   static const List<BoxShadow> shadowXl = [
-    BoxShadow(
-      color: Color(0x40000000),
-      blurRadius: 24,
-      offset: Offset(0, 12),
-    ),
+    BoxShadow(color: Color(0x40000000), blurRadius: 24, offset: Offset(0, 12)),
   ];
 
   // === DURAÇÕES DE ANIMAÇÃO ===

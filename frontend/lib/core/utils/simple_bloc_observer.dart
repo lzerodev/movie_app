@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 
 /// Observer simples para BLoCs que faz log das mudanças de estado.
-/// 
+///
 /// Útil para debug e desenvolvimento, mostra transições de estado
 /// e eventos sendo processados pelos BLoCs.
 class SimpleBlocObserver extends BlocObserver {

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../core/navigation/navigation_extensions.dart';
 import '../../../core/theme/app_design_system.dart';
@@ -6,8 +6,8 @@ import '../../../core/utils/responsive_utils.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../movie/presentation/pages/now_playing_movies.dart';
 
-  /// Dados para opções do perfil
-  class _ProfileOptionData {
+/// Dados para opções do perfil
+class _ProfileOptionData {
   final IconData icon;
   final String title;
   final String subtitle;
@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
-  
+
   @override
   Widget build(BuildContext context) {
     return AppPageLayout(
@@ -39,7 +39,7 @@ class HomePageState extends State<HomePage> {
       body: _buildBody(),
     );
   }
-  
+
   Widget _buildBody() {
     return IndexedStack(
       index: currentPageIndex,
@@ -50,16 +50,16 @@ class HomePageState extends State<HomePage> {
       ],
     );
   }
-  
+
   Widget _buildHomePage() {
     return const Padding(
       padding: EdgeInsets.all(AppDesignSystem.spaceMd),
       child: NowPlayingMoviesPage(),
     );
   }
-  
+
   Widget _buildNotificationsPage() {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(AppDesignSystem.spaceMd),
       child: Column(
         children: [
@@ -87,7 +87,7 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
-  
+
   Widget _buildNotificationCard({
     required IconData icon,
     required String title,
@@ -99,14 +99,10 @@ class HomePageState extends State<HomePage> {
         leading: Container(
           padding: const EdgeInsets.all(AppDesignSystem.spaceSm),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: AppDesignSystem.borderRadiusSm,
           ),
-          child: Icon(
-            icon,
-            color: color,
-            size: 24,
-          ),
+          child: Icon(icon, color: color, size: 24),
         ),
         title: Text(
           title,
@@ -129,7 +125,7 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
-  
+
   Widget _buildProfilePage() {
     return ResponsiveBuilder(
       builder: (context, deviceType) {
@@ -153,8 +149,11 @@ class HomePageState extends State<HomePage> {
       },
     );
   }
-  
-  Widget _buildResponsiveProfileHeader(DeviceType deviceType, BuildContext context) {
+
+  Widget _buildResponsiveProfileHeader(
+    DeviceType deviceType,
+    BuildContext context,
+  ) {
     final avatarSize = ResponsiveUtils.responsive<double>(
       context,
       mobile: 80,
@@ -163,7 +162,7 @@ class HomePageState extends State<HomePage> {
       largeDesktop: 140,
     );
     final iconSize = avatarSize * 0.5;
-    
+
     return AppCard(
       child: Padding(
         padding: ResponsiveUtils.responsive<EdgeInsets>(
@@ -189,22 +188,23 @@ class HomePageState extends State<HomePage> {
               ),
             ),
             SizedBox(height: ResponsiveUtils.responsiveSpacing(context) * 0.75),
-            
+
             // Nome com tipografia responsiva
             Text(
               'Usuário',
-              style: ResponsiveUtils.responsive<TextStyle>(
-                context,
-                mobile: AppDesignSystem.titleLarge,
-                tablet: AppDesignSystem.headlineSmall,
-                desktop: AppDesignSystem.headlineMedium,
-              ).copyWith(
-                color: AppDesignSystem.textPrimaryColor,
-                fontWeight: FontWeight.bold,
-              ),
+              style:
+                  ResponsiveUtils.responsive<TextStyle>(
+                    context,
+                    mobile: AppDesignSystem.titleLarge,
+                    tablet: AppDesignSystem.headlineSmall,
+                    desktop: AppDesignSystem.headlineMedium,
+                  ).copyWith(
+                    color: AppDesignSystem.textPrimaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             SizedBox(height: ResponsiveUtils.responsiveSpacing(context) * 0.5),
-            
+
             // Descrição com layout responsivo
             Container(
               constraints: BoxConstraints(
@@ -222,9 +222,7 @@ class HomePageState extends State<HomePage> {
                   mobile: AppDesignSystem.bodyMedium,
                   tablet: AppDesignSystem.bodyLarge,
                   desktop: AppDesignSystem.bodyLarge,
-                ).copyWith(
-                  color: AppDesignSystem.textSecondaryColor,
-                ),
+                ).copyWith(color: AppDesignSystem.textSecondaryColor),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -233,8 +231,11 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
-  
-  Widget _buildResponsiveProfileOptions(DeviceType deviceType, BuildContext context) {
+
+  Widget _buildResponsiveProfileOptions(
+    DeviceType deviceType,
+    BuildContext context,
+  ) {
     final options = [
       _ProfileOptionData(
         icon: Icons.favorite_outline,
@@ -269,7 +270,8 @@ class HomePageState extends State<HomePage> {
     ];
 
     // Layout em grid para desktop/largeDesktop
-    if (deviceType == DeviceType.desktop || deviceType == DeviceType.largeDesktop) {
+    if (deviceType == DeviceType.desktop ||
+        deviceType == DeviceType.largeDesktop) {
       final columns = deviceType == DeviceType.largeDesktop ? 3 : 2;
       return GridView.builder(
         shrinkWrap: true,
@@ -282,7 +284,11 @@ class HomePageState extends State<HomePage> {
         ),
         itemCount: options.length,
         itemBuilder: (itemContext, index) {
-          return _buildResponsiveProfileOption(options[index], deviceType, context);
+          return _buildResponsiveProfileOption(
+            options[index],
+            deviceType,
+            context,
+          );
         },
       );
     } else {
@@ -310,14 +316,14 @@ class HomePageState extends State<HomePage> {
       desktop: 28,
       largeDesktop: 30,
     );
-    
+
     final padding = ResponsiveUtils.responsive<EdgeInsets>(
       context,
       mobile: const EdgeInsets.all(16),
       tablet: const EdgeInsets.all(20),
       desktop: const EdgeInsets.all(24),
     );
-    
+
     return AppCard(
       onTap: () {
         // TODO: Implementar navegação específica para cada opção
@@ -332,7 +338,7 @@ class HomePageState extends State<HomePage> {
               width: iconSize + 8,
               height: iconSize + 8,
               decoration: BoxDecoration(
-                color: AppDesignSystem.accentColor.withOpacity(0.1),
+                color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(
                   ResponsiveUtils.responsive<double>(
                     context,
@@ -349,7 +355,7 @@ class HomePageState extends State<HomePage> {
               ),
             ),
             SizedBox(width: ResponsiveUtils.responsiveSpacing(context) * 0.75),
-            
+
             // Conteúdo expandido
             Expanded(
               child: Column(
@@ -359,25 +365,28 @@ class HomePageState extends State<HomePage> {
                   Flexible(
                     child: Text(
                       option.title,
-                      style: ResponsiveUtils.responsive<TextStyle>(
-                        context,
-                        mobile: AppDesignSystem.titleSmall,
-                        tablet: AppDesignSystem.titleMedium,
-                        desktop: AppDesignSystem.titleMedium,
-                      ).copyWith(
-                        color: AppDesignSystem.textPrimaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style:
+                          ResponsiveUtils.responsive<TextStyle>(
+                            context,
+                            mobile: AppDesignSystem.titleSmall,
+                            tablet: AppDesignSystem.titleMedium,
+                            desktop: AppDesignSystem.titleMedium,
+                          ).copyWith(
+                            color: AppDesignSystem.textPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  
+
                   // Mostra subtitle com lógica melhorada
-                  if (deviceType == DeviceType.mobile || 
+                  if (deviceType == DeviceType.mobile ||
                       deviceType == DeviceType.tablet ||
-                      (deviceType == DeviceType.desktop && option.subtitle.length < 30) ||
-                      (deviceType == DeviceType.largeDesktop && option.subtitle.length < 35)) ...[
+                      (deviceType == DeviceType.desktop &&
+                          option.subtitle.length < 30) ||
+                      (deviceType == DeviceType.largeDesktop &&
+                          option.subtitle.length < 35)) ...[
                     const SizedBox(height: 4),
                     Flexible(
                       child: Text(
@@ -387,9 +396,7 @@ class HomePageState extends State<HomePage> {
                           mobile: AppDesignSystem.bodySmall,
                           tablet: AppDesignSystem.bodyMedium,
                           desktop: AppDesignSystem.bodyMedium,
-                        ).copyWith(
-                          color: AppDesignSystem.textSecondaryColor,
-                        ),
+                        ).copyWith(color: AppDesignSystem.textSecondaryColor),
                         maxLines: deviceType == DeviceType.mobile ? 2 : 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -398,7 +405,7 @@ class HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            
+
             // Ícone de navegação
             Icon(
               Icons.arrow_forward_ios,
@@ -420,15 +427,12 @@ class HomePageState extends State<HomePage> {
     // TODO: Implementar navegação baseada na opção selecionada
     context.showMessage('Navegando para: $option');
   }
-  
+
   Widget _buildBottomNavigationBar() {
     return Container(
       decoration: const BoxDecoration(
         border: Border(
-          top: BorderSide(
-            color: AppDesignSystem.cardBorderColor,
-            width: 0.5,
-          ),
+          top: BorderSide(color: AppDesignSystem.cardBorderColor, width: 0.5),
         ),
       ),
       child: NavigationBar(
@@ -439,7 +443,7 @@ class HomePageState extends State<HomePage> {
           });
         },
         backgroundColor: AppDesignSystem.surfaceColor,
-        indicatorColor: AppDesignSystem.accentColor.withOpacity(0.15),
+        indicatorColor: AppDesignSystem.accentColor.withValues(alpha: 0.15),
         indicatorShape: const RoundedRectangleBorder(
           borderRadius: AppDesignSystem.borderRadiusMd,
         ),
@@ -449,14 +453,14 @@ class HomePageState extends State<HomePage> {
           NavigationDestination(
             icon: Icon(
               Icons.home_outlined,
-              color: currentPageIndex == 0 
-                  ? AppDesignSystem.accentColor 
+              color: currentPageIndex == 0
+                  ? AppDesignSystem.accentColor
                   : AppDesignSystem.iconSecondaryColor,
             ),
             selectedIcon: Container(
               padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
               decoration: BoxDecoration(
-                color: AppDesignSystem.accentColor.withOpacity(0.1),
+                color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
                 borderRadius: AppDesignSystem.borderRadiusSm,
               ),
               child: const Icon(
@@ -476,8 +480,8 @@ class HomePageState extends State<HomePage> {
               textColor: AppDesignSystem.textPrimaryColor,
               child: Icon(
                 Icons.notifications_outlined,
-                color: currentPageIndex == 1 
-                    ? AppDesignSystem.accentColor 
+                color: currentPageIndex == 1
+                    ? AppDesignSystem.accentColor
                     : AppDesignSystem.iconSecondaryColor,
               ),
             ),
@@ -491,7 +495,7 @@ class HomePageState extends State<HomePage> {
               child: Container(
                 padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
                 decoration: BoxDecoration(
-                  color: AppDesignSystem.accentColor.withOpacity(0.1),
+                  color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
                   borderRadius: AppDesignSystem.borderRadiusSm,
                 ),
                 child: const Icon(
@@ -505,14 +509,14 @@ class HomePageState extends State<HomePage> {
           NavigationDestination(
             icon: Icon(
               Icons.person_outline_rounded,
-              color: currentPageIndex == 2 
-                  ? AppDesignSystem.accentColor 
+              color: currentPageIndex == 2
+                  ? AppDesignSystem.accentColor
                   : AppDesignSystem.iconSecondaryColor,
             ),
             selectedIcon: Container(
               padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
               decoration: BoxDecoration(
-                color: AppDesignSystem.accentColor.withOpacity(0.1),
+                color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
                 borderRadius: AppDesignSystem.borderRadiusSm,
               ),
               child: const Icon(
@@ -526,7 +530,7 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
-  
+
   Widget _buildFloatingActionButton() {
     return Container(
       decoration: BoxDecoration(
@@ -534,12 +538,12 @@ class HomePageState extends State<HomePage> {
         borderRadius: AppDesignSystem.borderRadiusLg,
         boxShadow: [
           BoxShadow(
-            color: AppDesignSystem.accentColor.withOpacity(0.4),
+            color: AppDesignSystem.accentColor.withValues(alpha: 0.4),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
           BoxShadow(
-            color: AppDesignSystem.accentColor.withOpacity(0.2),
+            color: AppDesignSystem.accentColor.withValues(alpha: 0.2),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -551,14 +555,11 @@ class HomePageState extends State<HomePage> {
         foregroundColor: AppDesignSystem.textPrimaryColor,
         elevation: 0,
         highlightElevation: 0,
-        splashColor: AppDesignSystem.textPrimaryColor.withOpacity(0.1),
+        splashColor: AppDesignSystem.textPrimaryColor.withValues(alpha: 0.1),
         shape: const RoundedRectangleBorder(
           borderRadius: AppDesignSystem.borderRadiusLg,
         ),
-        icon: const Icon(
-          Icons.search_rounded,
-          size: 24,
-        ),
+        icon: const Icon(Icons.search_rounded, size: 24),
         label: Text(
           'Buscar',
           style: AppDesignSystem.labelLarge.copyWith(
@@ -570,7 +571,7 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
-  
+
   void _navigateToSearch() {
     context.goToSearchMovies();
   }
@@ -581,10 +582,10 @@ class HomePageState extends State<HomePage> {
       Container(
         margin: const EdgeInsets.only(right: AppDesignSystem.spaceSm),
         decoration: BoxDecoration(
-          color: AppDesignSystem.accentColor.withOpacity(0.1),
+          color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
           borderRadius: AppDesignSystem.borderRadiusSm,
           border: Border.all(
-            color: AppDesignSystem.accentColor.withOpacity(0.3),
+            color: AppDesignSystem.accentColor.withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -604,10 +605,7 @@ class HomePageState extends State<HomePage> {
         decoration: BoxDecoration(
           color: AppDesignSystem.cardColor,
           borderRadius: AppDesignSystem.borderRadiusSm,
-          border: Border.all(
-            color: AppDesignSystem.cardBorderColor,
-            width: 1,
-          ),
+          border: Border.all(color: AppDesignSystem.cardBorderColor, width: 1),
         ),
         child: PopupMenuButton<String>(
           onSelected: _handleMenuSelection,
@@ -618,13 +616,11 @@ class HomePageState extends State<HomePage> {
           tooltip: 'Mais opções',
           shape: const RoundedRectangleBorder(
             borderRadius: AppDesignSystem.borderRadiusMd,
-            side: BorderSide(
-              color: AppDesignSystem.cardBorderColor,
-            ),
+            side: BorderSide(color: AppDesignSystem.cardBorderColor),
           ),
           color: AppDesignSystem.cardColor,
           elevation: 8,
-          shadowColor: AppDesignSystem.primaryColor.withOpacity(0.3),
+          shadowColor: AppDesignSystem.primaryColor.withValues(alpha: 0.3),
           itemBuilder: (context) => [
             PopupMenuItem<String>(
               value: 'favorites',
@@ -677,14 +673,10 @@ class HomePageState extends State<HomePage> {
           Container(
             padding: const EdgeInsets.all(AppDesignSystem.spaceXs),
             decoration: BoxDecoration(
-              color: AppDesignSystem.accentColor.withOpacity(0.1),
+              color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
               borderRadius: AppDesignSystem.borderRadiusXs,
             ),
-            child: Icon(
-              icon,
-              color: AppDesignSystem.accentColor,
-              size: 20,
-            ),
+            child: Icon(icon, color: AppDesignSystem.accentColor, size: 20),
           ),
           const SizedBox(width: AppDesignSystem.spaceMd),
           Expanded(
@@ -755,9 +747,7 @@ class HomePageState extends State<HomePage> {
         behavior: SnackBarBehavior.floating,
         shape: const RoundedRectangleBorder(
           borderRadius: AppDesignSystem.borderRadiusMd,
-          side: BorderSide(
-            color: AppDesignSystem.cardBorderColor,
-          ),
+          side: BorderSide(color: AppDesignSystem.cardBorderColor),
         ),
         margin: const EdgeInsets.all(AppDesignSystem.spaceMd),
         duration: const Duration(seconds: 2),
@@ -772,9 +762,7 @@ class HomePageState extends State<HomePage> {
         backgroundColor: AppDesignSystem.cardColor,
         shape: const RoundedRectangleBorder(
           borderRadius: AppDesignSystem.borderRadiusLg,
-          side: BorderSide(
-            color: AppDesignSystem.cardBorderColor,
-          ),
+          side: BorderSide(color: AppDesignSystem.cardBorderColor),
         ),
         title: Row(
           children: [
@@ -816,9 +804,7 @@ class HomePageState extends State<HomePage> {
               decoration: BoxDecoration(
                 color: AppDesignSystem.backgroundColor,
                 borderRadius: AppDesignSystem.borderRadiusMd,
-                border: Border.all(
-                  color: AppDesignSystem.cardBorderColor,
-                ),
+                border: Border.all(color: AppDesignSystem.cardBorderColor),
               ),
               child: Column(
                 children: [
@@ -836,7 +822,9 @@ class HomePageState extends State<HomePage> {
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             style: TextButton.styleFrom(
-              backgroundColor: AppDesignSystem.accentColor.withOpacity(0.1),
+              backgroundColor: AppDesignSystem.accentColor.withValues(
+                alpha: 0.1,
+              ),
               shape: const RoundedRectangleBorder(
                 borderRadius: AppDesignSystem.borderRadiusSm,
               ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/mixins/design_system_mixin.dart';
@@ -30,21 +30,20 @@ class _MovieDetailPageState extends State<MovieDetailPage>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+      ),
+    );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
+          ),
+        );
 
     _animationController.forward();
   }
@@ -62,19 +61,16 @@ class _MovieDetailPageState extends State<MovieDetailPage>
     return Container(
       margin: compactPadding,
       decoration: cardDecoration.copyWith(
-        color: AppDesignSystem.cardColor.withOpacity(0.9),
+        color: AppDesignSystem.cardColor.withValues(alpha: 0.9),
       ),
-      child: IconButton(
-        icon: icon,
-        onPressed: onPressed,
-      ),
+      child: IconButton(icon: icon, onPressed: onPressed),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final releaseDate =
-        DateFormat.yMMMd('pt_BR').format(widget.movie.releaseDate);
+    final releaseDate = DateFormat.yMMMd('pt_BR')
+        .format(widget.movie.releaseDate);
 
     return Scaffold(
       backgroundColor: AppDesignSystem.backgroundColor,
@@ -160,8 +156,8 @@ class _MovieDetailPageState extends State<MovieDetailPage>
                   colors: [
                     Colors.transparent,
                     Colors.transparent,
-                    AppDesignSystem.backgroundColor.withOpacity(0.3),
-                    AppDesignSystem.backgroundColor.withOpacity(0.8),
+                    AppDesignSystem.backgroundColor.withValues(alpha: 0.3),
+                    AppDesignSystem.backgroundColor.withValues(alpha: 0.8),
                     AppDesignSystem.backgroundColor,
                   ],
                 ),
@@ -200,7 +196,7 @@ class _MovieDetailPageState extends State<MovieDetailPage>
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: AppDesignSystem.accentColor.withOpacity(0.3),
+                      color: AppDesignSystem.accentColor.withValues(alpha: 0.3),
                       blurRadius: 6,
                       offset: const Offset(0, 3),
                     ),
@@ -311,14 +307,10 @@ class _MovieDetailPageState extends State<MovieDetailPage>
         Container(
           padding: const EdgeInsets.all(AppDesignSystem.spaceSm),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: AppDesignSystem.borderRadiusMd,
           ),
-          child: Icon(
-            icon,
-            color: color,
-            size: 24,
-          ),
+          child: Icon(icon, color: color, size: 24),
         ),
         const SizedBox(height: AppDesignSystem.spaceSm),
         Text(

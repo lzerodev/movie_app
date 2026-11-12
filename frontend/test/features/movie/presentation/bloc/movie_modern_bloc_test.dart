@@ -10,10 +10,14 @@ import 'package:movie_app/features/movie/presentation/bloc/movie_modern_bloc.dar
 
 // Mocks dos UseCases
 class MockSearchMoviesUseCase extends Mock implements SearchMoviesUseCase {}
-class MockGetNowPlayingMoviesUseCase extends Mock implements GetNowPlayingMoviesUseCase {}
+
+class MockGetNowPlayingMoviesUseCase extends Mock
+    implements GetNowPlayingMoviesUseCase {}
 
 // Fakes para registerFallbackValue
-class FakeGetNowPlayingMoviesParams extends Fake implements GetNowPlayingMoviesParams {}
+class FakeGetNowPlayingMoviesParams extends Fake
+    implements GetNowPlayingMoviesParams {}
+
 class FakeSearchMoviesParams extends Fake implements SearchMoviesParams {}
 
 void main() {
@@ -85,8 +89,9 @@ void main() {
     blocTest<MovieModernBloc, MovieModernState>(
       'deve falhar ao buscar filmes',
       build: () {
-        when(() => mockGetNowPlayingMoviesUseCase(any()))
-            .thenAnswer((_) async => const Error(NetworkFailure(message: 'Network error')));
+        when(() => mockGetNowPlayingMoviesUseCase(any())).thenAnswer(
+          (_) async => const Error(NetworkFailure(message: 'Network error')),
+        );
         return bloc;
       },
       act: (bloc) => bloc.add(const MovieModernNowPlayingFetched()),
@@ -135,7 +140,11 @@ void main() {
       expect: () => [
         const MovieModernState(), // Reset para estado inicial
         const MovieModernState(status: MovieModernStatus.loading),
-        isA<MovieModernState>().having((s) => s.status, 'status', MovieModernStatus.success),
+        isA<MovieModernState>().having(
+          (s) => s.status,
+          'status',
+          MovieModernStatus.success,
+        ),
       ],
     );
   });

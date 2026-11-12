@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Extensions úteis para Context.
 extension ContextExtensions on BuildContext {
@@ -56,8 +56,12 @@ extension ContextExtensions on BuildContext {
   }
 
   /// Substituir a tela atual.
-  Future<T?> pushReplacementNamed<T, TO>(String routeName, {Object? arguments}) {
-    return Navigator.of(this).pushReplacementNamed<T, TO>(routeName, arguments: arguments);
+  Future<T?> pushReplacementNamed<T, TO>(
+    String routeName, {
+    Object? arguments,
+  }) {
+    return Navigator.of(this)
+        .pushReplacementNamed<T, TO>(routeName, arguments: arguments);
   }
 
   /// Voltar para a tela anterior.

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Sistema de navegação type-safe para a aplicação.
 ///
@@ -26,8 +26,10 @@ class AppRouter {
     AppRoute<T> route, {
     TO? result,
   }) {
-    return currentState!
-        .pushReplacement(route.materialPageRoute, result: result);
+    return currentState!.pushReplacement(
+      route.materialPageRoute,
+      result: result,
+    );
   }
 
   /// Navega e remove todas as rotas anteriores
@@ -158,7 +160,8 @@ abstract class AppRoute<T> {
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child,
-    ) transitionsBuilder,
+    )
+    transitionsBuilder,
     Duration? transitionDuration,
     Duration? reverseTransitionDuration,
   }) {
@@ -167,7 +170,11 @@ abstract class AppRoute<T> {
       settings: RouteSettings(name: name),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return transitionsBuilder(
-            context, animation, secondaryAnimation, child);
+          context,
+          animation,
+          secondaryAnimation,
+          child,
+        );
       },
       transitionDuration: transitionDuration ?? config.transitionDuration,
       reverseTransitionDuration:

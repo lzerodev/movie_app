@@ -1,7 +1,7 @@
 import 'failure.dart';
 
 /// Representa o resultado de uma operação que pode falhar.
-/// 
+///
 /// Encapsula tanto o sucesso quanto o erro de uma operação,
 /// forçando o tratamento explícito de erros.
 sealed class Result<T> {
@@ -17,7 +17,9 @@ sealed class Result<T> {
   T get value {
     return switch (this) {
       Success<T>(:final data) => data,
-      Error<T>(:final failure) => throw Exception('Result is an error: $failure'),
+      Error<T>(:final failure) => throw Exception(
+        'Result is an error: $failure',
+      ),
     };
   }
 
@@ -46,10 +48,7 @@ sealed class Result<T> {
   }
 
   /// Executa uma função se for um sucesso, senão executa outra função.
-  R fold<R>(
-    R Function(Failure) onError,
-    R Function(T) onSuccess,
-  ) {
+  R fold<R>(R Function(Failure) onError, R Function(T) onSuccess) {
     return switch (this) {
       Success<T>(:final data) => onSuccess(data),
       Error<T>(:final failure) => onError(failure),

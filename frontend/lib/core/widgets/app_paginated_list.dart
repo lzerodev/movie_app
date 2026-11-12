@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../theme/app_design_system.dart';
 import 'app_empty_state.dart';
@@ -139,9 +139,7 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
 
     return Container(
       decoration: layoutConfig.decoration,
-      child: const AppLoadingIndicator.page(
-        message: 'Carregando itens...',
-      ),
+      child: const AppLoadingIndicator.page(message: 'Carregando itens...'),
     );
   }
 
@@ -188,7 +186,9 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
         addAutomaticKeepAlives: layoutConfig.addAutomaticKeepAlives,
         addRepaintBoundaries: layoutConfig.addRepaintBoundaries,
         addSemanticIndexes: layoutConfig.addSemanticIndexes,
-        cacheExtent: layoutConfig.cacheExtent,
+        scrollCacheExtent: layoutConfig.cacheExtent == null
+            ? null
+            : ScrollCacheExtent.pixels(layoutConfig.cacheExtent!),
       );
     } else {
       listWidget = ListView.builder(
@@ -202,7 +202,9 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
         addAutomaticKeepAlives: layoutConfig.addAutomaticKeepAlives,
         addRepaintBoundaries: layoutConfig.addRepaintBoundaries,
         addSemanticIndexes: layoutConfig.addSemanticIndexes,
-        cacheExtent: layoutConfig.cacheExtent,
+        scrollCacheExtent: layoutConfig.cacheExtent == null
+            ? null
+            : ScrollCacheExtent.pixels(layoutConfig.cacheExtent!),
       );
     }
 
@@ -271,7 +273,8 @@ class _AppPaginatedListState<T> extends State<AppPaginatedList<T>> {
     if (animationConfig.enableItemAnimation) {
       return AnimatedContainer(
         duration: Duration(
-          milliseconds: animationConfig.animationDuration +
+          milliseconds:
+              animationConfig.animationDuration +
               (index * animationConfig.staggerDelay),
         ),
         curve: animationConfig.animationCurve,
@@ -401,9 +404,4 @@ class AppListAnimationConfig {
 }
 
 /// Tipos de física de scroll
-enum AppScrollPhysicsType {
-  bouncing,
-  clamping,
-  never,
-  platform,
-}
+enum AppScrollPhysicsType { bouncing, clamping, never, platform }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_app/core/error/failure.dart';
@@ -38,15 +38,18 @@ class TestHelpers {
 
   /// Cria lista de filmes para testes
   static List<Movie> createTestMovies({int count = 3}) {
-    return List.generate(count, (index) => Movie(
-      id: index + 1,
-      title: 'Test Movie ${index + 1}',
-      posterPath: '/poster$index.jpg',
-      backdropPath: '/backdrop$index.jpg',
-      releaseDate: DateTime(2024, 1, index + 1),
-      overview: 'Test movie overview $index',
-      voteAverage: 7.0 + index * 0.5,
-    ));
+    return List.generate(
+      count,
+      (index) => Movie(
+        id: index + 1,
+        title: 'Test Movie ${index + 1}',
+        posterPath: '/poster$index.jpg',
+        backdropPath: '/backdrop$index.jpg',
+        releaseDate: DateTime(2024, 1, index + 1),
+        overview: 'Test movie overview $index',
+        voteAverage: 7.0 + index * 0.5,
+      ),
+    );
   }
 
   /// Cria um filme específico para testes
@@ -71,17 +74,24 @@ class TestHelpers {
 /// Mocks reutilizáveis para testes
 class TestMocks {
   static MockIMovieRepository createMockRepository() => MockIMovieRepository();
-  static MockSearchMoviesUseCase createMockSearchUseCase() => MockSearchMoviesUseCase();
-  static MockGetNowPlayingMoviesUseCase createMockNowPlayingUseCase() => MockGetNowPlayingMoviesUseCase();
+  static MockSearchMoviesUseCase createMockSearchUseCase() =>
+      MockSearchMoviesUseCase();
+  static MockGetNowPlayingMoviesUseCase createMockNowPlayingUseCase() =>
+      MockGetNowPlayingMoviesUseCase();
 }
 
 /// Mocks das dependências principais
 class MockIMovieRepository extends Mock implements IMovieRepository {}
+
 class MockSearchMoviesUseCase extends Mock implements SearchMoviesUseCase {}
-class MockGetNowPlayingMoviesUseCase extends Mock implements GetNowPlayingMoviesUseCase {}
+
+class MockGetNowPlayingMoviesUseCase extends Mock
+    implements GetNowPlayingMoviesUseCase {}
 
 /// Fakes para registerFallbackValue
-class FakeGetNowPlayingMoviesParams extends Fake implements GetNowPlayingMoviesParams {}
+class FakeGetNowPlayingMoviesParams extends Fake
+    implements GetNowPlayingMoviesParams {}
+
 class FakeSearchMoviesParams extends Fake implements SearchMoviesParams {}
 
 /// Configuração de testes comum
@@ -134,9 +144,8 @@ class TestScenarios {
     MockSearchMoviesUseCase mockUseCase, {
     String errorMessage = 'Network error',
   }) {
-    when(() => mockUseCase(any())).thenAnswer(
-      (_) async => Error(NetworkFailure(message: errorMessage)),
-    );
+    when(() => mockUseCase(any()))
+        .thenAnswer((_) async => Error(NetworkFailure(message: errorMessage)));
   }
 
   /// Cenário: Sucesso nos filmes em cartaz
@@ -154,8 +163,7 @@ class TestScenarios {
     MockGetNowPlayingMoviesUseCase mockUseCase, {
     String errorMessage = 'API error',
   }) {
-    when(() => mockUseCase(any())).thenAnswer(
-      (_) async => Error(NetworkFailure(message: errorMessage)),
-    );
+    when(() => mockUseCase(any()))
+        .thenAnswer((_) async => Error(NetworkFailure(message: errorMessage)));
   }
 }

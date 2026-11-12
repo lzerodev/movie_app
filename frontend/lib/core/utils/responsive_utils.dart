@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Utilitários para responsividade
 class ResponsiveUtils {
@@ -60,13 +60,15 @@ class ResponsiveUtils {
 
   /// Retorna padding responsivo
   static EdgeInsets responsivePadding(BuildContext context) {
-    return EdgeInsets.all(responsive<double>(
-      context,
-      mobile: 16,
-      tablet: 24,
-      desktop: 32,
-      largeDesktop: 40,
-    ));
+    return EdgeInsets.all(
+      responsive<double>(
+        context,
+        mobile: 16,
+        tablet: 24,
+        desktop: 32,
+        largeDesktop: 40,
+      ),
+    );
   }
 
   /// Retorna espaçamento responsivo
@@ -109,21 +111,13 @@ class ResponsiveUtils {
 }
 
 /// Tipos de dispositivo
-enum DeviceType {
-  mobile,
-  tablet,
-  desktop,
-  largeDesktop,
-}
+enum DeviceType { mobile, tablet, desktop, largeDesktop }
 
 /// Widget helper para construção responsiva
 class ResponsiveBuilder extends StatelessWidget {
   final Widget Function(BuildContext context, DeviceType deviceType) builder;
 
-  const ResponsiveBuilder({
-    super.key,
-    required this.builder,
-  });
+  const ResponsiveBuilder({super.key, required this.builder});
 
   @override
   Widget build(BuildContext context) {

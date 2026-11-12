@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../theme/app_design_system.dart';
 
@@ -27,91 +27,84 @@ mixin DesignSystemMixin {
 
   /// Padding horizontal para listas
   EdgeInsets get listPadding => const EdgeInsets.symmetric(
-        horizontal: AppDesignSystem.spaceMd,
-        vertical: AppDesignSystem.spaceSm,
-      );
+    horizontal: AppDesignSystem.spaceMd,
+    vertical: AppDesignSystem.spaceSm,
+  );
 
   // === BORDAS E DECORAÇÕES ===
 
   /// Decoração padrão para cards
   BoxDecoration get cardDecoration => BoxDecoration(
-        color: AppDesignSystem.cardColor,
-        borderRadius: AppDesignSystem.borderRadiusMd,
-        border: Border.all(
-          color: AppDesignSystem.cardBorderColor,
-          width: 1,
-        ),
-        boxShadow: AppDesignSystem.shadowSm,
-      );
+    color: AppDesignSystem.cardColor,
+    borderRadius: AppDesignSystem.borderRadiusMd,
+    border: Border.all(color: AppDesignSystem.cardBorderColor, width: 1),
+    boxShadow: AppDesignSystem.shadowSm,
+  );
 
   /// Decoração para containers principais
   BoxDecoration get containerDecoration => BoxDecoration(
-        color: AppDesignSystem.surfaceColor,
-        borderRadius: AppDesignSystem.borderRadiusLg,
-        border: Border.all(
-          color: AppDesignSystem.borderColor,
-          width: 1,
-        ),
-      );
+    color: AppDesignSystem.surfaceColor,
+    borderRadius: AppDesignSystem.borderRadiusLg,
+    border: Border.all(color: AppDesignSystem.borderColor, width: 1),
+  );
 
   /// Decoração para elementos de destaque
   BoxDecoration get accentDecoration => BoxDecoration(
-        gradient: AppDesignSystem.accentGradient,
-        borderRadius: AppDesignSystem.borderRadiusMd,
-        boxShadow: [
-          BoxShadow(
-            color: AppDesignSystem.accentColor.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      );
+    gradient: AppDesignSystem.accentGradient,
+    borderRadius: AppDesignSystem.borderRadiusMd,
+    boxShadow: [
+      BoxShadow(
+        color: AppDesignSystem.accentColor.withValues(alpha: 0.3),
+        blurRadius: 8,
+        offset: const Offset(0, 4),
+      ),
+    ],
+  );
 
   /// Decoração para botões circulares
   BoxDecoration circularDecoration({
     required double size,
     Color? color,
     List<BoxShadow>? boxShadow,
-  }) =>
-      BoxDecoration(
-        color: color ?? AppDesignSystem.cardColor,
-        shape: BoxShape.circle,
-        boxShadow: boxShadow ?? AppDesignSystem.shadowSm,
-      );
+  }) => BoxDecoration(
+    color: color ?? AppDesignSystem.cardColor,
+    shape: BoxShape.circle,
+    boxShadow: boxShadow ?? AppDesignSystem.shadowSm,
+  );
 
   /// Decoração para badges e chips
   BoxDecoration get badgeDecoration => BoxDecoration(
-        color: AppDesignSystem.accentColor.withOpacity(0.1),
-        borderRadius: AppDesignSystem.borderRadiusSm,
-        border: Border.all(
-          color: AppDesignSystem.accentColor.withOpacity(0.3),
-          width: 1,
-        ),
-      );
+    color: AppDesignSystem.accentColor.withValues(alpha: 0.1),
+    borderRadius: AppDesignSystem.borderRadiusSm,
+    border: Border.all(
+      color: AppDesignSystem.accentColor.withValues(alpha: 0.3),
+      width: 1,
+    ),
+  );
 
   // === ESTILOS DE TEXTO ===
 
   /// Estilo para títulos de seção
   TextStyle get sectionTitleStyle => AppDesignSystem.titleLarge.copyWith(
-        color: AppDesignSystem.textPrimaryColor,
-        fontWeight: FontWeight.bold,
-      );
+    color: AppDesignSystem.textPrimaryColor,
+    fontWeight: FontWeight.bold,
+  );
 
   /// Estilo para subtítulos
   TextStyle get subtitleStyle => AppDesignSystem.bodyMedium.copyWith(
-        color: AppDesignSystem.textSecondaryColor,
-      );
+    color: AppDesignSystem.textSecondaryColor,
+  );
 
   /// Estilo para texto de destaque
   TextStyle get accentTextStyle => AppDesignSystem.labelLarge.copyWith(
-        color: AppDesignSystem.accentColor,
-        fontWeight: FontWeight.w600,
-      );
+    color: AppDesignSystem.accentColor,
+    fontWeight: FontWeight.w600,
+  );
 
   /// Estilo para texto secundário
   TextStyle get secondaryTextStyle => AppDesignSystem.bodySmall.copyWith(
-        color: AppDesignSystem.textTertiaryColor,
-      );
+    color: AppDesignSystem.textTertiaryColor,
+  );
 
   // === ANIMAÇÕES ===
 
@@ -145,8 +138,8 @@ mixin DesignSystemMixin {
 
   /// Divider padrão
   Widget get defaultDivider => const Divider(
-        color: AppDesignSystem.borderColor,
-        height: 1,
-        thickness: 1,
-      );
+    color: AppDesignSystem.borderColor,
+    height: 1,
+    thickness: 1,
+  );
 }

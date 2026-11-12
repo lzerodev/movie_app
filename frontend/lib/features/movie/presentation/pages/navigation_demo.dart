@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../core/navigation/navigation.dart';
 import '../../../../core/theme/app_design_system.dart';
@@ -188,7 +188,9 @@ class NavigationDemoPage extends StatelessWidget {
   }
 
   void _showTransitionDemo(
-      BuildContext context, AppTransitionType transitionType) {
+    BuildContext context,
+    AppTransitionType transitionType,
+  ) {
     final route = PageRouteBuilder<void>(
       pageBuilder: (context, animation, secondaryAnimation) {
         return _TransitionDemoPage(transitionType: transitionType);
@@ -307,17 +309,13 @@ class _TransitionDemoPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100),
                 boxShadow: [
                   BoxShadow(
-                    color: AppDesignSystem.accentColor.withOpacity(0.3),
+                    color: AppDesignSystem.accentColor.withValues(alpha: 0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
                 ],
               ),
-              child: const Icon(
-                Icons.animation,
-                size: 80,
-                color: Colors.white,
-              ),
+              child: const Icon(Icons.animation, size: 80, color: Colors.white),
             ),
             const SizedBox(height: AppDesignSystem.spaceXl),
             Text(

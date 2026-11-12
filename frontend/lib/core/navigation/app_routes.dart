@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../features/home/widgets/home.dart';
 import '../../features/movie/data/models/movie.dart';
@@ -34,11 +34,11 @@ class AppRoutes {
   // === MAPA DE ROTAS NOMEADAS ===
 
   static Map<String, WidgetBuilder> get namedRoutes => {
-        home: (context) => const HomePage(),
-        nowPlayingMovies: (context) => const NowPlayingMoviesPage(),
-        searchMovies: (context) => const SearchMoviesPage(),
-        // movieDetail precisa de parâmetros, então não incluímos aqui
-      };
+    home: (context) => const HomePage(),
+    nowPlayingMovies: (context) => const NowPlayingMoviesPage(),
+    searchMovies: (context) => const SearchMoviesPage(),
+    // movieDetail precisa de parâmetros, então não incluímos aqui
+  };
 
   /// Gerador de rotas para rotas dinâmicas
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -151,9 +151,9 @@ class MovieDetailRoute extends AppRoute<void> {
 
   @override
   AppRouteConfig get config => const AppRouteConfig(
-        transitionDuration: Duration(milliseconds: 400),
-        reverseTransitionDuration: Duration(milliseconds: 300),
-      );
+    transitionDuration: Duration(milliseconds: 400),
+    reverseTransitionDuration: Duration(milliseconds: 300),
+  );
 
   /// Cria transição customizada para detalhes do filme
   PageRouteBuilder<void> get heroTransitionRoute {
@@ -164,14 +164,12 @@ class MovieDetailRoute extends AppRoute<void> {
         const end = Offset.zero;
         const curve = Curves.easeInOut;
 
-        var tween = Tween(begin: begin, end: end).chain(
-          CurveTween(curve: curve),
-        );
+        var tween = Tween(
+          begin: begin,
+          end: end,
+        ).chain(CurveTween(curve: curve));
 
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
+        return SlideTransition(position: animation.drive(tween), child: child);
       },
       transitionDuration: const Duration(milliseconds: 400),
     );

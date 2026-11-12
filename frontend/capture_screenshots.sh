@@ -9,7 +9,8 @@ set -e
 echo "🎬 Iniciando captura de screenshots do Movie App..."
 
 # Diretório de screenshots
-SCREENSHOTS_DIR="screenshots"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+SCREENSHOTS_DIR="$SCRIPT_DIR/screenshots"
 mkdir -p "$SCREENSHOTS_DIR"
 
 # Função para capturar screenshot no Android

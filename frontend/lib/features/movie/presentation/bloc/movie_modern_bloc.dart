@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import 'package:movie_app/core/error/result.dart';
+
 import '../../data/models/movie.dart';
 import '../../domain/usecases/get_now_playing_movies_usecase.dart';
 import '../../domain/usecases/search_movies_usecase.dart';
@@ -25,7 +26,7 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 }
 
 /// BLoC moderno para gerenciamento de lista de filmes.
-/// 
+///
 /// Utiliza UseCases seguindo Clean Architecture e Result Pattern
 /// para tratamento type-safe de erros.
 class MovieModernBloc extends Bloc<MovieModernEvent, MovieModernState> {
@@ -33,26 +34,21 @@ class MovieModernBloc extends Bloc<MovieModernEvent, MovieModernState> {
   final SearchMoviesUseCase _searchMoviesUseCase;
 
   MovieModernBloc({
-    required GetNowPlayingMoviesUseCase getNowPlayingMoviesUseCase,
-    required SearchMoviesUseCase searchMoviesUseCase,
-  })  : _getNowPlayingMoviesUseCase = getNowPlayingMoviesUseCase,
-        _searchMoviesUseCase = searchMoviesUseCase,
-        super(const MovieModernState()) {
-    
+    required this._getNowPlayingMoviesUseCase,
+    required this._searchMoviesUseCase,
+  }) : super(const MovieModernState()) {
     // Registra handlers para eventos
     on<MovieModernNowPlayingFetched>(
       _onNowPlayingFetched,
       transformer: throttleDroppable(throttleDuration),
     );
-    
+
     on<MovieModernSearchRequested>(
       _onSearchRequested,
       transformer: throttleDroppable(const Duration(milliseconds: 500)),
     );
-    
-    on<MovieModernRefreshRequested>(
-      _onRefreshRequested,
-    );
+
+    on<MovieModernRefreshRequested>(_onRefreshRequested);
   }
 
   /// Handler para buscar filmes em cartaz
@@ -66,7 +62,7 @@ class MovieModernBloc extends Bloc<MovieModernEvent, MovieModernState> {
     try {
       // Calcula próxima página baseada na quantidade atual
       final currentPage = (state.movies.length ~/ pageSize) + 1;
-      
+
       // Emite loading apenas se for a primeira página
       if (currentPage == 1) {
         emit(state.copyWith(status: MovieModernStatus.loading));
@@ -83,23 +79,29 @@ class MovieModernBloc extends Bloc<MovieModernEvent, MovieModernState> {
           if (data.isEmpty) {
             emit(state.copyWith(hasReachedMax: true));
           } else {
-            emit(state.copyWith(
-              status: MovieModernStatus.success,
-              movies: [...state.movies, ...data],
-              hasReachedMax: data.length < pageSize,
-            ));
+            emit(
+              state.copyWith(
+                status: MovieModernStatus.success,
+                movies: [...state.movies, ...data],
+                hasReachedMax: data.length < pageSize,
+              ),
+            );
           }
         case Error(:final failure):
-          emit(state.copyWith(
-            status: MovieModernStatus.failure,
-            errorMessage: failure.message,
-          ));
+          emit(
+            state.copyWith(
+              status: MovieModernStatus.failure,
+              errorMessage: failure.message,
+            ),
+          );
       }
     } catch (e) {
-      emit(state.copyWith(
-        status: MovieModernStatus.failure,
-        errorMessage: 'Erro inesperado: $e',
-      ));
+      emit(
+        state.copyWith(
+          status: MovieModernStatus.failure,
+          errorMessage: 'Erro inesperado: $e',
+        ),
+      );
     }
   }
 
@@ -110,18 +112,17 @@ class MovieModernBloc extends Bloc<MovieModernEvent, MovieModernState> {
   ) async {
     // Valida entrada
     if (event.query.trim().isEmpty) {
-      emit(state.copyWith(
-        status: MovieModernStatus.success,
-        movies: [],
-        isSearchMode: false,
-      ));
+      emit(
+        state.copyWith(
+          status: MovieModernStatus.success,
+          movies: [],
+          isSearchMode: false,
+        ),
+      );
       return;
     }
 
-    emit(state.copyWith(
-      status: MovieModernStatus.loading,
-      isSearchMode: true,
-    ));
+    emit(state.copyWith(status: MovieModernStatus.loading, isSearchMode: true));
 
     // Executa UseCase de busca
     final result = await _searchMoviesUseCase(
@@ -130,18 +131,22 @@ class MovieModernBloc extends Bloc<MovieModernEvent, MovieModernState> {
 
     switch (result) {
       case Success(:final data):
-        emit(state.copyWith(
-          status: MovieModernStatus.success,
-          movies: data,
-          hasReachedMax: data.length < pageSize,
-          searchQuery: event.query,
-        ));
+        emit(
+          state.copyWith(
+            status: MovieModernStatus.success,
+            movies: data,
+            hasReachedMax: data.length < pageSize,
+            searchQuery: event.query,
+          ),
+        );
       case Error(:final failure):
-        emit(state.copyWith(
-          status: MovieModernStatus.failure,
-          errorMessage: failure.message,
-          movies: [],
-        ));
+        emit(
+          state.copyWith(
+            status: MovieModernStatus.failure,
+            errorMessage: failure.message,
+            movies: [],
+          ),
+        );
     }
   }
 

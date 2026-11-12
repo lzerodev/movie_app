@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../theme/app_design_system.dart';
 
@@ -93,12 +93,12 @@ class AppCard extends StatelessWidget {
     this.animationDuration = const Duration(milliseconds: 200),
     this.enableSplash = true,
     this.heroTag,
-  })  : variant = AppCardVariant.primary,
-        backgroundColor = null,
-        elevation = null,
-        gradient = null,
-        borderColor = null,
-        borderWidth = null;
+  }) : variant = AppCardVariant.primary,
+       backgroundColor = null,
+       elevation = null,
+       gradient = null,
+       borderColor = null,
+       borderWidth = null;
 
   /// Factory para card secundário (surface color)
   const AppCard.secondary({
@@ -114,12 +114,12 @@ class AppCard extends StatelessWidget {
     this.animationDuration = const Duration(milliseconds: 200),
     this.enableSplash = true,
     this.heroTag,
-  })  : variant = AppCardVariant.secondary,
-        backgroundColor = null,
-        elevation = null,
-        gradient = null,
-        borderColor = null,
-        borderWidth = null;
+  }) : variant = AppCardVariant.secondary,
+       backgroundColor = null,
+       elevation = null,
+       gradient = null,
+       borderColor = null,
+       borderWidth = null;
 
   /// Factory para card outlined (apenas borda)
   const AppCard.outlined({
@@ -137,10 +137,10 @@ class AppCard extends StatelessWidget {
     this.animationDuration = const Duration(milliseconds: 200),
     this.enableSplash = true,
     this.heroTag,
-  })  : variant = AppCardVariant.outlined,
-        backgroundColor = null,
-        elevation = null,
-        gradient = null;
+  }) : variant = AppCardVariant.outlined,
+       backgroundColor = null,
+       elevation = null,
+       gradient = null;
 
   /// Factory para card minimal (background transparente)
   const AppCard.minimal({
@@ -156,12 +156,12 @@ class AppCard extends StatelessWidget {
     this.animationDuration = const Duration(milliseconds: 200),
     this.enableSplash = true,
     this.heroTag,
-  })  : variant = AppCardVariant.minimal,
-        backgroundColor = null,
-        elevation = null,
-        gradient = null,
-        borderColor = null,
-        borderWidth = null;
+  }) : variant = AppCardVariant.minimal,
+       backgroundColor = null,
+       elevation = null,
+       gradient = null,
+       borderColor = null,
+       borderWidth = null;
 
   /// Factory para card pequeno
   const AppCard.small({
@@ -215,10 +215,7 @@ class AppCard extends StatelessWidget {
 
     // Aplicar Hero animation se heroTag fornecido
     if (heroTag != null) {
-      cardWidget = Hero(
-        tag: heroTag!,
-        child: cardWidget,
-      );
+      cardWidget = Hero(tag: heroTag!, child: cardWidget);
     }
 
     // Aplicar animação de hover/press se habilitada
@@ -237,10 +234,7 @@ class AppCard extends StatelessWidget {
   Widget _buildCardContent() {
     final effectivePadding = padding ?? _getDefaultPadding();
 
-    Widget content = Padding(
-      padding: effectivePadding,
-      child: child,
-    );
+    Widget content = Padding(padding: effectivePadding, child: child);
 
     // Se não há interação, retorna apenas o conteúdo
     if (onTap == null && onLongPress == null) {
@@ -255,8 +249,9 @@ class AppCard extends StatelessWidget {
         onLongPress: onLongPress,
         borderRadius: _getEffectiveBorderRadius(),
         splashColor: enableSplash ? _getSplashColor() : Colors.transparent,
-        highlightColor:
-            enableSplash ? _getHighlightColor() : Colors.transparent,
+        highlightColor: enableSplash
+            ? _getHighlightColor()
+            : Colors.transparent,
         child: content,
       ),
     );
@@ -278,7 +273,7 @@ class AppCard extends StatelessWidget {
 
     switch (variant) {
       case AppCardVariant.primary:
-        return AppDesignSystem.accentColor.withOpacity(0.1);
+        return AppDesignSystem.accentColor.withValues(alpha: 0.1);
       case AppCardVariant.secondary:
         return AppDesignSystem.surfaceColor;
       case AppCardVariant.elevated:
@@ -316,7 +311,9 @@ class AppCard extends StatelessWidget {
           effectiveBorderColor = AppDesignSystem.borderColor;
           break;
         case AppCardVariant.primary:
-          effectiveBorderColor = AppDesignSystem.accentColor.withOpacity(0.3);
+          effectiveBorderColor = AppDesignSystem.accentColor.withValues(
+            alpha: 0.3,
+          );
           break;
         default:
           return null;
@@ -325,17 +322,14 @@ class AppCard extends StatelessWidget {
 
     if (effectiveBorderColor == null) return null;
 
-    return Border.all(
-      color: effectiveBorderColor,
-      width: effectiveBorderWidth,
-    );
+    return Border.all(color: effectiveBorderColor, width: effectiveBorderWidth);
   }
 
   List<BoxShadow>? _getBoxShadow() {
     if (elevation != null) {
       return [
         BoxShadow(
-          color: Colors.black.withOpacity(0.1 * (elevation! / 8)),
+          color: Colors.black.withValues(alpha: 0.1 * (elevation! / 8)),
           blurRadius: elevation! * 2,
           offset: Offset(0, elevation! / 2),
         ),
@@ -346,12 +340,12 @@ class AppCard extends StatelessWidget {
       case AppCardVariant.elevated:
         return [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
           BoxShadow(
-            color: AppDesignSystem.primaryColor.withOpacity(0.05),
+            color: AppDesignSystem.primaryColor.withValues(alpha: 0.05),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -359,7 +353,7 @@ class AppCard extends StatelessWidget {
       case AppCardVariant.primary:
         return [
           BoxShadow(
-            color: AppDesignSystem.accentColor.withOpacity(0.15),
+            color: AppDesignSystem.accentColor.withValues(alpha: 0.15),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -385,18 +379,18 @@ class AppCard extends StatelessWidget {
   Color _getSplashColor() {
     switch (variant) {
       case AppCardVariant.primary:
-        return AppDesignSystem.accentColor.withOpacity(0.1);
+        return AppDesignSystem.accentColor.withValues(alpha: 0.1);
       default:
-        return AppDesignSystem.primaryColor.withOpacity(0.05);
+        return AppDesignSystem.primaryColor.withValues(alpha: 0.05);
     }
   }
 
   Color _getHighlightColor() {
     switch (variant) {
       case AppCardVariant.primary:
-        return AppDesignSystem.accentColor.withOpacity(0.05);
+        return AppDesignSystem.accentColor.withValues(alpha: 0.05);
       default:
-        return AppDesignSystem.primaryColor.withOpacity(0.03);
+        return AppDesignSystem.primaryColor.withValues(alpha: 0.03);
     }
   }
 }

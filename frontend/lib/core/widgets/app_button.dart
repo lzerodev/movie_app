@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../theme/app_design_system.dart';
 
@@ -64,7 +64,7 @@ class AppCardLegacy extends StatelessWidget {
               boxShadow: elevation != null
                   ? [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: elevation! * 2,
                         offset: Offset(0, elevation! / 2),
                       ),
@@ -98,10 +98,7 @@ class AppCardLegacy extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: borderRadius ?? AppDesignSystem.borderRadiusMd,
           side: borderColor != null
-              ? BorderSide(
-                  color: borderColor!,
-                  width: borderWidth ?? 1.0,
-                )
+              ? BorderSide(color: borderColor!, width: borderWidth ?? 1.0)
               : BorderSide.none,
         ),
         child: onTap != null
@@ -172,11 +169,7 @@ class AppButton extends StatelessWidget {
         if ((icon != null || isLoading) && text.isNotEmpty)
           const SizedBox(width: AppDesignSystem.spaceSm),
         if (text.isNotEmpty)
-          Text(
-            text,
-            style: _getTextStyle(),
-            textAlign: TextAlign.center,
-          ),
+          Text(text, style: _getTextStyle(), textAlign: TextAlign.center),
       ],
     );
 
@@ -284,15 +277,7 @@ class AppButton extends StatelessWidget {
 }
 
 /// Variantes do AppButton
-enum AppButtonVariant {
-  primary,
-  secondary,
-  text,
-}
+enum AppButtonVariant { primary, secondary, text }
 
 /// Tamanhos do AppButton
-enum AppButtonSize {
-  small,
-  medium,
-  large,
-}
+enum AppButtonSize { small, medium, large }

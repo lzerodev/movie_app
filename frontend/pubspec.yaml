@@ -4,17 +4,20 @@ publish_to: "none"
 version: 1.1.0+2
 
 environment:
-  sdk: ">=3.4.4 <4.0.0"
+  sdk: ">=3.14.0 <4.0.0"
+  flutter: ">=3.50.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  material_ui: ^1.1.0
+  cupertino_ui: ^1.1.6
   cupertino_icons: ^1.0.6
   flutter_svg: ^2.0.10+1
   dio: ^5.5.0+1
-  intl: ^0.19.0
+  intl: ^0.20.3
   bloc: ^8.1.0
   bloc_concurrency: ^0.2.0
   equatable: ^2.0.3
@@ -41,11 +44,11 @@ flutter:
   fonts:
     - family: Poppins
       fonts:
-        - asset: fonts\Poppins-Bold.ttf
+        - asset: fonts/Poppins-Bold.ttf
           weight: 700
-        - asset: fonts\Poppins-Medium.ttf
+        - asset: fonts/Poppins-Medium.ttf
           weight: 500
-        - asset: fonts\Poppins-Regular.ttf
+        - asset: fonts/Poppins-Regular.ttf
           weight: 400
-        - asset: fonts\Poppins-SemiBold.ttf
+        - asset: fonts/Poppins-SemiBold.ttf
           weight: 600

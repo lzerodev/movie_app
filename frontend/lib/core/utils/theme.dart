@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Configurações de tema da aplicação.
-/// 
+///
 /// Define cores, tipografia e componentes visuais
 /// para garantir consistência visual em toda a aplicação.
 class AppTheme {
@@ -9,22 +9,22 @@ class AppTheme {
   static const Color primaryColor = Color(0xFF1976D2);
   static const Color primaryColorLight = Color(0xFF42A5F5);
   static const Color primaryColorDark = Color(0xFF1565C0);
-  
+
   // Cores secundárias
   static const Color secondaryColor = Color(0xFFFF9800);
   static const Color secondaryColorLight = Color(0xFFFFB74D);
   static const Color secondaryColorDark = Color(0xFFF57C00);
-  
+
   // Cores de fundo
   static const Color backgroundColor = Color(0xFFF5F5F5);
   static const Color surfaceColor = Color(0xFFFFFFFF);
   static const Color cardColor = Color(0xFFFFFFFF);
-  
+
   // Cores de erro e sucesso
   static const Color errorColor = Color(0xFFD32F2F);
   static const Color successColor = Color(0xFF388E3C);
   static const Color warningColor = Color(0xFFF57C00);
-  
+
   // Cores de texto
   static const Color textPrimary = Color(0xFF212121);
   static const Color textSecondary = Color(0xFF757575);
@@ -35,7 +35,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      
+
       // Color Scheme
       colorScheme: const ColorScheme.light(
         primary: primaryColor,
@@ -47,7 +47,7 @@ class AppTheme {
         onSurface: textPrimary,
         onError: Colors.white,
       ),
-      
+
       // App Bar Theme
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.black,
@@ -61,7 +61,7 @@ class AppTheme {
           color: Colors.white,
         ),
       ),
-      
+
       // Text Theme
       textTheme: const TextTheme(
         displayLarge: TextStyle(
@@ -155,26 +155,22 @@ class AppTheme {
           color: textSecondary,
         ),
       ),
-      
+
       // Card Theme
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: cardColor,
         elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(8),
       ),
-      
+
       // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColor,
           foregroundColor: Colors.white,
           elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(
             fontFamily: 'Poppins',
@@ -183,7 +179,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -205,25 +201,19 @@ class AppTheme {
           borderSide: const BorderSide(color: errorColor),
         ),
         contentPadding: const EdgeInsets.all(16),
-        hintStyle: const TextStyle(
-          fontFamily: 'Poppins',
-          color: textHint,
-        ),
+        hintStyle: const TextStyle(fontFamily: 'Poppins', color: textHint),
       ),
-      
+
       // Icon Theme
-      iconTheme: const IconThemeData(
-        color: textSecondary,
-        size: 24,
-      ),
-      
+      iconTheme: const IconThemeData(color: textSecondary, size: 24),
+
       // Floating Action Button Theme
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: primaryColor,
         foregroundColor: Colors.white,
         elevation: 4,
       ),
-      
+
       // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
@@ -250,12 +240,10 @@ class AppTheme {
         onError: Colors.white,
       ),
       scaffoldBackgroundColor: const Color(0xFF000000),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: const Color(0xFF1E1E1E),
         elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(8),
       ),
     );

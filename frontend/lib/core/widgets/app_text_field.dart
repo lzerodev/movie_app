@@ -1,81 +1,82 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
+
 import '../theme/app_design_system.dart';
 
 /// Campo de entrada personalizado que segue o Design System da aplicação.
 class AppTextField extends StatefulWidget {
   /// Texto do label
   final String? label;
-  
+
   /// Texto do placeholder
   final String? hintText;
-  
+
   /// Texto de ajuda/descrição
   final String? helperText;
-  
+
   /// Texto de erro
   final String? errorText;
-  
+
   /// Controlador do campo
   final TextEditingController? controller;
-  
+
   /// Valor inicial do campo
   final String? initialValue;
-  
+
   /// Função chamada quando o valor muda
   final ValueChanged<String>? onChanged;
-  
+
   /// Função chamada quando o campo é submetido
   final ValueChanged<String>? onSubmitted;
-  
+
   /// Função de validação
   final FormFieldValidator<String>? validator;
-  
+
   /// Ícone do campo
   final IconData? icon;
-  
+
   /// Ícone de prefixo
   final Widget? prefixIcon;
-  
+
   /// Ícone de sufixo
   final Widget? suffixIcon;
-  
+
   /// Se o campo é obrigatório
   final bool required;
-  
+
   /// Se o campo está habilitado
   final bool enabled;
-  
+
   /// Se o campo é readonly
   final bool readOnly;
-  
+
   /// Se o campo é para senha
   final bool obscureText;
-  
+
   /// Tipo do teclado
   final TextInputType? keyboardType;
-  
+
   /// Ação do teclado
   final TextInputAction? textInputAction;
-  
+
   /// Formatadores de entrada
   final List<TextInputFormatter>? inputFormatters;
-  
+
   /// Número máximo de linhas
   final int? maxLines;
-  
+
   /// Número mínimo de linhas
   final int? minLines;
-  
+
   /// Comprimento máximo do texto
   final int? maxLength;
-  
+
   /// FocusNode do campo
   final FocusNode? focusNode;
-  
+
   /// Se deve fazer autofocus
   final bool autofocus;
-  
+
   const AppTextField({
     super.key,
     this.label,
@@ -103,20 +104,20 @@ class AppTextField extends StatefulWidget {
     this.focusNode,
     this.autofocus = false,
   });
-  
+
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
 
 class _AppTextFieldState extends State<AppTextField> {
   late bool _obscureText;
-  
+
   @override
   void initState() {
     super.initState();
     _obscureText = widget.obscureText;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -133,9 +134,7 @@ class _AppTextFieldState extends State<AppTextField> {
                 if (widget.required)
                   const TextSpan(
                     text: ' *',
-                    style: TextStyle(
-                      color: AppDesignSystem.errorColor,
-                    ),
+                    style: TextStyle(color: AppDesignSystem.errorColor),
                   ),
               ],
             ),
@@ -160,7 +159,7 @@ class _AppTextFieldState extends State<AppTextField> {
           focusNode: widget.focusNode,
           autofocus: widget.autofocus,
           style: AppDesignSystem.bodyLarge.copyWith(
-            color: widget.enabled 
+            color: widget.enabled
                 ? AppDesignSystem.textPrimaryColor
                 : AppDesignSystem.textSecondaryColor,
           ),
@@ -193,15 +192,11 @@ class _AppTextFieldState extends State<AppTextField> {
             contentPadding: const EdgeInsets.all(AppDesignSystem.spaceMd),
             border: const OutlineInputBorder(
               borderRadius: AppDesignSystem.borderRadiusMd,
-              borderSide: BorderSide(
-                color: AppDesignSystem.borderColor,
-              ),
+              borderSide: BorderSide(color: AppDesignSystem.borderColor),
             ),
             enabledBorder: const OutlineInputBorder(
               borderRadius: AppDesignSystem.borderRadiusMd,
-              borderSide: BorderSide(
-                color: AppDesignSystem.borderColor,
-              ),
+              borderSide: BorderSide(color: AppDesignSystem.borderColor),
             ),
             focusedBorder: const OutlineInputBorder(
               borderRadius: AppDesignSystem.borderRadiusMd,
@@ -212,9 +207,7 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
             errorBorder: const OutlineInputBorder(
               borderRadius: AppDesignSystem.borderRadiusMd,
-              borderSide: BorderSide(
-                color: AppDesignSystem.errorColor,
-              ),
+              borderSide: BorderSide(color: AppDesignSystem.errorColor),
             ),
             focusedErrorBorder: const OutlineInputBorder(
               borderRadius: AppDesignSystem.borderRadiusMd,
@@ -234,7 +227,7 @@ class _AppTextFieldState extends State<AppTextField> {
       ],
     );
   }
-  
+
   Widget? _buildSuffixIcon() {
     if (widget.obscureText) {
       return IconButton(
@@ -249,7 +242,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
       );
     }
-    
+
     return widget.suffixIcon;
   }
 }
@@ -258,28 +251,28 @@ class _AppTextFieldState extends State<AppTextField> {
 class AppSearchField extends StatefulWidget {
   /// Texto do placeholder
   final String? hintText;
-  
+
   /// Controlador do campo
   final TextEditingController? controller;
-  
+
   /// Função chamada quando o valor muda
   final ValueChanged<String>? onChanged;
-  
+
   /// Função chamada quando o campo é submetido
   final ValueChanged<String>? onSubmitted;
-  
+
   /// Função chamada quando o botão de limpar é pressionado
   final VoidCallback? onClear;
-  
+
   /// Se deve mostrar o botão de limpar
   final bool showClearButton;
-  
+
   /// FocusNode do campo
   final FocusNode? focusNode;
-  
+
   /// Se deve fazer autofocus
   final bool autofocus;
-  
+
   const AppSearchField({
     super.key,
     this.hintText,
@@ -291,7 +284,7 @@ class AppSearchField extends StatefulWidget {
     this.focusNode,
     this.autofocus = false,
   });
-  
+
   @override
   State<AppSearchField> createState() => _AppSearchFieldState();
 }
@@ -299,7 +292,7 @@ class AppSearchField extends StatefulWidget {
 class _AppSearchFieldState extends State<AppSearchField> {
   late TextEditingController _controller;
   bool _showClearButton = false;
-  
+
   @override
   void initState() {
     super.initState();
@@ -307,7 +300,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
     _showClearButton = _controller.text.isNotEmpty;
     _controller.addListener(_onTextChanged);
   }
-  
+
   @override
   void dispose() {
     if (widget.controller == null) {
@@ -317,7 +310,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
     }
     super.dispose();
   }
-  
+
   void _onTextChanged() {
     final showClear = _controller.text.isNotEmpty && widget.showClearButton;
     if (_showClearButton != showClear) {
@@ -326,13 +319,13 @@ class _AppSearchFieldState extends State<AppSearchField> {
       });
     }
   }
-  
+
   void _onClear() {
     _controller.clear();
     widget.onClear?.call();
     widget.onChanged?.call('');
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -375,10 +368,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: AppDesignSystem.borderRadiusLg,
-          borderSide: BorderSide(
-            color: AppDesignSystem.accentColor,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: AppDesignSystem.accentColor, width: 2),
         ),
       ),
     );

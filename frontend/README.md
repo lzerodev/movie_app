@@ -1,3 +1,7 @@
+> Atualização de 11/11/2026: a cadeia de build foi migrada para Flutter 3.50.0. Versões, comandos e validação atuais estão em [docs/BUILD_TOOLCHAIN.md](../docs/BUILD_TOOLCHAIN.md); os exemplos históricos abaixo podem citar a base anterior.
+
+> Este é o guia do aplicativo Flutter. Execute os comandos desta página dentro de `frontend/`. Para a arquitetura completa, consulte o [README do repositório](../README.md). As alegações históricas de testes e funcionalidades abaixo não substituem a validação atual.
+
 # 🎬 Movie App - Flutter
 
 Um aplicativo de filmes desenvolvido em Flutter seguindo **Clean Architecture** com padrão **BLoC** para gerenciamento de estado e **Result Pattern** para tratamento de erros.
@@ -598,7 +602,7 @@ class DependencyInjection {
 
 ```bash
 git clone https://github.com/lzerodev/movie_app.git
-cd movie_app
+cd movie_app/frontend
 ```
 
 2. **Instale as dependências**
@@ -844,7 +848,7 @@ O Flutter DevTools está disponível em: `http://localhost:9101`
 ```bash
 # Clone o repositório
 git clone https://github.com/lzerodev/movie_app.git
-cd movie_app
+cd movie_app/frontend
 
 # Instale as dependências
 flutter pub get

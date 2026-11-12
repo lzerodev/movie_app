@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Widget customizado para estados vazios.
-/// 
+///
 /// Fornece uma interface consistente para exibir quando
 /// não há dados para mostrar.
 class AppEmptyWidget extends StatelessWidget {
@@ -46,9 +46,8 @@ class AppEmptyWidget extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 subtitle!,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
+                style: Theme.of(context).textTheme.bodyMedium
+                    ?.copyWith(color: Colors.grey[600]),
                 textAlign: TextAlign.center,
               ),
             ],
