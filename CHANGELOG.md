@@ -351,7 +351,7 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 - [📖 Documentação](./README.md)
 - [🐛 Reportar Bug](https://github.com/lzerodev/movie_app/issues)
 - [💡 Sugerir Feature](https://github.com/lzerodev/movie_app/issues)
-- [📷 Screenshots](./screenshots/README.md)
+- [📷 Screenshots](./frontend/screenshots/README.md)
 
 ---
 

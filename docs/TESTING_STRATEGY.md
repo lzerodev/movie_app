@@ -1,3 +1,5 @@
+> Documento do frontend Flutter. Os caminhos de código e comandos desta página são relativos a `frontend/`. Resultados históricos devem ser revalidados.
+
 # Plano Completo de Testes - Movie App Flutter
 
 ## 📋 Visão Geral

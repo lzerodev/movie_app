@@ -1,0 +1,15 @@
+# Copie para .codex/config.toml e ajuste os caminhos para esta máquina.
+# O arquivo real é ignorado pelo Git.
+# O plugin continua habilitado; só o servidor genérico baseado no PATH é
+# substituído, neste projeto, por um servidor que usa o SDK fixado.
+[plugins."dart-flutter@dart-flutter".mcp_servers."dart-mcp-server"]
+enabled = false
+
+[mcp_servers.dart_flutter]
+command = 'C:\CAMINHO\flutter-3.50.0\bin\cache\dart-sdk\bin\dart.exe'
+args = ['mcp-server', '--enable', 'run_tests', '--flutter-sdk', 'C:\CAMINHO\flutter-3.50.0']
+cwd = 'H:\CAMINHO\movie_app\frontend'
+startup_timeout_sec = 90
+
+[mcp_servers.dart_flutter.env]
+AGENT_PLUGIN = 'codex'

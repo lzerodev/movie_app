@@ -1,3 +1,5 @@
+> Documento do frontend Flutter. Os caminhos de código e comandos desta página são relativos a `frontend/`. Resultados históricos devem ser revalidados.
+
 # Migração das UIs para MovieModernBloc
 
 ## Resumo da Migração

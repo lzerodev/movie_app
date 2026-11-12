@@ -1,151 +1,29 @@
-## 🎯 **Tipo de Mudança**
+## Problema e resultado
 
-- [ ] ✨ Nova funcionalidade (feature)
-- [ ] 🐛 Correção de bug (fix)
-- [ ] 📚 Documentação (docs)
-- [ ] 🔄 Refatoração (refactor)
-- [ ] ⚡ Melhoria de performance (perf)
-- [ ] 🧪 Testes (test)
-- [ ] 🏗️ Arquitetura (arch)
-- [ ] 🎨 Estilo/UI (style)
-- [ ] 🔧 Manutenção (chore)
+Descreva o problema concreto e o comportamento após a alteração. Título Conventional Commit, por exemplo `fix(frontend): corrigir overflow da tela inicial`.
 
-## 📋 **Descrição**
+## Escopo e decisão
 
-> Forneça uma descrição clara e concisa das mudanças implementadas.
+Explique a solução e os motivos relevantes à revisão. Vincule uma issue existente quando houver.
 
-### **Resumo das Mudanças:**
+## Validação
 
--
--
--
+Informe comandos executados, resultados e limites. Para UI, inclua evidência visual quando disponível; para dados/contratos, descreva compatibilidade e recuperação.
 
-### **Problema Resolvido:**
+- [ ] Verificações locais relevantes executadas e resultados descritos.
+- [ ] Falhas anteriores/novas e validações bloqueadas explícitas.
+- [ ] Execução remota do CI conferida; falhas conhecidas mantêm o PR como draft até resolução.
 
-> Qual problema esta PR resolve? Inclua links para issues relacionadas.
+## Gitflow e revisão
 
-Closes #
+Origem: `feature/...`, `release/...` ou `hotfix/...`.
+Destino: `develop` ou `main`, conforme `CONTRIBUTING.md`.
 
-### **Solução Implementada:**
+- [ ] Base correta e diff completo revisado, incluindo arquivos novos e exclusões.
+- [ ] Commits autorais e título seguem Conventional Commits.
+- [ ] Sem segredos, arquivos gerados ou alterações alheias incluídos por engano.
+- [ ] Contratos, documentação e incompatibilidades atualizados quando necessário.
 
-> Como o problema foi resolvido? Explique a abordagem técnica.
+## Riscos e próximos passos
 
-## 🎨 **Screenshots/Videos (se aplicável)**
-
-> Adicione capturas de tela ou vídeos mostrando as mudanças visuais.
-
-| Antes        | Depois       |
-| ------------ | ------------ |
-| [screenshot] | [screenshot] |
-
-## 🧪 **Como Testar**
-
-> Instruções passo-a-passo para testar as mudanças.
-
-1.
-2.
-3.
-
-### **Casos de Teste:**
-
-- [ ] Teste funcional básico
-- [ ] Teste de responsividade
-- [ ] Teste de acessibilidade
-- [ ] Teste de performance
-
-## 📊 **Impacto**
-
-### **Impacto no Usuário:**
-
-- [ ] 🟢 Melhoria na experiência
-- [ ] 🟡 Neutro (sem impacto visível)
-- [ ] 🔴 Requer adaptação do usuário
-
-### **Impacto Técnico:**
-
-- [ ] 🟢 Melhoria na manutenibilidade
-- [ ] 🟢 Melhoria na performance
-- [ ] 🟡 Refatoração sem impacto
-- [ ] 🔴 Breaking change
-
-### **Métricas (se aplicável):**
-
-- **Linhas de código:** +X / -Y
-- **Arquivos modificados:** X
-- **Cobertura de testes:** X%
-- **Bundle size:** ±X KB
-
-## ✅ **Checklist de Qualidade**
-
-### **Código:**
-
-- [ ] Código segue padrões do projeto
-- [ ] Sem código duplicado
-- [ ] Documentação atualizada
-- [ ] Comentários adequados onde necessário
-- [ ] Análise estática limpa (`flutter analyze`)
-
-### **Testes:**
-
-- [ ] Testes unitários passando
-- [ ] Novos testes adicionados (se necessário)
-- [ ] Cobertura de testes mantida/melhorada
-- [ ] Testes de integração passando (se aplicável)
-
-### **Git:**
-
-- [ ] Branch atualizada com develop
-- [ ] Commits seguem padrão (Conventional Commits)
-- [ ] Tag criada (se aplicável)
-- [ ] Sem commits de merge desnecessários
-
-### **Documentação:**
-
-- [ ] README atualizado (se necessário)
-- [ ] CHANGELOG atualizado
-- [ ] Documentação técnica atualizada
-- [ ] Screenshots/videos adicionados (se UI)
-
-## 🔄 **Próximos Passos**
-
-> O que deve ser feito após o merge desta PR?
-
-- [ ]
-- [ ]
-- [ ]
-
-## 📝 **Notas Adicionais**
-
-> Informações extras para os revisores.
-
-### **Decisões de Design:**
-
-> Explique decisões importantes de arquitetura/design.
-
-### **Limitações Conhecidas:**
-
-> Liste qualquer limitação ou trade-off conhecido.
-
-### **Dependências:**
-
-> Esta PR depende de outras PRs ou mudanças?
-
----
-
-## 🏷️ **Informações da Release**
-
-### **Versão:** vX.Y.Z-feature.nome
-
-### **Tag:**
-
-### **Branch Base:** develop
-
-### **Target Branch:** develop
-
----
-
-**👨‍💻 Desenvolvido por:** @lzerodev  
-**🤖 Assistido por:** GitHub Copilot  
-**📅 Data:** {{ date }}
-
-/cc @lzerodev
+Registre limitações, migrations, rollback e ações operacionais pertinentes. Para release/hotfix, descreva versão, artefatos e reintegração em `develop`/release aberta. Features não exigem tags. Diferencie código integrado, deploy do backend e publicação do aplicativo.
