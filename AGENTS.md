@@ -17,8 +17,14 @@
 - Se não houver instância em execução ou conexão MCP, informar o limite sem afirmar que houve hot reload, hot restart ou teste em aparelho.
 - A regra de hot reload é do frontend; não se aplica a `backend/` ou `infra/`.
 - Skills são orientação de tarefa; preservar a arquitetura e as decisões do projeto, como BLoC e o cliente HTTP existente, salvo solicitação de mudança.
+- Preservar a transição Hero existente entre pôster e detalhe (`movie_<id>`) e as animações de entrada. Com abas preservadas em IndexedStack, habilitar Heroes somente na aba ativa para evitar tags duplicadas entre catálogo e busca.
 
 ## Validação
+
+- O foco de produto é reviews, comentários e dicas sobre filmes e séries, com trailers, favoritos e links compartilháveis. Consultar `docs/PRODUCT_AND_DESIGN_PLAN.md`.
+- Decisões confirmadas: leitura pública de links compartilhados (sinopse, notas e comentários), com login apenas para avaliar/comentar/favoritar; avaliações RTM em cinco estrelas com meias estrelas; avaliar séries, temporadas e episódios já no primeiro escopo. A leitura pública substitui a escolha anterior de exigir login para ler. Preservar o destino completo e a ação após login; não expor dados da conta ou rascunhos na prévia compartilhada. Separar notas de catálogo e RTM e as avaliações de cada nível da série.
+- Seguir a ordem solicitada pelo usuário: organizar escopo e fluxos → desenhar design system e telas → revisar protótipo → implementar. Não tratar propostas e dados simulados de design como funcionalidades existentes ou decisões já aprovadas.
+- Enquanto a etapa atual for planejamento/design, preservar as alterações funcionais anteriores e não continuar o desenvolvimento sem a transição de etapa solicitada pelo usuário.
 
 - Diferenciar instalação/configuração, teste local, execução real no app e publicação.
 - Consultar `docs/REORGANIZATION.md` e `docs/BUILD_TOOLCHAIN.md` para as falhas de testes já registradas.
