@@ -13,8 +13,10 @@ import '../models/movie.dart';
 /// seguindo os princípios da Clean Architecture.
 class MovieRepositoryAdapter implements IMovieRepository {
   final Dio _dio;
+  final String Function() _apiKey;
 
-  MovieRepositoryAdapter(this._dio);
+  MovieRepositoryAdapter(this._dio, {String Function()? apiKeyProvider})
+    : _apiKey = apiKeyProvider ?? (() => SecureConfig.tmdbApiKey);
 
   @override
   Future<Result<List<Movie>>> getNowPlayingMovies({int page = 1}) async {
@@ -22,7 +24,7 @@ class MovieRepositoryAdapter implements IMovieRepository {
       final response = await _dio.get(
         '${AppConstants.tmdbBaseUrl}/movie/now_playing',
         queryParameters: {
-          'api_key': SecureConfig.tmdbApiKey,
+          'api_key': _apiKey(),
           'page': page,
           'language': 'pt-BR',
         },
@@ -59,7 +61,7 @@ class MovieRepositoryAdapter implements IMovieRepository {
       final response = await _dio.get(
         '${AppConstants.tmdbBaseUrl}/search/movie',
         queryParameters: {
-          'api_key': SecureConfig.tmdbApiKey,
+          'api_key': _apiKey(),
           'query': query,
           'page': page,
           'language': 'pt-BR',
@@ -88,10 +90,33 @@ class MovieRepositoryAdapter implements IMovieRepository {
 
   @override
   Future<Result<Movie>> getMovieDetails(int movieId) async {
-    // TODO: Implementar quando o método existir no repositório legado
-    return const Error(
-      ServerFailure(message: 'Método getMovieDetails não implementado ainda'),
-    );
+    if (movieId <= 0) {
+      return const Error(
+        ValidationFailure(message: 'Identificador do filme inválido'),
+      );
+    }
+    try {
+      final response = await _dio.get(
+        '${AppConstants.tmdbBaseUrl}/movie/$movieId',
+        queryParameters: {'api_key': _apiKey(), 'language': 'pt-BR'},
+      );
+      if (response.statusCode == 200) {
+        return Success(Movie.fromJson(response.data as Map<String, dynamic>));
+      }
+      return Error(
+        ServerFailure(
+          message: 'Falha ao buscar detalhes do filme: ${response.statusCode}',
+        ),
+      );
+    } on DioException catch (error) {
+      return Error(_mapDioExceptionToFailure(error));
+    } catch (_) {
+      return const Error(
+        ServerFailure(
+          message: 'Não foi possível interpretar os detalhes do filme.',
+        ),
+      );
+    }
   }
 
   /// Mapeia DioException para Failure apropriado.

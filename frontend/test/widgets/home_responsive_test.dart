@@ -290,7 +290,8 @@ void main() {
           );
           expect(find.byType(GridView), findsNothing);
           expect(find.text('Meus Favoritos'), findsOneWidget);
-          expect(find.text('Histórico'), findsOneWidget);
+          expect(find.text('Histórico'), findsNothing);
+          expect(find.text('Sair'), findsNothing);
           expect(find.text('Configurações'), findsOneWidget);
           // Remonta a Home sem preservar a aba selecionada entre dispositivos.
           await tester.pumpWidget(const SizedBox.shrink());
@@ -304,11 +305,9 @@ void main() {
         expect(profileGrid(tester).crossAxisCount, 2);
         for (final title in [
           'Meus Favoritos',
-          'Histórico',
           'Configurações',
           'Ajuda',
           'Sobre',
-          'Sair',
         ]) {
           expect(find.text(title), findsOneWidget);
         }
@@ -375,7 +374,7 @@ void main() {
         expect(dialog, findsNothing);
       });
 
-      testWidgets('deve mostrar snackbar ao tocar nas opções do perfil', (
+      testWidgets('favoritos do perfil abre a aba correspondente', (
         tester,
       ) async {
         await pumpHome(tester);
@@ -383,7 +382,39 @@ void main() {
         await tester.ensureVisible(find.text('Meus Favoritos'));
         await tester.tap(find.text('Meus Favoritos'));
         await tester.pumpAndSettle();
-        expect(find.text('Navegando para: Meus Favoritos'), findsOneWidget);
+        expect(find.text('Seus favoritos, em breve'), findsOneWidget);
+        expect(
+          tester
+              .widget<NavigationBar>(find.byType(NavigationBar))
+              .selectedIndex,
+          2,
+        );
+      });
+
+      testWidgets('configurações e ajuda do perfil executam ações reais', (
+        tester,
+      ) async {
+        await pumpHome(tester);
+        await openProfile(tester);
+        await tester.ensureVisible(find.text('Configurações'));
+        await tester.tap(find.text('Configurações'));
+        await tester.pumpAndSettle();
+        expect(find.text('Aparência'), findsOneWidget);
+        await tester.tap(find.text('Claro'));
+        await tester.pumpAndSettle();
+        expect(
+          Theme.of(tester.element(find.byType(HomePage))).brightness,
+          Brightness.light,
+        );
+        await tester.ensureVisible(find.text('Ajuda'));
+        await tester.tap(find.text('Ajuda'));
+        await tester.pumpAndSettle();
+        expect(find.byType(AlertDialog), findsOneWidget);
+        expect(find.text('Como usar o RTM'), findsWidgets);
+        await tester.tap(find.text('Entendi'));
+        await tester.pumpAndSettle();
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(tester.takeException(), isNull);
       });
     });
 

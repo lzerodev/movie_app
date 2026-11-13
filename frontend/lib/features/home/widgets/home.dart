@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/theme/theme_cubit.dart';
 
-import '../../../core/navigation/navigation_extensions.dart';
 import '../../../core/theme/app_design_system.dart';
 import '../../../core/utils/app_constants.dart';
 import '../../../core/utils/responsive_utils.dart';
@@ -17,11 +16,13 @@ class _ProfileOptionData {
   final IconData icon;
   final String title;
   final String subtitle;
+  final VoidCallback onTap;
 
   _ProfileOptionData({
     required this.icon,
     required this.title,
     required this.subtitle,
+    required this.onTap,
   });
 }
 
@@ -304,32 +305,26 @@ class HomePageState extends State<HomePage> {
       _ProfileOptionData(
         icon: Icons.favorite_outline,
         title: 'Meus Favoritos',
-        subtitle: 'Filmes salvos para assistir depois',
-      ),
-      _ProfileOptionData(
-        icon: Icons.history,
-        title: 'Histórico',
-        subtitle: 'Filmes que você já assistiu',
+        subtitle: 'Seus títulos salvos',
+        onTap: () => setState(() => currentPageIndex = 2),
       ),
       _ProfileOptionData(
         icon: Icons.settings_outlined,
         title: 'Configurações',
         subtitle: 'Personalize sua experiência',
+        onTap: _showAppearanceDialog,
       ),
       _ProfileOptionData(
         icon: Icons.help_outline,
         title: 'Ajuda',
-        subtitle: 'Central de suporte e FAQ',
+        subtitle: 'Como usar o RTM',
+        onTap: _showHelpDialog,
       ),
       _ProfileOptionData(
         icon: Icons.info_outline,
         title: 'Sobre',
         subtitle: 'Informações do aplicativo',
-      ),
-      _ProfileOptionData(
-        icon: Icons.logout_outlined,
-        title: 'Sair',
-        subtitle: 'Fazer logout da conta',
+        onTap: _showAboutDialog,
       ),
     ];
 
@@ -389,10 +384,7 @@ class HomePageState extends State<HomePage> {
     );
 
     return AppCard(
-      onTap: () {
-        // TODO: Implementar navegação específica para cada opção
-        _handleProfileOptionTap(option.title);
-      },
+      onTap: option.onTap,
       child: Padding(
         padding: padding,
         child: Row(
@@ -493,9 +485,52 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  void _handleProfileOptionTap(String option) {
-    // TODO: Implementar navegação baseada na opção selecionada
-    context.showMessage('Navegando para: $option');
+  void _showAppearanceDialog() {
+    final selected = context.read<ThemeCubit>().state;
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => SimpleDialog(
+        title: const Text('Aparência'),
+        children: [
+          for (final option in [
+            (ThemeMode.light, 'Claro', Icons.light_mode_outlined),
+            (ThemeMode.dark, 'Escuro', Icons.dark_mode_outlined),
+            (ThemeMode.system, 'Sistema', Icons.brightness_auto_outlined),
+          ])
+            ListTile(
+              leading: Icon(option.$3),
+              title: Text(option.$2),
+              trailing: selected == option.$1
+                  ? const Icon(Icons.check_rounded)
+                  : null,
+              onTap: () {
+                context.read<ThemeCubit>().select(option.$1);
+                Navigator.pop(dialogContext);
+              },
+            ),
+        ],
+      ),
+    );
+  }
+
+  void _showHelpDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Como usar o RTM'),
+        content: const SingleChildScrollView(
+          child: Text(
+            'Explore os filmes em Descobrir ou procure um título em Buscar. Toque no pôster para abrir a sinopse e a nota do catálogo TMDb, de 0 a 10.\n\nVocê pode escolher o tema claro, escuro ou do sistema em Configurações.',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Entendi'),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildBottomNavigationBar() {
@@ -681,13 +716,13 @@ class HomePageState extends State<HomePage> {
   void _handleMenuSelection(String value) {
     switch (value) {
       case 'favorites':
-        _showSnackBar('Favoritos - Em desenvolvimento');
+        setState(() => currentPageIndex = 2);
         break;
       case 'watchlist':
         _showSnackBar('Lista para assistir - Em desenvolvimento');
         break;
       case 'settings':
-        _showSnackBar('Configurações - Em desenvolvimento');
+        _showAppearanceDialog();
         break;
       case 'about':
         _showAboutDialog();
